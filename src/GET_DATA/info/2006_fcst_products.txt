@@ -1,0 +1,234 @@
+18A FB 18 Hour Report
+24A FB 24 Hour Report
+30L FE Monthly Weather Outlook
+3HR FO 3-hourly Space Weather Conditions and Forecast
+ADA NO Alarm/Alert Administrative Message
+ADM NO Alert Administrative Message
+ADR NO Administrative Message
+ADV NW Official Space Weather Advisory
+ADW NO Administrative Message for NWWS
+ADX NT Administrative Alert Non-Receipt
+AFD FX Area Forecast Discussion
+AFM FO Area Forecast Matrices
+AFP FL Area Forecast Product
+AGF FN Agricultural Forecast
+AGO SH Agricultural Observations
+AHO UR Air Force High Density Obs
+ALT WO Space Weather Message Alert
+APG AE Air Stagnation Guidance Narrative
+AQI AE Air Quality Index Statement
+ASA AE Air Stagnation Advisory
+AVA WO Avalanche Watch
+AVM NO Aviation Verification Matrix
+AVW WO Avalanche Warning
+AWG WO National Attack Warning
+AWS AW Area Weather Summary
+AWU FL Area Weather Update
+AWW WW Aviation Weather Warning
+BOY SS Buoy Reports
+CAE WO Child Abduction Emergency
+CCF FP Coded City Forecast
+CDW WO Civil Danger Warning
+CEM WO Civil Emergency Message
+CFW WH Coastal Flood Warnings, Watches or Statements
+CGR SX Coast Guard Surface Report
+CHG WT Computer Hurricane Guidance
+CLI CD Climate Report (Daily)
+CLM CX Climatological Report (Long Term)
+CMM CS Coded Climatological Monthly Means
+COD FX Coded Analysis and Forecasts
+CSC FP Canadian Selected Cities Forecast
+CUR FX Current Space Weather Indices
+CWA WL Center Weather Advisory
+CWF FZ Coastal Waters Forecast
+CWS WO Center Weather Statement
+DAY FX Daily Space Weather Summary and Forecast
+DPA SD Radar Hourly Digital Precipitation
+DSA AC Unnumbered Depression
+DSM CX Asos Daily Summary
+EFP FE 3 TO 5 Day Extended Forecast
+EOL FE Average 6 TO 10 Day Weather Outlook
+EON FE Average 6 TO 10 Day Weather Outlook
+EQR SE Earthquake Report
+EQW WO Earthquake Warning
+ESF FG Flood Potential Outlook
+ESG FG Extended Streamflow Guidance
+ESP FG Extended Streamflow Prediction
+ESS FG Water Supply Outlook
+EVI WO Evacuation Immediate
+FA0 FA Aviation Area Forecast (Pacific)
+FA1 FA Aviation Area Forecast (Northeast U.S.)
+FA2 FA Aviation Area Forecast (Southeast U.S.)
+FA3 FA Aviation Area Forecast (North Cent U.S.)
+FA4 FA Aviation Area Forecast (South Cent U.S.)
+FA5 FA Aviation Area Forecast (U.S. Rocky Mts.)
+FA6 FA Aviation Area Forecast (U.S. West Coast)
+FA7 FA Aviation Area Forecast (Juneau)
+FA8 FA Aviation Area Forecast (Anchorage)
+FA9 FA Aviation Area Forecast (Fairbanks)
+FDI FN Fire Danger Indices
+FFA WG Flash Flood Watch
+FFG FO Flash Flood Guidance
+FFH FO Headwater Guidance
+FFS WG Flash Flood Statement
+FFW WG Flash Flood Warning
+FLN FG National Flood Summary
+FLS WG Flood Statement
+FLW WG Flood Warning
+FMR FE Forecast Medium Range Guidance
+FOF FD Upper Wind Fallout Forecast
+FOH FO ETA FOUS Freezing and Relative Humidity
+FRW WO Fire Warning
+FSS FG Urban and Small Stream Flood Advisory
+FTM NO WSR-88D Radar Outage Notification
+FWA NO Fire Weather Admisistrative Message
+FWD FN Fire Weather Outlook Discussion
+FWE FE Extended Fire Weather Outlook
+FWF FN Routine Fire WX Forecasts
+FWL FN Land Management Forecasts
+FWM FN Miscellaneous Fire Weather Product
+FWN SH Fire Weather Notification
+FWO SH Fire Weather Observation
+FWS FN Suppression Forecast
+FZL UX Freezing Level Data
+GLF FZ Great Lakes Forecast
+GLO FZ Great Lakes Storm Outlook
+GLS WW Great Lakes Storm Summary
+GSM NX General Status Message
+HCM NG Hydrometeorlogical Coordination Message
+HLS WT Hurricane Local Statement
+HMD AG Hydrometeorological Discussion
+HMW WO Hazardous Materials Warning
+HSF FZ High Seas Forecast
+HWO FL Hazardous Weather Outlook
+HYD SX Rainfall Reports
+HYM CS Monthly Hydrometerological Plain Language Product
+ICE FZ Ice Forecast
+IOB SV Ice Observation
+KPA NT Keep Alive Message
+LAE WO Local Area Emergency
+LAW SM Great Lakes Weather Observation
+LCO SX Local Cooperative Observation
+LEW WO Law Enforcement Warning
+LFP FL Local Forecast
+LLS UX Low-Level Sounding
+LSH WH Lakeshore Warning or Statement
+LSR NW Local Storm Report
+LTG SF Lightning Data
+MIM AG Marine Interpretation Message
+MIS AX Miscellaneous Local Product
+MON NT Test Message
+MTR SA METAR Formatted Surface Weather Observation
+MWS FZ Marine Weather Statement
+NOW FP Short Term Forecast
+NPW WW Non-Precipitation Warnings, Watches, Advisories
+NSH FZ Nearshore Marine Forecast / Surf Forecast
+NUW WO Nuclear Power Plant Warning
+OAV NO Other Aviation Products
+OFF FZ Offshore Forecast
+OMR SX Other Marine Products
+OPU FP Other Public Products
+OSO SX Other Surface Observations
+PBF FN Prescribed Burn Forecast
+PFM FO Point Forecast Matrices
+PLS SX Plain Language Ship Report
+PMD FX Prognostic Meteorological Discussion
+PNS NO Public Information Statement
+PSH AC Post Storm Hurricane Report
+PWO WW Public Severe Weather Alert
+QPF FS Quantitative Precipitation Forecast
+QPS FS Quantitative Precipitation Statement
+RCM SD WSR-88D Radar Coded Message
+RDF FO Revised Digital Forecast
+RDG FO Revised Digital Guidance
+REC SX Recreational Report
+RER SX Record Event Report
+RFD FN Rangeland Fire Danger Forecast
+RFR FR Route Forecast
+RFW WW Red Flag Warning
+RHW WO Radiological Hazard Warning
+RR1 SR Hydrology Meteorology Data ReportPart 1
+RR2 SR Hydrology Meteorology Data Report Part 2
+RRA SR Automated Hydrologic Observation STA Report
+RRC SR SCS Manual Snow Course Data
+RRM SR Miscellaneous Hydrologic Data
+RRS SR Special Automated Hydromet Data Report
+RTP AS Max/Min Temperature and Precipitation Table
+RVA SR River Summary
+RVD FG Daily River Forecast
+RVF FG River Forecast
+RVI FI River Ice Statement
+RVM SR Miscellaneous River Product
+RVR FG River Recreation Statement
+RVS FG River Statement
+RWR AS Weather Roundup
+RWS AW Weather Summary
+RZF FP Regional Zone Forecast
+SAB WW Snow Avalanche Bulletin
+SAF FN Speci Agri WX FCST/Advisory/Flying Farmer FCST Outlook
+SAW WW Prelim Notice of Watch & Cancellation MSG
+SCC AC Storm Summary
+SCD CX Supplementary Climatological Data (ASOS)
+SCS FP Selected Cities Summary
+SDS FU Special Dispersion Statement 
+SEL WW Severe Local Storm Watch and Watch Cancellation MSG
+SEV WW SPC Watch Point Information Message
+SFD FX State Forecast Discussion
+SFP FP State Forecast
+SFT FP Tabular State Forecast
+SHP SM Surface Ship Report at Synoptic Time
+SIM AT Satellite Interpretation Message
+SLS WW Severe Local Storm Watch and Areal Outline
+SMF FN Smoke Management Weather Forecast
+SMW WH Special marine Warning
+SPE TX Satellite Precipitation Estimates
+SPF WT Storm Strike Probability Bulletin 
+SPS WW Special Weather Statement
+SPW WO Shelter in Place Warning SRF FZ Surf Forecast
+STA NW SPC Tornado and Severe Thunderstorm Reports
+STD AT Satellite Tropical Disturbance Summary
+STO SX Road Condition Reports
+STP AS State Max/Min Temperature and Precipitation Table
+SUM WO Space Weather Message Summary
+SVR WU Severe Thunderstorm Warning
+SVS WW Severe Weather Statement
+SWO AC Severe Storm Outlook Narrative
+SWR AS State Weather Roundup
+SWS AW State Weather Summary
+TAF FT Terminal Aerodrome Forecast
+TAV FP Travelers Forecast Table
+TCA FK Tropical Cyclone Advisory
+TCD WT Tropical Cyclone Discussion
+TCE WT Tropical Cyclone Position Estimate
+TCM WT Marine/Aviation Tropical Cyclone Advisory
+TCP WT Public Tropical Cyclone Advisory
+TCS TX Satellite Tropical Cyclone Summary
+TCU WT Tropical Cyclone Update
+TCV WT Tropical Cyclone Watch/Warning
+TID SO Tide Report
+TMA SE Tsunami Tide/Seismic Message Acknowledgment
+TOE WO 911 Telephone Outage Emergency
+TOR WF Tornado Warning
+TPT SX Temperature Precipitation Table
+TSM SE Tsunami Tide/Seismic Message
+TST NT Test Message
+TSU WE Tsunami Watch/Warning
+TVL FP Travelers Forecast
+TWD AC Tropical Weather Discussion
+TWO AC Tropical Weather Outlook and Summary
+TWS AC Tropical Weather Summary
+UVI AE Ultraviolet Index
+VAA FV Volcanic Activity Advisory
+VOW WO Volcano Warning
+WAR WO Space Environment Warning
+WAT WO Space Weather Message Watch
+WCN WW Watch County Notification
+WCR AX Weekly Weather and Crop Report
+WDA CX Weekly Data for Agriculture
+WEK FX 27-day Space Weather Forecast
+WOU WO Watch Outline Update
+WRK NZ Local Work File
+WSW WW Winter Weather Warnings, Watches, Advisories
+WVM NW Warning Verification Message
+WWA NW Watch Status Report
+ZFP FP Zone Forecast Product

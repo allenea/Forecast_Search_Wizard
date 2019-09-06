@@ -1,0 +1,465 @@
+AK WFO Juneau ACG
+AK RFC Alaska - Anchorage ACR
+AK WFO Fairbanks AEC
+AK WFO Anchorage AER
+AK WFO Anchorage AFC
+AK WFO Fairbanks AFG
+AK WFO Juneau AJK
+AK WFO Anchorage ALU
+AK WFO Fairbanks APD
+AK WFO Fairbanks FAI
+AK WFO Juneau JNU
+AK WFO Fairbanks NSB
+AK WFO Anchorage SWB
+AK WFO Anchorage WCM
+AK WFO Fairbanks WCZ
+AL WFO Birmingham BHM
+AL WFO Birmingham BMX
+AL WFO Mobile EVX
+AL WFO Huntsville HSV
+AL WFO Birmingham HTX
+AL WFO Huntsville HUN
+AL WFO Birmingham MGM
+AL WFO Mobile MOB
+AL WFO Huntsville MSL
+AL WFO Mobile PNS
+AR WFO Little Rock LIT
+AR WFO Little Rock LZK
+AZ WFO Tucson EMX
+AZ WFO Flagstaff FGZ
+AZ WFO Flagstaff FLG
+AZ WFO Flagstaff FSX
+AZ WFO Flagstaff INW
+AZ WFO Phoenix IWA
+AZ WFO Phoenix PHX
+AZ WFO Phoenix PSR
+AZ WFO Tucson TUS
+AZ WFO Tucson TWC
+CA WFO Sacramento BBX
+CA WFO San Joaquin Valley - Hanford BFL
+CA WFO Eureka BHX
+CA WFO Eureka EKA
+CA WFO San Joaquin Valley - Hanford FAT
+CA WFO Los Angeles FWF
+CA WFO San Joaquin Valley - Hanford HNX
+CA WFO Los Angeles LAX
+CA WFO Los Angeles LOX
+CA WFO San Francisco Bay Area - Monterey MRY
+CA WFO San Francisco Bay Area - Monterey MTR
+CA WFO Sacramento RBL
+CA WFO Sacramento RDD
+CA California-Nevada RFC - Sacramento RSA
+CA WFO Sacramento SAC
+CA WFO San Diego SAN
+CA WFO Sacramento SCK
+CA WFO San Francisco Bay Area - Monterey SFO
+CA WFO San Diego SGX
+CA WFO Los Angeles SMX
+CA WFO San Diego SOX
+CA WFO Sacramento STO
+CA WFO Los Angeles UCR
+CA WFO Sacramento USA
+CA WFO San Joaquin Valley - Hanford USJ
+CA WFO Los Angeles VTX
+CO WFO Pueblo ALS
+CO WFO Denver BOU
+CO WFO Denver COS
+CO WFO Denver DEN
+CO WFO Denver FTG
+CO WFO Grand Junction GJT
+CO WFO Grand Junction GJX
+CO National Earthquake Center NEC
+CO WFO Pueblo PUB
+CO WFO Pueblo PUX
+DC WFO Baltimore/Washington D.C. BWI
+DC National Centers For Environmental Prediction CAC
+DC National Centers For Environmental Prediction CAN
+DC National Centers For Environmental Prediction CRN
+DC National Centers For Environmental Prediction EPD
+DC National Centers For Environmental Prediction EPI
+DC National Centers For Environmental Prediction ERD
+DC National Centers For Environmental Prediction ERN
+DC National Centers For Environmental Prediction HSD
+DC National Centers For Environmental Prediction HUR
+DC WFO Baltimore/Washington D.C. IAD
+DC National Centers For Environmental Prediction INT
+DC National Centers For Environmental Prediction LAT
+DC WFO Baltimore/Washington D.C. LWX
+DC National Centers For Environmental Prediction MRD
+DC National Centers For Environmental Prediction NAM
+DC National Centers For Environmental Prediction NMC
+DC National Centers For Environmental Prediction PFD
+DC National Centers For Environmental Prediction QLM
+DC National Centers For Environmental Prediction SPD
+DC National Centers For Environmental Prediction SUS
+DC National Centers For Environmental Prediction WRN
+DC National Centers For Environmental Prediction WSH
+FL WFO Key West AMX
+FL WFO Miami APF
+FL WFO Melbourne DAB
+FL WFO Tallahassee EOX
+FL WFO Key West EYW
+FL WFO Miami FLL
+FL WFO Tampa Bay Area - Ruskin FMY
+FL WFO Jacksonville GNV
+FL WFO Jacksonville JAX
+FL WFO Key West KEY
+FL WFO Melbourne MCO
+FL WFO Miami MFL
+FL WFO Miami MIA
+FL WFO Melbourne MLB
+FL National Hurricane Center NHC
+FL WFO Miami PBI
+FL WFO Tallahassee TAE
+FL WFO Tampa Bay Area - Ruskin TBW
+FL WFO Tallahassee TLH
+FL WFO Tampa Bay Area - Ruskin TPA
+FL WFO Jacksonville VAX
+FL WFO Melbourne VRB
+GA WFO Atlanta AHN
+GA Southeast RFC - Atlanta ALR
+GA WFO Atlanta ATL
+GA Southeast RFC - Atlanta ATR
+GA WFO Atlanta CSG
+GA WFO Atlanta FFC
+GA WFO Atlanta JGX
+GA WFO Atlanta MCN
+GA Southeast RFC - Atlanta RDU
+GU WFO Guam GUA
+GU WFO Guam GUM
+HI WFO Honolulu HFO
+HI WFO Honolulu HNL
+HI WFO Honolulu HWA
+HI WFO Honolulu ITO
+HI WFO Honolulu LIH
+HI WFO Honolulu OGG
+HI WFO Honolulu STU
+HI WFO Honolulu WAK
+IA WFO Des Moines ALO
+IA WFO Quad Cities DBQ
+IA WFO Des Moines DMX
+IA WFO Des Moines DSM
+IA WFO Quad Cities DVN
+IA WFO Quad Cities MLI
+ID WFO Boise BOI
+ID WFO Boise CBX
+ID WFO Pocatello/Idaho Falls PIH
+ID WFO Pocatello/Idaho Falls SFX
+ID WFO Pocatello/Idaho Falls SNT
+IL WFO Chicago CHI
+IL WFO Central Illinois - Lincoln ILX
+IL WFO Chicago LOT
+IL WFO Central Illinois - Lincoln PIA
+IL WFO Chicago RFD
+IL WFO Central Illinois - Lincoln SPI
+IN WFO Northern Indiana - North Webster FWA
+IN WFO Indianapolis IND
+IN WFO Northern Indiana - North Webster IWX
+IN WFO Northern Indiana - North Webster SBN
+KS WFO Dodge City DDC
+KS WFO Goodland GLD
+KS WFO Wichita ICT
+KS WFO Topeka TOP
+KS WFO Topeka TWX
+KY WFO Louisville BWG
+KY WFO Paducah EVV
+KY WFO Paducah HPX
+KY WFO Jackson JKL
+KY WFO Louisville LEX
+KY WFO Louisville LMK
+KY WFO Louisville LVX
+KY WFO Paducah PAH
+KY WFO Louisville SDF
+LA WFO New Orleans/Baton Rouge BTR
+LA WFO Lake Charles LCH
+LA WFO Lake Charles LFT
+LA WFO New Orleans/Baton Rouge LIX
+LA Lower Mississippi RFC - Slidell LOM
+LA WFO New Orleans/Baton Rouge NEW
+LA Lower Mississippi RFC - Slidell ORN
+LA WFO Shreveport SHV
+LA WFO New Orleans/Baton Rouge SIL
+MA WFO Boston BDL
+MA WFO Boston BOS
+MA WFO Boston BOX
+MA WFO Boston EQI
+MA Northeast RFC - Taunton HFD
+MA WFO Boston ORH
+MA WFO Boston PVD
+MA Northeast RFC - Taunton TAR
+MD National Centers For Environmental Prediction WBC
+MD Hydrometeorological Predication Center WNH
+MD Ocean Prediction Center/Ocean Forecast WNM
+ME WFO Caribou BGR
+ME WFO Caribou BGR
+ME WFO Caribou CAR
+ME WFO Caribou CBW
+ME WFO Portland CON
+ME WFO Portland GYX
+ME WFO Caribou HUL
+ME WFO Portland PWM
+MI WFO North Central Lower Michigan - Gaylord APN
+MI WFO North Central Lower Michigan - Gaylord APX
+MI WFO Detroit DTW
+MI WFO Detroit DTX
+MI WFO Detroit FNT
+MI WFO Grand Rapids GRR
+MI WFO Detroit MKG
+MI WFO Marquette MQT
+MI WFO North Central Lower Michigan - Gaylord NWR
+MI Sault Ste Marie SSM
+MN WFO Duluth DLH
+MN WFO Minneapolis EAU
+MN WFO Duluth INL
+MN WFO Minneapolis MPX
+MN WFO Minneapolis MSP
+MN North Central RFC - Chanhassen MSR
+MN WFO Minneapolis STC
+MO WFO St. Louis COU
+MO WFO Kansas City/Pleasant Hill EAX
+MO Missouri Basin RFC - Pleasant Hill KRF
+MO WFO St. Louis LSX
+MO WFO Kansas City/Pleasant Hill MCI
+MO WFO Springfield SGF
+MO WFO St. Louis STL
+MS WFO Jackson GWX
+MS WFO Jackson JAN
+MS WFO Jackson MEI
+MT WFO Billings BIL
+MT WFO Billings BLX
+MT WFO Missoula BTM
+MT WFO Billings BYZ
+MT WFO Missoula FCA
+MT WFO Glasgow GGW
+MT WFO Great Falls GTF
+MT WFO Great Falls HLN
+MT WFO Missoula MSO
+MT WFO Glasgow RRM
+MT WFO Billings SHR
+MT WFO Great Falls TFX
+NB WFO Hastings GID
+NB WFO Hastings GRI
+NB WFO Omaha OAX
+NB WFO Omaha OFK
+NB WFO Omaha OMA
+NB WFO Hastings UEX
+NC WFO Wilmington FLO
+NC WFO Raleigh/Durham GSO
+NC WFO Morehead City HAT
+NC WFO Wilmington ILM
+NC WFO Morehead City MHX
+NC WFO Wilmington MYR
+NC WFO Raleigh/Durham RAH
+NC WFO Raleigh/Durham RAX
+ND WFO Bismarck BIS
+ND WFO Eastern North Dakota - Grand Forks FAR
+ND WFO Eastern North Dakota - Grand Forks FGF
+ND WFO Bismarck ISN
+ND WFO Bismarck MBX
+NE WFO North Platte LBF
+NE WFO North Platte LNX
+NE WFO North Platte VTN
+NM WFO Albuquerque ABQ
+NM WFO Albuquerque CAO
+NM WFO Albuquerque FDX
+NV WFO Elko EKO
+NV WFO Elko ELY
+NV WFO Las Vegas LAS
+NV WFO Elko LKN
+NV WFO Elko LRX
+NV WFO Reno REV
+NV WFO Reno RNO
+NV WFO Las Vegas VEF
+NV WFO Elko WMC
+NY WFO Albany ALB
+NY WFO Albany ALY
+NY WFO Binghamton AVP
+NY WFO New York City - Upton BDR
+NY WFO Binghamton BGM
+NY WFO Buffalo BUF
+NY WFO Albany ENX
+NY WFO New York City - Upton EWR
+NY WFO New York City - Upton ISP
+NY WFO New York City - Upton JFK
+NY WFO New York City - Upton LGA
+NY WFO New York City - Upton NYC
+NY WFO New York City - Upton OKX
+NY WFO Buffalo ROC
+NY WFO Binghamton SYR
+OH WFO Cleveland CAK
+OH WFO Cleveland CLE
+OH WFO Cincinnati CMH
+OH WFO Cincinnati CVG
+OH WFO Cincinnati DAY
+OH WFO Cleveland ERI
+OH WFO Cincinnati ILN
+OH Ohio RFC - Wilmington KTY
+OH WFO Cleveland LIO
+OH WFO Cleveland MFD
+OH Ohio RFC - Wilmington OHL
+OH Ohio RFC - Wilmington OHW
+OH Ohio RFC - Wilmington TIR
+OH WFO Cleveland TOL
+OH WFO Cleveland YNG
+OK WFO Oklahoma City FDR
+OK WFO Tulsa FSM
+OK Storm Prediction Center Norman MKC
+OK WFO Oklahoma City OKC
+OK WFO Oklahoma City OUN
+OK WFO Tulsa SRX
+OK WFO Tulsa TSA
+OK Arkansas-Red Basin RFC - Tulsa TUA
+OK WFO Tulsa TUL
+OK Arkansas-Red Basin RFC - Tulsa TUR
+OK NWS Storm Prediction Center Norman WNS
+OR WFO Portland AST
+OR WFO Portland BNO
+OR WFO Portland EUG
+OR WFO Medford MAX
+OR WFO Medford MEF
+OR WFO Medford MFR
+OR Astoria CG NMW
+OR WFO Pendleton PDT
+OR WFO Portland PDX
+OR WFO Portland PQR
+OR Northwest RFC - Portland PTR
+OR WFO Portland RTX
+OR WFO Medford SIY
+OR WFO Portland SLE
+OR WFO Pendleton YKM
+PA WFO Philadelphia ABE
+PA WFO Philadelphia ACY
+PA WFO Central Pennsylvania - State College CCX
+PA WFO Central Pennsylvania - State College CTP
+PA WFO Philadelphia DIX
+PA WFO Philadelphia DOX
+PA WFO Philadelphia GED
+PA WFO Central Pennsylvania - State College HAR
+PA WFO Philadelphia ILG
+PA WFO Central Pennsylvania - State College IPT
+PA Middle Atlantic RFC - State College JAA
+PA WFO Philadelphia MPO
+PA WFO Pittsburgh PBZ
+PA WFO Philadelphia PHI
+PA WFO Philadelphia PHL
+PA WFO Pittsburgh PIT
+PA WFO Philadelphia RDG
+PA Middle Atlantic RFC - State College RHA
+PA WFO Philadelphia TTN
+PR WFO San Juan SJU
+SC WFO Columbia AGS
+SC WFO Greenville/Spartanburg AVL
+SC WFO Columbia CAE
+SC WFO Charleston CHS
+SC WFO Greenville/Spartanburg CLT
+SC WFO Charleston CLX
+SC WFO Greenville/Spartanburg GSP
+SC WFO Charleston NBC
+SC WFO Charleston SAV
+SD WFO Aberdeen ABR
+SD WFO Aberdeen BRW
+SD WFO Sioux Falls FSD
+SD WFO Sioux Falls HON
+SD WFO Rapid City RAP
+SD WFO Sioux Falls SUX
+SD WFO Rapid City UNR
+TN WFO Nashville BNA
+TN WFO Knoxville/Tri-Cities CHA
+TN WFO Memphis MEG
+TN WFO Memphis MEM
+TN WFO Knoxville/Tri-Cities MRX
+TN WFO Memphis NQA
+TN WFO Nashville OHX
+TN WFO Knoxville/Tri-Cities TYS
+TX WFO San Angelo ABI
+TX WFO Dallas/Fort Worth ACT
+TX WFO Amarillo AMA
+TX WFO Austin/San Antonio ATT
+TX WFO Austin/San Antonio AUS
+TX WFO Brownsville BRO
+TX WFO Houston/Galveston CLL
+TX WFO Corpus Christi CRP
+TX Dallas DAL
+TX WFO Dallas/Fort Worth DFW
+TX WFO Austin/San Antonio DRT
+TX WFO Dallas/Fort Worth DYX
+TX WFO El Paso ELP
+TX WFO El Paso EPZ
+TX WFO Austin/San Antonio EWX
+TX WFO Dallas/Fort Worth FTW
+TX WFO Dallas/Fort Worth FWD
+TX West Gulf RFC - Forth Worth FWR
+TX WFO Dallas/Fort Worth FWS
+TX WFO Houston/Galveston GLS
+TX WFO Dallas/Fort Worth GRK
+TX WFO Houston/Galveston HGX
+TX WFO Houston/Galveston HOU
+TX WFO Lubbock LBB
+TX WFO Lubbock LUB
+TX WFO Midland/Odessa MAF
+TX WFO Austin/San Antonio SAT
+TX WFO San Angelo SJT
+TX WFO Dallas/Fort Worth SPS
+UT WFO Salt Lake City MCT
+UT WFO Salt Lake City MTX
+UT WFO Salt Lake City SLC
+UT Colorado Basin RFC Salt Lake City STR
+VA WFO Wakefield AKQ
+VA WFO Charleston CRW
+VA WFO Wakefield ECG
+VA WFO Blacksburg FCX
+VA WFO Blacksburg LYH
+VA WFO Wakefield ORF
+VA WFO Wakefield RIC
+VA WFO Charleston RLX
+VA WFO Blacksburg RNK
+VA WFO Blacksburg ROA
+VA WFO Wakefield SBY
+VA Wallops Flight Facility WAL
+VT WFO Burlington BTV
+VT WFO Burlington TYX
+WA WFO Spokane GEG
+WA WFO Spokane LWS
+WA WFO Seattle/Tacoma OLM
+WA WFO Spokane OTX
+WA WFO Seattle/Tacoma SEA
+WA WFO Seattle/Tacoma SEW
+WA WFO Seattle/Tacoma SOR
+WA WFO Seattle/Tacoma UIL
+WA WFO Seattle/Tacoma ZSE
+WI WFO La Crosse ARX
+WI WFO Green Bay GRB
+WI WFO La Crosse LSE
+WI WFO Milwaukee MKE
+WI WFO Milwaukee MKX
+WI WFO Milwaukee MSN
+WI WFO La Crosse RST
+WY WFO Cheyenne BFF
+WY WFO Riverton CPR
+WY WFO Riverton CRS
+WY WFO Cheyenne CYS
+WY WFO Riverton LND
+WY WFO Riverton RIW
+XX Network Control Facility ANC
+XX Central Region Headquarters BCQ
+XX Tropical Prediction Center CCA
+XX Network Control Facility DRK
+XX Network Control Facility DRO
+XX Tropical Prediction Center ECA
+XX Southern Region Headquarters EHU
+XX Network Control Facility ENS
+XX Western Region Headquarters MSG
+XX World Weather Building NFD
+XX Tropical Prediction Center PAN
+XX Pacific Region Headquarters PBP
+XX Storm Prediction Center SPC
+XX Spanish Product SPN
+XX Network Control Facility SST
+XX Network Control Facility THR
+XX Western Region Headquarters VHW
+XX Alaska Region Headquarters VRH
+XX Eastern Region Headquarters VUY
+XX Tropical Prediction Center WCA
+XX Network Control Facility WNC
+XX World Weather Building WNO
+XX Weather Message WXM

@@ -1,0 +1,72 @@
+AL Alabama
+AK Alaska
+AS American Samoa
+AZ Arizona
+AR Arkansas
+CA California
+PH Central Pacific Ocean
+CO Colorado
+CT Connecticut
+DE Delaware
+DC District of Columbia
+PZ Eastern N. Pacific Ocean
+FL Florida
+GA Georgia
+GU Guam
+GM Gulf of Mexico
+HI Hawaii
+ID Idaho
+IL Illinois
+IN Indiana
+IA Iowa
+KS Kansas
+KY Kentucky
+LE Lake Erie
+LH Lake Huron
+LM Lake Michigan
+LO Lake Ontario
+LC Lake St. Clair
+LS Lake Superior
+LA Louisiana
+ME Maine
+MD Maryland
+MA Massachusetts
+MI Michigan
+UM Midway Islands
+MN Minnesota
+MS Mississippi
+MO Missouri
+MT Montana
+PK N. Pacific Ocean
+NE Nebraska
+NV Nevada
+NH New Hampshire
+NJ New Jersey
+NM New Mexico
+NY New York
+NC North Carolina
+ND North Dakota
+MP Northern Mariana Islands
+AN Northwest Atlantic Ocean
+OH Ohio
+OK Oklahoma
+OR Oregon
+PA Pennsylvania
+PR Puerto Rico
+RI Rhode Island
+PS S. Central Pacific Ocean
+SC South Carolina
+SD South Dakota
+SL St. Lawrence River
+TN Tennessee
+TX Texas
+UT Utah
+VT Vermont
+VI Virgin Islands
+VA Virginia
+PM W. Pacific Ocean
+WA Washington
+AM West Atlantic Ocean
+WV West Virginia
+WI Wisconsin
+WY Wyoming

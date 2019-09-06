@@ -1,0 +1,60 @@
+ATPATHUS Atlantic Path
+CMPWLDUS Land/Sea Temperatures and Clouds
+CRB1WBCA Day 1 QPF & 850 HPA Winds
+CRB2WBCA Day 2 QPF & 850 HPA Winds
+CRB3WBCA Day 3 QPF & 850 HPA Winds
+CSA001US Caribbean Surface Analysis
+CUBARADR Cuba Radar
+FFG001US 1-Hour Flash Flood Guidance
+FFG003US 3-Hour Flash Flood Guidance
+FFG006US 6-Hour Flash Flood Guidance
+G08CIRUS GOES 8 Satellite Image - All United States
+G08HURUS GOES 8 Satellite Image - Southern US / Caribbean
+G10CIRUS GOES 10 Satellite Image - Western United States
+G10FDIUS GOES 10 Satellite Image - Pacific Ocean
+GMS005US Satellite Image Earth View - Pacific Ocean
+GPHJ88US Significant River Flood Outlook
+IMGFNT00 0000Z Surface Analysis
+IMGFNT06 0600Z Surface Analysis
+IMGFNT12 1200Z Surface Analysis
+IMGFNT18 1800Z Surface Analysis
+IMGSJUPR Satellite Image - Caribbean Islands
+IMGSNDUS GOES Sounder
+IMGSWPUS Satellite Image - Southwestern Pacific
+IMGWWAUS United States Warnings, Watches and Advisories
+INDCIRUS Satellite Image Earth View - Indian Ocean
+METFIREU Satellite Image Earth View - Africa
+MOD91EUS 6-Hour QPF 91e
+MOD92FBW 12-Hour Forecast of Fronts/Pressure and Weather
+MOD93SUS 6-Hour QPF 93e
+MOD94SUS Excessive Rainfall Potential Outlook
+MOD96FBW 36-Hour Forecast of Fronts/Pressure and Weather
+MODDY1US Day 1 Convective Outlook
+MODDY2US Day 2 Convective Outlook
+MODQP1US 24-Hour Day 1 QPF 94q
+MODQP2US 24-Hour Day 2 QPF 98q
+RADALLAK Alaska
+RADALLGU Guam
+RADALLHI Hawaii
+RADALLPR Puerto Rico
+RADALLUS NEXRAD All US
+RADGRTLK Central Great Lakes
+RADNTHES Northeast
+RADPACNW Pacific Northwest
+RADPACSW Pacific Southwest
+RADRCKNT Northern Rockies
+RADRCKST Southern Rockies
+RADREFUS NEXRAD Reflectivity
+RADSMSVY Lower Mississippi Valley
+RADSTHES Southeast
+RADSTHPL Southern Plains
+RADUMSVY Upper Mississippi Valley
+SESALLUS Earth View -
+TRKATLUS Atlantic Tropical Cyclones
+TRKNEPUS Northeast Pacific Tropical Cyclones
+TRKNINUS North Indian Tropical Cyclones
+TRKNWPUS Northwest Pacific Tropical Cyclones
+TRKSEPUS Southeast Pacific Tropical Cyclones
+TRKSINUS South Indian Tropical Cyclones
+TRKSWPUS Southwest Pacific Tropical Cyclones
+TRKWLDUS Worldwide Tropical Cyclones
