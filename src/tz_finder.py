@@ -12,7 +12,7 @@
 # publications.
 #
 # Imports
-import re
+import re,sys
 
 wk_days = ["MON","TUE","WED","THU","FRI","SAT","SUN"]
 ST_lst = ["EST","CST","MST","PST","AST","SST","AKST","HAST","HST","CHST","ChST","GUAM LST","LST"]
@@ -254,8 +254,9 @@ def timezone_finder(readData,iHolder,last_tz):
         date = line.split("AM")
         return date[0].strip(), date[1].strip(),last_tz
       
-    #else:    #PRINT BADWARNING in AFD_keyword_finder.py
-    #    print("TZ_BADWARNING ", line, flush = True)
+    #else:    #PRINT BADWARNING in finder.py
+    #    print("TZ_BADWARNING ", line)#, flush = True)
+    #    sys.stdout.flush()
     
     ### FOR TESTING PURPOSES ONLY... KEEP COMMENTED OUT
     

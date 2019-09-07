@@ -29,7 +29,7 @@ def main():
     For robustness, try some possible common mispellings."""
     
     input_word_list = ["Sea breeze", "Sea breaze", "SEA BREEZE", "SEABREEZES", "SEABREEZE", "SEABREAZES", "SEABREAZE", "SEA BREEZES", "SEA BREAZES"] 
-    
+    #input_word_list = ["A"]
     
     
     
@@ -44,7 +44,7 @@ def main():
     #list1.sort()
     #
     
-    forecast_product_list = Option.MT_HOLLY_PHILADELPHIA_NJ_AFD
+    forecast_product_list = ["AFDLWX"]#Option.MT_HOLLY_PHILADELPHIA_NJ_AFD
     
     
     

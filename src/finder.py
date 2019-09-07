@@ -59,8 +59,8 @@ def AFD_finder(FSW_SEARCH, run_start_time):
         outputfileOUT (file): Search results
     """   
     startT = t.time()
-    print("Start Time: " + t.ctime(), flush=True)
-
+    print("Start Time: " + t.ctime())#, flush=True)
+    sys.stdout.flush()
     ## SET SOME DIRECTORY PATHS
     extension = ".txt"           # INPUT AND OUTPUT FILE THE SAME FORMAT
     indir = FSW_SEARCH['TEXT_DATA_PATH']
@@ -68,14 +68,16 @@ def AFD_finder(FSW_SEARCH, run_start_time):
     inputKey = FSW_SEARCH['KEYWORD_LIST']
     shortestword = len(min(inputKey, key=len)) # skip rows len shorter than shortest word.... but what if the word is longer than one row.....
     biggestword = len(max(inputKey, key=len))
-
+    testQuickCountFcst = 0
 # =============================================================================
 #  OUTFILE NAMING ...    --- REMOVE AND MODIFY FOR WEBSITE
 # =============================================================================
     stLEN = len(FSW_SEARCH['STATION_LIST'])
     outfile = run_start_time +"_"+ inputKey[0].replace(" ", "_")+"_"+str(stLEN)+"_"+str(FSW_SEARCH['START_YEAR'])+"_"+str(FSW_SEARCH['END_YEAR']) +"_Forecast_Search_Wizard" + extension  
-    print("Outfile: "+outfile, flush=True)
-    print(flush=True)
+    print("Outfile: "+outfile)#, flush=True)
+    print()
+    sys.stdout.flush()
+
 # =============================================================================
 #  Sets variables and constants --- KEEP
 # =============================================================================    
@@ -94,7 +96,9 @@ def AFD_finder(FSW_SEARCH, run_start_time):
 # =============================================================================
 # ITERATE THROUGH PRODUCTS TO BE SEARCHED   -- KEEP
 # =============================================================================
-    print("Begin Search", flush=True)
+    print("Begin Search")#, flush=True)
+    sys.stdout.flush()
+
     #Loops through all the files it's been told to loop through
     for wfo in FSW_SEARCH['STATION_LIST']:
         # Reset for each issuing branch
@@ -105,7 +109,8 @@ def AFD_finder(FSW_SEARCH, run_start_time):
 # INFILE NAMING?  -- MODIFY
 # =============================================================================
         partInFile = indir + wfo + "/" + wfo + "_"
-        print("Searching: ", wfo, flush=True)
+        print("Searching: ", wfo)#, flush=True)
+        sys.stdout.flush()
         partInFile = os.path.join(indir,wfo)
 # =============================================================================
 #  Iterate through the file for each product (years)   --- KEEP
@@ -118,8 +123,7 @@ def AFD_finder(FSW_SEARCH, run_start_time):
 
             ## OPEN/READ DATA FILE WITH ARCHIVED AFD
             if os.path.isfile(data_file) == True:
-                infile = open(data_file,'r')
-                readData = infile.readlines()
+                readData = open(data_file,'r').readlines()
                 readData = [rD.upper() for rD in readData]
     # =============================================================================
     #        DOES THIS ACTUALLY SPEED IT UP OR SLOW IT DOWN????          
@@ -131,23 +135,34 @@ def AFD_finder(FSW_SEARCH, run_start_time):
                 if FSW_SEARCH['And_Or'] == False:
                     ## NEW - ANY SEARCH
                     if any(keyword in rCheck for keyword in inputKey):
+                        for idy in range(len(inputKey)):
+                            keywordCounts[idy] += rCheck.count(inputKey[idy]) # Could be done faster by doing once per forecast file
+                        testQuickCountFcst += rCheck.count(wfo)
                         del rCheck
                     else:
-                        #print("No Possible Search Matches in: ",wfo+"_"+sYear+" . Skipping...", flush=True)
+                        testQuickCountFcst += rCheck.count(wfo)
+                        #print("No Possible Search Matches in: ",wfo+"_"+sYear+" . Skipping...")#, flush=True)
+                        #sys.stdout.flush()
                         continue
                 ### IF ALL OF THE KEYWORDS ARE IN THAT WFO/YEAR FILE THEN CONTINUE/ELSE SKIP
                 elif FSW_SEARCH['And_Or'] == True:
                     if all(keyword in rCheck for keyword in inputKey):
+                        for idy in range(len(inputKey)):
+                            keywordCounts[idy] += rCheck.count(inputKey[idy]) # Could be done faster by doing once per forecast file
+                        testQuickCountFcst += rCheck.count(wfo)
                         del rCheck
                     else:
-                        #print("No Possible Search Matches in: ",wfo+"_"+sYear+" . Skipping...", flush=True)
+                        testQuickCountFcst += rCheck.count(wfo)
+                        #print("No Possible Search Matches in: ",wfo+"_"+sYear+" . Skipping...")#, flush=True)
+                        #sys.stdout.flush()
                         continue
     # =============================================================================
     # 
     # =============================================================================
     
             else:
-                print("MISSING FILE: ", data_file, flush=True)
+                print("MISSING FILE: ", data_file)#, flush=True)
+                sys.stdout.flush()
                 continue
 
 # =============================================================================
@@ -166,7 +181,7 @@ def AFD_finder(FSW_SEARCH, run_start_time):
             #Search Each row in the file            
             for idx in range(length_file-1):
                 
-                #print("Count: ", countZ, "||", countTry-reset_count, reset_count, prodsIssued, wfo, iYear, idx, flush=True) 
+                #print("Count: ", countZ, "||", countTry-reset_count, reset_count, prodsIssued, wfo, iYear, idx)#, flush=True) 
 
                 #if the row is empty skip
                 if readData[idx] == "\n":         continue
@@ -192,15 +207,17 @@ def AFD_finder(FSW_SEARCH, run_start_time):
                                 elif "SWXALTK" in readData[idx]:
                                     pass
                                 else:
-                                    print("FINDER: NO FORECAST HEADER WAS FOUND, ", wfo, iYear, "Current: ", idx, "Last Good: ", iHolder, flush=True)
+                                    print("FINDER: NO FORECAST HEADER WAS FOUND, ", wfo, iYear, "Current: ", idx, "Last Good: ", iHolder)#, flush=True)
+                                    sys.stdout.flush()
                             else:
                                 if abs(idx-iHolder) < 8:
-                                    #print("FINDER: DUPLICATE AWIPS ID IN HEADER", wfo, iYear, "Current: ", idx, "Last Good: ", iHolder, flush=True)
+                                    #print("FINDER: DUPLICATE AWIPS ID IN HEADER", wfo, iYear, "Current: ", idx, "Last Good: ", iHolder)#, flush=True)
+                                    sys.stdout.flush()
                                     countTry -= 1
                                     continue
-                                print("FINDER: NO FORECAST HEADER WAS FOUND, ", wfo, iYear, "Current: ", idx, "Last Good: ", iHolder, flush=True)
-                                
-                    
+                                print("FINDER: NO FORECAST HEADER WAS FOUND, ", wfo, iYear, "Current: ", idx, "Last Good: ", iHolder)#, flush=True)
+                                sys.stdout.flush()
+
                     # FOUND THE TOP.... TRY TO FIND THE TIME DDHHMM
                     foundDDHHMM = False
                     try:
@@ -385,7 +402,7 @@ def AFD_finder(FSW_SEARCH, run_start_time):
                     for idy in range(len(inputKey)):
                         #ACCURATE COUNT OF THE KEYWORDS
                         if inputKey[idy] in readData[idx]:
-                            keywordCounts[idy] += readData[idx].count(inputKey[idy]) # Could be done faster by doing once per forecast file
+                            #keywordCounts[idy] += readData[idx].count(inputKey[idy]) # Could be done faster by doing once per forecast file
                             linestring = readData[idx]
                         # THIS MEANS THE WORD IS SPLIT BETWEEN TWO LINES.... If it goes to ELSE that means it's only in the next row....skip
                         elif inputKey[idy] not in readData[idx+1][:biggestword] and inputKey[idy] not in readData[idx]:
@@ -440,7 +457,8 @@ def AFD_finder(FSW_SEARCH, run_start_time):
                                         #try:
                                         date, time, tz_array = timezone_finder(readData,iHolder,last_tz)
                                         #except:
-                                        #    print("TZ WARNING: ", readData[iHolder-2:iHolder+2], flush = True)
+                                        #    print("TZ WARNING: ", readData[iHolder-2:iHolder+2])#, flush = True)
+                                        #    sys.stdout.flush()
                                         iHolderLast = iHolder
                                         last_tz = tz_array
                                         cFalse[idy] = True
@@ -459,8 +477,8 @@ def AFD_finder(FSW_SEARCH, run_start_time):
                                         # COULD NOT FIND DATE/TIME and the time zone.... use the last known forecast
                                         try:
                                             date, time, tz_array = timezone_finder(readData,iHolderLast,last_tz)
-                                            #print("TZ WARNING: ", readData[iHolder-2:iHolder+2], flush = True)
-
+                                            #print("TZ WARNING: ", readData[iHolder-2:iHolder+2])#, flush = True)
+                                            #    sys.stdout.flush()
                                             ###isAssume = True
                                             iHolderLast = iHolderLast
                                             last_tz = tz_array
@@ -506,8 +524,8 @@ def AFD_finder(FSW_SEARCH, run_start_time):
 # =============================================================================      
                 if idx == (length_file-1) and foundHEADER == False and foundDDHHMM == True:
                     reset_count -=1
-                    print("FINDER: NO FORECAST HEADER WAS FOUND (EOF), ", wfo, iYear, "Current: ", idx, "Last Good: ", iHolder, flush=True)   
-                    
+                    print("FINDER: NO FORECAST HEADER WAS FOUND (EOF), ", wfo, iYear, "Current: ", idx, "Last Good: ", iHolder)#, flush=True)   
+                    sys.stdout.flush()
                 
 # TIME HANDLE FUNCTIONS FOR ALL CASES FOUND   - AFTER EACH FILE... OUTSIDE FOR LOOP
 # =============================================================================
@@ -547,34 +565,34 @@ def AFD_finder(FSW_SEARCH, run_start_time):
     
 # PRINT STATISTICS - SEARCH = DONE...
 # =============================================================================   
-    print("End Search", flush=True)
-    print("End Time: " + t.ctime(), flush=True)
-    print(flush=True)
+    print("End Search")#, flush=True)
+    sys.stdout.flush()
     endT = t.time()
     eTime = endT-startT
     
-    print(flush=True)
     num_days = len(masterList) # NUMBER OF CASES/DAYS
     total_mentions = sum(keywordCountsFINAL) # TOTAL MENTIONS: SUM OF FORECAST FREQUENCY OF EACH KEYWORD
 
     #Print Algorithm Statistics to the console
     algor_stats(FSW_SEARCH['STATION_LIST'],inputKey, total_mentions,num_days,no_dups,FSW_SEARCH['START_YEAR'],FSW_SEARCH['END_YEAR'],countBad)
-    print(flush=True)
-    print("Total Products Expected: ",countTry, flush=True)
-    print(flush=True)
-    print("Total Products Searched: ",prodsIssued, flush=True)
-    print("Duplicate Forecasts Issued", countDupFcst, flush=True)  
-    print(flush=True)
-    print("Main-Search Elapsed Time:",endT-startT, flush=True)
-    
+    sys.stdout.flush()
+    print("Estimated Forecasts: ",testQuickCountFcst)
+    print("Total Forecasts Attempted: ",countTry)#, flush=True)
+    print("Total Forecasts Searched: ",prodsIssued)#, flush=True)
+    print("\nIndeterminable Forecasts", countTry-prodsIssued)#, flush=True)  
+    print("Duplicate Forecasts Issued", countDupFcst)#, flush=True)  
+    experimental = testQuickCountFcst  - ((testQuickCountFcst - reset_count) - (countTry-prodsIssued))
+    print("\nExpected Forecasts (Experimental): ", experimental)
+    sys.stdout.flush()
+
 # WRITE OUTPUT
 # =============================================================================   
     outputfileOUT = write_output_file(outputfile, inputKey, FSW_SEARCH['STATION_LIST'], FSW_SEARCH['START_YEAR'],FSW_SEARCH['END_YEAR'], eTime, FSW_SEARCH['isGrep'], FSW_SEARCH['And_Or'],\
                  FSW_SEARCH['ByForecast_ByDay'],FSW_SEARCH['Make_Assumptions'],keywordCounts,keywordCountsFINAL,num_days,prodsIssued,\
                  countDupFcst,total_mentions,no_dups,countBad,masterList,masterList2,masterList3)
    
-    print(flush=True)
-    print("Output file complete\n\n", flush=True)
-    ###print("Difference: ", countTry-prodsIssued)
-    print(flush=True)
+    print("\nMain-Search Elapsed Time:",endT-startT)#, flush=True)
+    print()#, flush=True)
+    sys.stdout.flush()
+
     return outputfileOUT

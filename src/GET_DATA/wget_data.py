@@ -16,7 +16,7 @@
 #  - Not recommended for operational purposes
 #
 # Imports
-import os    
+import os, sys 
 import src.GET_DATA.wget as wget
 
 #This program could be broken if something changes on Iowa Environmental Mesonet's end
@@ -40,13 +40,15 @@ def get_data(lst, start, end):
     #To my knowledge all should be upper-case when calling from IEM
     lst2 = [x.upper() for x in lst]
     
-    print("\n\nData being stored to: " + data_dir + "\n\n", flush=True)
-    
+    print("\n\nData being stored to: " + data_dir + "\n\n")#, flush=True)
+    sys.stdout.flush()
+
     # For forecast product
     for AWIPS_ID in lst2:
         
-        print(AWIPS_ID, flush=True)
-        
+        print(AWIPS_ID)#, flush=True)
+        sys.stdout.flush()
+
         # For year in product history
         for year in range(start,end+1):
             
@@ -78,5 +80,6 @@ def get_data(lst, start, end):
             # If the file is less than 50 bytes it's likely empty and missing data, so inform the user for their records.
             # After checking, keep regardlessly
             if os.stat(outfile).st_size < 50: #bytes
-                print("Empty File: " + outfile, flush=True)
+                print("Empty File: " + outfile)#, flush=True)
+                sys.stdout.flush()
     return data_dir

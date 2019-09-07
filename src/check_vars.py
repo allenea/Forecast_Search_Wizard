@@ -76,7 +76,8 @@ def input_words(lst, isGrep):
             
         inputKeyLst = []
         if len(lst) < 1:
-            print("Empty List of Words", flush=True)
+            print("Empty List of Words")#, flush=True)
+            sys.stdout.flush()
             return None
         else:
             i = 0
@@ -117,7 +118,8 @@ def input_words(lst, isGrep):
             inputKeyLst = check_if_substring(inputKeyLst)
         return inputKeyLst
     else:
-        print("List of keywords contains something other than all strings...",flush=True)
+        print("List of keywords contains something other than all strings...")#,flush=True)
+        sys.stdout.flush()
         return None
 
 def search_option(option):
@@ -131,6 +133,7 @@ def search_option(option):
         return True
     else:
         print("FAILURE... USE DEFAULT SEARCH OPTIONS")
+        sys.stdout.flush()
         return False
 
 
@@ -148,25 +151,25 @@ def set_year_range(start, end):
         
     # You might be living in the future, but we're all living in the present.    
     if end >= ADMIN_SET_MAX + 1:
-        print ("\nThis year has not happened yet. Choose a more recent end date - year", flush=True)
-        print ("", flush=True)
-        print ("Redo with correct year range\n", flush=True)
+        print("\nThis year has not happened yet. Choose a more recent end date - year\n")#, flush=True)
+        print("Redo with correct year range\n")#, flush=True)
+        sys.stdout.flush()
         return None, None
         
     # ha you're funny
     if (start < ADMIN_SET_MIN or start >= ADMIN_SET_MAX + 1) and end <= ADMIN_SET_MAX:
         
         ## IEM DATA MESSAGE
-        print("Start year out of range [1996 - Current Year]. Check your TEXT_DATA folder and refer below (from Iowa Mesonet)", flush=True)
-        print("1996 thru 2000: Very sparse and incomplete, selectively backfilled as archives have been found.", flush=True)
-        print("Also note that product source IDs are possibly different back then (prior to NWS Modernization).", flush=True)
-        print("Known holes exist at: 29 Oct-1 Nov 1998, 24-27 Dec 1998, 25-28 Jul 1999, 21-25 Jan 2000, 26-27 Mar 2000 \n\n", flush=True)
-        print("2001 thru 2007: More consistent archives, but still likely missing things. Much better coverage though.", flush=True)
-        print("2008 thru now: Very good data coverage and higher fidelity archiving.", flush=True)
-        
-        print("\n\nIf your dataset does indeed exists prior to 1996. Then modify the get_year_range function in redo_finder_functions.py located in the src directory.", flush=True)
-        print ("", flush=True)
-        print ("Otherwise redo with correct year range\n", flush=True)
+        print("Start year out of range [1996 - Current Year]. Check your TEXT_DATA folder and refer below (from Iowa Mesonet)")#, flush=True)
+        print("1996 thru 2000: Very sparse and incomplete, selectively backfilled as archives have been found.")#, flush=True)
+        print("Also note that product source IDs are possibly different back then (prior to NWS Modernization).")#, flush=True)
+        print("Known holes exist at: 29 Oct-1 Nov 1998, 24-27 Dec 1998, 25-28 Jul 1999, 21-25 Jan 2000, 26-27 Mar 2000 \n\n")#, flush=True)
+        print("2001 thru 2007: More consistent archives, but still likely missing things. Much better coverage though.")#, flush=True)
+        print("2008 thru now: Very good data coverage and higher fidelity archiving.")#, flush=True)
+        print("\n\nIf your dataset does indeed exists prior to 1996. Then modify the get_year_range function in redo_finder_functions.py located in the src directory.\n")#, flush=True)
+        print("Otherwise redo with correct year range\n")#, flush=True)
+        sys.stdout.flush()
+
         return None, None
     
     if start > end:
@@ -185,13 +188,14 @@ def check_if_substring(lst):
     keepKey = [inputKeyNew[0].upper()]
     for y in range(1, len(inputKeyNew)):
         if any(kk in inputKeyNew[y].upper() for kk in keepKey):
-            print("REDUNDANT: REMOVING: ", inputKeyNew[y].upper(),"FROM THE LIST OF KEYWORDS...",flush=True)
-
+            print("REDUNDANT: REMOVING: ", inputKeyNew[y].upper(),"FROM THE LIST OF KEYWORDS...")#,flush=True)
+            sys.stdout.flush()
             continue
         elif inputKeyNew[y].upper() not in keepKey:
             keepKey.append(inputKeyNew[y].upper())
         else:
-            print("REDUNDANT: REMOVING: ", inputKeyNew[y].upper(),"FROM THE LIST OF KEYWORDS...",flush=True)
+            print("REDUNDANT: REMOVING: ", inputKeyNew[y].upper(),"FROM THE LIST OF KEYWORDS...")#,flush=True)
+            sys.stdout.flush()
             continue
             
             

@@ -40,6 +40,9 @@ def main():
     end_year = int(time.ctime()[-4:]) ## CURRENT YEAR
     
     # 6. The List of PILs for the NWS text products 
+    MASTER_LIST = ["AFDLWX","AFDPHI"]
+    ## Remove the 3- " in ther row below and at the end of the master list (green?) -  FOR FULL DATASET
+    """
     MASTER_LIST = ['AFDABQ', 'AFDABR', 'AFDAFC', 'AFDAFG', 'AFDAJK', 'AFDAKQ', 'AFDALY', 'AFDAMA', 'AFDAPX', 'AFDARX',
 			  'AFDBGM', 'AFDBIS', 'AFDBMX', 'AFDBOI', 'AFDBOU', 'AFDBOX', 'AFDBRO', 'AFDBTV', 'AFDBUF', 'AFDBYZ',
 			  'AFDCAE', 'AFDCAR', 'AFDCHS', 'AFDCLE', 'AFDCRP', 'AFDCTP', 'AFDCYS', 'AFDDDC', 'AFDDLH', 'AFDDMX',
@@ -94,6 +97,9 @@ def main():
               'WSWLWX', 'WSWPHI', "LSRADQ", "LSRAKN", "LSRANN", "LSRAT1", "LSRBA1", "LSRBET", "LSRBH1", "LSRBR1", "LSRCS1",
               "LSRHO1", "LSRJM1", "LSRMCG", "LSRNK1", "LSRNY5", "LSRNY6", "LSROME", "LSROTZ", "LSRPPG", "LSRSNP", "LSRTD1",
               "LSRYAK", "VOWLWX","VOWPHI"]
+    
+    
+    """
 
 
 
@@ -113,16 +119,25 @@ def main():
     start_time = time.time()
     
     #Print Statements
-    print("IEM Text-Data Retrieval is Powered by the Forecast Search Wizard\n", flush=True)
-    print(time.ctime(), flush=True)
-    print("\nDownload Data? " + str(Download_Data), flush=True)
-    print("Get the Latest Year? " + str(Get_Latest_Year), flush=True)
+    print("IEM Text-Data Retrieval is Powered by the Forecast Search Wizard\n")#, flush=True)
+    sys.stdout.flush()
+
+    print(time.ctime())#, flush=True)
+    sys.stdout.flush()
+
+    print("\nDownload Data? " + str(Download_Data))#, flush=True)
+    sys.stdout.flush()
+
+    print("Get the Latest Year? " + str(Get_Latest_Year))#, flush=True)
     if Get_Latest_Year == True:
-        print("Start: " + str(end_year)+"\t\t End: "+str(end_year), flush=True)
+        print("Start: " + str(end_year)+"\t\t End: "+str(end_year))#, flush=True)
+        sys.stdout.flush()
     else:
-        print("Start: " + str(start_year)+"\t\t End: "+str(end_year), flush=True)
-    print("Sorting text products alphabetically...", flush=True)
-    
+        print("Start: " + str(start_year)+"\t\t End: "+str(end_year))#, flush=True)
+        sys.stdout.flush()
+    print("Sorting text products alphabetically...")#, flush=True)
+    sys.stdout.flush()
+
     #Sort the list
     MASTER_LIST.sort()
  
@@ -133,9 +148,12 @@ def main():
         MASTER_SPLIT[allen] = str(MASTER_SPLIT[allen]).replace("[", " ")
         MASTER_SPLIT[allen] = str(MASTER_SPLIT[allen]).replace("]", " ")
         if firstRow == False:
-            print("\t\t\t", MASTER_SPLIT[allen], flush=True)
+            print("\t\t\t", MASTER_SPLIT[allen])#, flush=True)
+            sys.stdout.flush()
+
         else:
-            print("Forecast Products: ", MASTER_SPLIT[allen], flush=True)
+            print("Forecast Products: ", MASTER_SPLIT[allen])#, flush=True)
+            sys.stdout.flush()
             firstRow = False
     
     #DOWNLOAD THE DATA
@@ -146,7 +164,8 @@ def main():
         data_dir = get_data(MASTER_LIST, start_year, end_year)
         pass
     else:
-        print("Download Data was not set to true, therefore no data will be downloaded. Existing dataset will be preserved.", flush=True)
+        print("Download Data was not set to true, therefore no data will be downloaded. Existing dataset will be preserved.")#, flush=True)
+        sys.stdout.flush()
         sys.exit(0)
     
     #If folder contains only empty files... do what file says. currently removes LSRs and VOW files but you can change that to what you want.
@@ -156,7 +175,8 @@ def main():
         pass
     
     #Print Lapse Time
-    print("--- %s seconds ---"%(time.time() - start_time), flush=True)
+    print("--- %s seconds ---"%(time.time() - start_time))#, flush=True)
+    sys.stdout.flush()
     data_acknowledgement()
     #Close log file
     sys.stdout.close()

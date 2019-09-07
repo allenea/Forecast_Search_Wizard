@@ -1,4 +1,4 @@
-0# Copyright (C) 2018-2019 Eric Allen - All Rights Reserved
+# Copyright (C) 2018-2019 Eric Allen - All Rights Reserved
 # Modified from my PyDatPicture code governed by the same 
 # GNU Public License v3.0
 #
@@ -13,6 +13,7 @@
 # of the Forecast Search Wizard in all scholarly work and
 # publications.
 #
+# ONCE SETUP.PY WORKS GET RID OF THIS....
 
 def setup_FSW():
     """ See if require software is available. If not ATTEMPT to download/install it."""
@@ -30,8 +31,9 @@ def setup_FSW():
 
     except:
         print("One or more (expected) pre-installed python modules are not installed: ",\
-              "os, sys, re, glob, time, getpass, shutil, pathlib, signal, subprocess",\
-              flush = True)
+              "os, sys, re, glob, time, getpass, shutil, pathlib, signal, subprocess")#,\
+              #flush = True)
+        sys.stdout.flush()
         return False
     
     #USER_ID = getpass.getuser()
@@ -44,7 +46,8 @@ def setup_FSW():
         try:
             import conda.cli
         except:
-            print("FAILED IMPORT OF  conda.cli", flush = True)
+            print("FAILED IMPORT OF  conda.cli")#, flush = True)
+            sys.stdout.flush()
         try:
             import datetime
         except:        
@@ -68,7 +71,8 @@ def setup_FSW():
             print("Could not import one or more of the modules - "\
                   "Anaconda.\nTry restarting Anaconda and re-run the ",\
                   "program otherwise follow the documentation to download ",\
-                  "the necessary modules." , flush = True)
+                  "the necessary modules.")#, flush = True)
+            sys.stdout.flush()
             return False
             
     else: # Not Anaconda environment
@@ -92,7 +96,8 @@ def setup_FSW():
             print("Could not import one or more of the modules - "\
                   "Non-Anaconda.\nTry installing/upgrading pip or download/use Anaconda and re-run the ",\
                   "program otherwise follow the documentation to download ",\
-                  "the necessary modules." , flush = True)
+                  "the necessary modules.")#, flush = True)
+            sys.stdout.flush()
             return False
         
     return True

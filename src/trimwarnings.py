@@ -34,7 +34,7 @@ def trim_warnings(warningfile):
     be4Begin = False ; afterEnd = False
     countTP = 0; countTZ = 0; utc_convert = 0; countOther=0; countCR = 0; rowLast = "";
     
-        #Iterate through file
+    #Iterate through file
     for row in f:
         #Begin Search marks the starting point
         if "Begin Search" in row and be4Begin==False:
@@ -53,10 +53,8 @@ def trim_warnings(warningfile):
                 outfile.write("%s" % row)
                 afterEnd = True
             else:
-                #ADDED
                 if row.strip() == "":
-                    continue
-                #if row == rowLast:
+                    outfile.write("%s" % row)
                 elif row == rowLast:
                     continue
                 else:
@@ -80,7 +78,7 @@ def trim_warnings(warningfile):
                     
                     
     #Write some numbers   
-    outfile.write("\n\nFINDER: Could Not Access An Expected Forecast: %d\n" % countCR)             
+    outfile.write("\nFINDER: Could Not Access An Expected Forecast: %d\n" % countCR)             
     outfile.write("TZ: Timezone Errors: %d\n" % countTZ)
     outfile.write("TP: Time Problem Errors: %d\n" % countTP)
     outfile.write("UTC Conversion Error: %d\n" % utc_convert)
@@ -99,14 +97,11 @@ def trim_warnings(warningfile):
             if row == "End Search":
                 outfile.write("%s" % row)
             else:
-                #ADDED
                 if row.strip() == "":
                     continue
-                #if row == rowLast:
                 elif row == rowLast:
                     continue
                 else:
-                    #REMOVE
                     if "FINDER:" in row:
                         outfile.write("%s" % row)
                         rowLast = row

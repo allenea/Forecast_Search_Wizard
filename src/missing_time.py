@@ -48,7 +48,7 @@ def wfo_rft_time_ALT(trimTimesFound,uniqueHours,wfo, timezone, uniqueKeyWords,ma
         FinalTimesFound (datetime tuple): A datetime tuple that has been converted to UTC.
         KeyFound (str):  The keyword that was found with any req. flags
     """   
-    #SPC2003 coming in here
+    #SPC2003 coming in here and getting lost
     #store successfully identified cases in this array
     count = 0
     cYear = int(gettime.ctime()[-4:]) + 1
@@ -201,13 +201,16 @@ def wfo_rft_time_ALT(trimTimesFound,uniqueHours,wfo, timezone, uniqueKeyWords,ma
     # if day is 0 (first check IMPORTANT)... don't accept since day !=0
     if day == -1:
         if month == "" and year == -1:
-            print("OTHER: ",wfo," NON-HEADER - INVALID DATE/TIME LINE: NO MONTH, DAY, OR YEAR", flush=True)#,trimTimesFound, "&&", uniqueHours, "&&",timezone)
+            print("OTHER: ",wfo," NON-HEADER - INVALID DATE/TIME LINE: NO MONTH, DAY, OR YEAR")#, flush=True)#,trimTimesFound, "&&", uniqueHours, "&&",timezone)
+            sys.stdout.flush()
             return None, None
         elif month == "":
-            print("OTHER: ",wfo," NON-HEADER - INVALID DATE/TIME LINE: NO MONTH OR DAY", flush=True)#,trimTimesFound, "&&", uniqueHours, "&&",timezone)
+            print("OTHER: ",wfo," NON-HEADER - INVALID DATE/TIME LINE: NO MONTH OR DAY")#, flush=True)#,trimTimesFound, "&&", uniqueHours, "&&",timezone)
+            sys.stdout.flush()
             return None, None
         else:    
-            print("TP: ",wfo," - ERR NO DAY: ",str(day),"....",date, flush=True)
+            print("TP: ",wfo," - ERR NO DAY: ",str(day),"....",date)#, flush=True)
+            sys.stdout.flush()
             return None, None
     # if day is less than 10 need to add a 0 in front for string sort
     elif day < 10: strdayEAA = '0'+ str(day)
@@ -215,14 +218,16 @@ def wfo_rft_time_ALT(trimTimesFound,uniqueHours,wfo, timezone, uniqueKeyWords,ma
     elif day < 32: strdayEAA = str(day)
     #otherwise warn and skip
     else:
-        print("TP: ",wfo," - ERR DAY... Check: ",str(day),"....",date, flush=True)
+        print("TP: ",wfo," - ERR DAY... Check: ",str(day),"....",date)#, flush=True)
+        sys.stdout.flush()
         return None, None
     
     #MONTH
     #if the length of month is greater than 3 for the check
     # IF MONTH NEVER ASSIGNED
     if len(month) == 0:
-        print("TP: ",wfo," - ERR NO MONTH... Check:",date, flush=True)
+        print("TP: ",wfo," - ERR NO MONTH... Check:",date)#, flush=True)
+        sys.stdout.flush()
         return None, None
     
     # PROPER ABBRIVIATION - 3 char
@@ -247,12 +252,14 @@ def wfo_rft_time_ALT(trimTimesFound,uniqueHours,wfo, timezone, uniqueKeyWords,ma
                     # If at the end of mo_str - not found then not there
                     # warn and skip
                     else:# mon == mo_str[-1]:
-                        print("TP: ",wfo," - ERR MONTH: ", mArr,"....",date, flush=True)
+                        print("TP: ",wfo," - ERR MONTH: ", mArr,"....",date)#, flush=True)
+                        sys.stdout.flush()
                         return None, None
             # is only one then there was no month, only the week day
             # warn and skip
             else:
-                print("TP: ",wfo," - ERR MONTH - not mo+wk_day: ",date, flush=True)
+                print("TP: ",wfo," - ERR MONTH - not mo+wk_day: ",date)#, flush=True)
+                sys.stdout.flush()
                 return None, None
         # if not in weekdays then just take the first 3 characters.
         # Most likely this is the month but if not it'll be tossed below
@@ -263,7 +270,8 @@ def wfo_rft_time_ALT(trimTimesFound,uniqueHours,wfo, timezone, uniqueKeyWords,ma
     # warn and skip
     # LEN < 3 but not 0
     else:
-        print("TP: ",wfo," - ERR UNKNOWN MONTH... Check:",date, flush=True)
+        print("TP: ",wfo," - ERR UNKNOWN MONTH... Check:",date)#, flush=True)
+        sys.stdout.flush()
         return None, None
     
     # IF 0 was used instead of O -- place below for months with O's or 0's and remove 
@@ -285,7 +293,8 @@ def wfo_rft_time_ALT(trimTimesFound,uniqueHours,wfo, timezone, uniqueKeyWords,ma
     # If else make it 999 where it can't possibly be used and warn us
     else:
         mo="99"
-        print("TP: ",wfo," - Reason for UTC FAIL: ", month, "...",month,"-",day,"-",year, flush=True)
+        print("TP: ",wfo," - Reason for UTC FAIL: ", month, "...",month,"-",day,"-",year)#, flush=True)
+        sys.stdout.flush()
         return None, None
     
     #!!! Outside year range  - modify for CPC... don't because not processed in main search b/c year == year
@@ -295,7 +304,8 @@ def wfo_rft_time_ALT(trimTimesFound,uniqueHours,wfo, timezone, uniqueKeyWords,ma
             year = year + 100
         else:
             #year = iYear
-            print("TP: ",wfo," - ERR YEAR... Check: ", str(year),"....",date, flush=True)
+            print("TP: ",wfo," - ERR YEAR... Check: ", str(year),"....",date)#, flush=True)
+            sys.stdout.flush()
             return None, None
 
 # =============================================================================
@@ -309,7 +319,8 @@ def wfo_rft_time_ALT(trimTimesFound,uniqueHours,wfo, timezone, uniqueKeyWords,ma
     
     
     if len(uniqueHours) == 0:
-        print("TP: ",wfo," - WARN NO TIME INFORMATION: ",year, month, day, "  ",uniqueHours, flush=True)
+        print("TP: ",wfo," - WARN NO TIME INFORMATION: ",year, month, day, "  ",uniqueHours)#, flush=True)
+        sys.stdout.flush()
         return None, None
     elif len(numTime) == 0:
         try:
@@ -321,7 +332,8 @@ def wfo_rft_time_ALT(trimTimesFound,uniqueHours,wfo, timezone, uniqueKeyWords,ma
         if len(numTime) == 0:
             if "NOON" in uniqueHours or "MIDNIGHT" in uniqueHours:
                 if "AFTERNOON" in uniqueHours:
-                    print("TP: ",wfo," - WARN 'AFTERNOON' IS NOT AN ACCEPTABLE TIME: ",year, month, day, "  ",uniqueHours, flush=True)
+                    print("TP: ",wfo," - WARN 'AFTERNOON' IS NOT AN ACCEPTABLE TIME: ",year, month, day, "  ",uniqueHours)#, flush=True)
+                    sys.stdout.flush()
                     return None, None
                 else:
                      if "NOON" in uniqueHours:
@@ -331,7 +343,8 @@ def wfo_rft_time_ALT(trimTimesFound,uniqueHours,wfo, timezone, uniqueKeyWords,ma
                         numTime = str(0000)
                         time22 = "AM"
             else:
-                print("TP: ",wfo," - WARN NO TIME INFORMATION: ",year, month, day, "  ",uniqueHours, flush=True)
+                print("TP: ",wfo," - WARN NO TIME INFORMATION: ",year, month, day, "  ",uniqueHours)#, flush=True)
+                sys.stdout.flush()
                 return None, None
         
     elif len(numTime) <= 4:
@@ -351,7 +364,8 @@ def wfo_rft_time_ALT(trimTimesFound,uniqueHours,wfo, timezone, uniqueKeyWords,ma
             timeTMP2 = (timeTMP2.replace("O","0"))
             numTime = re.sub('[^0-9]+', '', timeTMP2)
             if len(numTime) == 0:
-                print("TP: ",wfo," - WARN NO TIME INFORMATION: ",year, month, day, "  ",uniqueHours, flush=True)
+                print("TP: ",wfo," - WARN NO TIME INFORMATION: ",year, month, day, "  ",uniqueHours)#, flush=True)
+                sys.stdout.flush()
                 return None, None
 
     #ABSOLUTE
@@ -388,7 +402,8 @@ def wfo_rft_time_ALT(trimTimesFound,uniqueHours,wfo, timezone, uniqueKeyWords,ma
             time2 = int(numTime)
             if time2 >= 2400 or time2 < 0:
                 # on forecaster typo exception for 12000 should be 1200
-                print("TP: ",wfo," - ERR TIME INVALID - DIGITS: ", str(numTime), "...",month,"-",day,"-",year, uniqueHours, flush=True);
+                print("TP: ",wfo," - ERR TIME INVALID - DIGITS: ", str(numTime), "...",month,"-",day,"-",year, uniqueHours)#, flush=True);
+                sys.stdout.flush()
                 return None, None
             
             else:
@@ -405,7 +420,8 @@ def wfo_rft_time_ALT(trimTimesFound,uniqueHours,wfo, timezone, uniqueKeyWords,ma
                 AMPM = "AM"
                 short_time = str(0000)
             else:
-                print("TP: ",wfo," - ERR TIME - NO DIGITS: ",uniqueHours, "  ",AMPM," ",year, month, day, flush=True)
+                print("TP: ",wfo," - ERR TIME - NO DIGITS: ",uniqueHours, "  ",AMPM," ",year, month, day)#, flush=True)
+                sys.stdout.flush()
                 return None, None
             
     #PRETTY SAFE BET THAT IT WAS GOING TO BE AM OR PM            
@@ -435,7 +451,8 @@ def wfo_rft_time_ALT(trimTimesFound,uniqueHours,wfo, timezone, uniqueKeyWords,ma
             elif time22 >= 1200: AMPM = "PM";    short_time = str(time22);    isAssumedAMPM = True;   isAssumedInfo = True
 
         except:
-            print("TP: ",wfo," - ERR NO NUMERICAL TIME: ",time22, "  ",AMPM," ",year, month, day, uniqueHours, flush=True)
+            print("TP: ",wfo," - ERR NO NUMERICAL TIME: ",time22, "  ",AMPM," ",year, month, day, uniqueHours)#, flush=True)
+            sys.stdout.flush()
             return None, None
 
     
@@ -472,7 +489,8 @@ def wfo_rft_time_ALT(trimTimesFound,uniqueHours,wfo, timezone, uniqueKeyWords,ma
         
     # If length is > than 5 then we aren't expecting that warn and skip
     else:
-        print("TP: ",wfo," - ERR CATCH-ALL HHMM: ",uniqueHours, "  ",AMPM," ",year, month, day, uniqueHours, flush=True)
+        print("TP: ",wfo," - ERR CATCH-ALL HHMM: ",uniqueHours, "  ",AMPM," ",year, month, day, uniqueHours)#, flush=True)
+        sys.stdout.flush()
         return None, None
 
 
@@ -482,7 +500,8 @@ def wfo_rft_time_ALT(trimTimesFound,uniqueHours,wfo, timezone, uniqueKeyWords,ma
     #MINUTE  
     # IF still not resolved
     if minute == -1:
-        print("TP: ",wfo," - ERR NO MINUTE: ", minute," at hour: ",hour, AMPM," ... ",short_time, " ... ",month,"-",day,"-",year, uniqueHours, flush=True)
+        print("TP: ",wfo," - ERR NO MINUTE: ", minute," at hour: ",hour, AMPM," ... ",short_time, " ... ",month,"-",day,"-",year, uniqueHours)#, flush=True)
+        sys.stdout.flush()
         return None, None
     
     #If minute is a single digit less than 10 add a 0 to make it 2 digits
@@ -491,12 +510,14 @@ def wfo_rft_time_ALT(trimTimesFound,uniqueHours,wfo, timezone, uniqueKeyWords,ma
     elif minute < 60: minute = str(minute)
     # otherwise warn and print
     else:
-        print("TP: ",wfo," - ERR INVALID MINUTE: ", minute," at hour: ",hour, AMPM," ... ",short_time, " ... ",month,"-",day,"-",year, uniqueHours, flush=True)
+        print("TP: ",wfo," - ERR INVALID MINUTE: ", minute," at hour: ",hour, AMPM," ... ",short_time, " ... ",month,"-",day,"-",year, uniqueHours)#, flush=True)
+        sys.stdout.flush()
         return None, None
             
     #HOUR        
     if hour == -1:        #If still not resolved
-        print("TP: ",wfo," - ERR NO HOUR: ", hour, "is", AMPM," ... ",time22, " ... ",month,"-",day,"-",year, uniqueHours, flush=True)
+        print("TP: ",wfo," - ERR NO HOUR: ", hour, "is", AMPM," ... ",time22, " ... ",month,"-",day,"-",year, uniqueHours)#, flush=True)
+        sys.stdout.flush()
         return None, None
             
     elif hour <= 11 and AMPM == 'PM':  strHour = str(hour+ 12)
@@ -518,7 +539,8 @@ def wfo_rft_time_ALT(trimTimesFound,uniqueHours,wfo, timezone, uniqueKeyWords,ma
                 AMPM == "PM"
                 strHour = str(hour)
             else:
-                print("TP: ",wfo," - ERR INVALID HOUR (UTC): ", hour, "is", AMPM," ... ",time22, " ... ",month,"-",day,"-",year, uniqueHours, flush=True)
+                print("TP: ",wfo," - ERR INVALID HOUR (UTC): ", hour, "is", AMPM," ... ",time22, " ... ",month,"-",day,"-",year, uniqueHours)#, flush=True)
+                sys.stdout.flush()
                 return None, None
 
         elif hour < 24:
@@ -535,10 +557,12 @@ def wfo_rft_time_ALT(trimTimesFound,uniqueHours,wfo, timezone, uniqueKeyWords,ma
                 AMPM == "PM"
                 strHour = str(hour)
             else:
-                print("TP: ",wfo," - ERR INVALID HOUR (NON-UTC): ", hour, "is", AMPM," ... ",time22, " ... ",month,"-",day,"-",year, uniqueHours, flush=True)
+                print("TP: ",wfo," - ERR INVALID HOUR (NON-UTC): ", hour, "is", AMPM," ... ",time22, " ... ",month,"-",day,"-",year, uniqueHours)#, flush=True)
+                sys.stdout.flush()
                 return None, None
         else:         
-            print("TP: ",wfo," - ERR INVALID HOUR: ", hour, "is", AMPM," ... ",time22, " ... ",month,"-",day,"-",year, uniqueHours, flush=True)
+            print("TP: ",wfo," - ERR INVALID HOUR: ", hour, "is", AMPM," ... ",time22, " ... ",month,"-",day,"-",year, uniqueHours)#, flush=True)
+            sys.stdout.flush()
             return None, None
 
     if AMPM != "":
@@ -548,10 +572,12 @@ def wfo_rft_time_ALT(trimTimesFound,uniqueHours,wfo, timezone, uniqueKeyWords,ma
         
         if timezone == "":
             replace_tz = max(((item, timezone.count(item)) for item in set(timezone)), key=lambda a: a[1])[0]
-            print("WARNING TZ: Substituting TZ (w/ most common TZ in sequence): ", replace_tz," at ",wfo, flush=True)
+            print("WARNING TZ: Substituting TZ (w/ most common TZ in sequence): ", replace_tz," at ",wfo)#, flush=True)
+            sys.stdout.flush()
             TimesFound = utc_convert_reformat_time(dtf, replace_tz)
             if TimesFound == None:
-                print ("ERROR CONVERTING: NOAA/NWS messed up time...Check manually for this day: ", dtf, timezone, "at ",wfo, flush=True)
+                print ("ERROR CONVERTING: NOAA/NWS messed up time...Check manually for this day: ", dtf, timezone, "at ",wfo)#, flush=True)
+                sys.stdout.flush()
                 return None, None
             isAssumedAMPM = True
             isAssumedInfo = True
@@ -559,11 +585,13 @@ def wfo_rft_time_ALT(trimTimesFound,uniqueHours,wfo, timezone, uniqueKeyWords,ma
         else:
             TimesFound = utc_convert_reformat_time(dtf, timezone)
             if TimesFound == None:
-                print ("ERROR CONVERTING: NOAA/NWS messed up time...Check manually for this day: ", dtf, timezone, "at ",wfo, flush=True)
+                print ("ERROR CONVERTING: NOAA/NWS messed up time...Check manually for this day: ", dtf, timezone, "at ",wfo)#, flush=True)
+                sys.stdout.flush()
                 return None, None
             
     else:
-        print("TP: ",wfo," - AMPM MISSING - FINAL CHECK: ", hour,":",minute, " ... ",date, flush=True)
+        print("TP: ",wfo," - AMPM MISSING - FINAL CHECK: ", hour,":",minute, " ... ",date)#, flush=True)
+        sys.stdout.flush()
         return None, None
 
     ## If there wasn't an error in CONVERTING TIME        

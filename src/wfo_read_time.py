@@ -14,6 +14,7 @@
 # Imports
 import time as gettime
 import re
+import sys
 import pytz
 import datetime
 from src.missing_time import wfo_rft_time_ALT
@@ -104,7 +105,8 @@ def wfo_rft_time(trimTimesFound,uniqueHours,wfo, uniqueKeyWords,makeAssume,iYear
         #if the length of month is greater than 3 for the check
         # IF MONTH NEVER ASSIGNED
         if len(month) == 0:
-            print("TP: ",wfo," - ERR NO MONTH... Check:",date.strip(),"  ","??-",dayWMOHEAD,"-",iYear,"?  @",uniqueHours[x][-4:],"Z", flush=True)
+            print("TP: ",wfo," - ERR NO MONTH... Check:",date.strip(),"  ","??-",dayWMOHEAD,"-",iYear,"?  @",uniqueHours[x][-4:],"Z")#, flush=True)
+            sys.stdout.flush()
             continue
         
         # PROPER ABBRIVIATION - 3 char
@@ -129,12 +131,14 @@ def wfo_rft_time(trimTimesFound,uniqueHours,wfo, uniqueKeyWords,makeAssume,iYear
                         # If at the end of mo_str - not found then not there
                         # warn and skip
                         else:# mon == mo_str[-1]:
-                            print("TP: ",wfo," - ERR MONTH: ", mArr,"....",date, flush=True)
+                            print("TP: ",wfo," - ERR MONTH: ", mArr,"....",date)#, flush=True)
+                            sys.stdout.flush()
                             continue
                 # is only one then there was no month, only the week day
                 # warn and skip
                 else:
-                    print("TP: ",wfo," - ERR MONTH - not mo+wk_day: ",date, flush=True)
+                    print("TP: ",wfo," - ERR MONTH - not mo+wk_day: ",date)#, flush=True)
+                    sys.stdout.flush()
                     continue  
             # if not in weekdays then just take the first 3 characters.
             # Most likely this is the month but if not it'll be tossed below
@@ -145,7 +149,8 @@ def wfo_rft_time(trimTimesFound,uniqueHours,wfo, uniqueKeyWords,makeAssume,iYear
         # warn and skip
         # LEN < 3 but not 0
         else:
-            print("TP: ",wfo," - ERR UNKNOWN MONTH... Check:",date, flush=True)
+            print("TP: ",wfo," - ERR UNKNOWN MONTH... Check:",date)#, flush=True)
+            sys.stdout.flush()
             continue
         
         # IF 0 was used instead of O -- place below for months with O's or 0's and remove 
@@ -167,7 +172,8 @@ def wfo_rft_time(trimTimesFound,uniqueHours,wfo, uniqueKeyWords,makeAssume,iYear
         # If else make it 999 where it can't possibly be used and warn us
         else:
             mo="99"
-            print("TP: ",wfo," - Reason for UTC FAIL: ", month, "...",month,"-",dayWMOHEAD,"-",iYear, flush=True)
+            print("TP: ",wfo," - Reason for UTC FAIL: ", month, "...",month,"-",dayWMOHEAD,"-",iYear)#, flush=True)
+            sys.stdout.flush()
             continue                    
 
 
@@ -257,7 +263,8 @@ def wfo_rft_time(trimTimesFound,uniqueHours,wfo, uniqueKeyWords,makeAssume,iYear
                         year = [int(item) for item in t_nums if (item != '' and len(item) >=4 and int(item) >= 1900 and int(item) <= cYear)][0]        #remove empty values in array with time_nums
                     except:
                         year = iYear
-                        print("TP: ",wfo," - NON FATAL ERROR - YEAR REPLACED BY FILE-YEAR... Check: ", str(year),"....",date.strip(), flush=True)
+                        print("TP: ",wfo," - NON FATAL ERROR - YEAR REPLACED BY FILE-YEAR... Check: ", str(year),"....",date.strip())#, flush=True)
+                        sys.stdout.flush()
                         isAssumedInfo = True
                         
                     if year != iYear:
@@ -269,11 +276,13 @@ def wfo_rft_time(trimTimesFound,uniqueHours,wfo, uniqueKeyWords,makeAssume,iYear
                 day1 = [item for item in t_nums if item.isdigit() and (int(item) >0 and int(item) < 32)]
                 day = int(day1[0])       #remove empty values in array with time_nums
                 if len(day1) != 1:
-                    print("TP: DAY LONG",day1,trimTimesFound[x].strip(), uniqueHours[x].strip(), flush=True)
+                    print("TP: DAY LONG",day1,trimTimesFound[x].strip(), uniqueHours[x].strip())#, flush=True)
+                    sys.stdout.flush()
             except:
                 #pass
-                #print("warning on day, using UTC default", flush=True)
-                print("TP: ",wfo," - ERR NO DAY... Check:",t_nums,month,"-??-",year," @",uniqueHours[x][-4:],"Z", trimTimesFound[x].strip(), flush=True)
+                #print("warning on day, using UTC default")#, flush=True)
+                print("TP: ",wfo," - ERR NO DAY... Check:",t_nums,month,"-??-",year," @",uniqueHours[x][-4:],"Z", trimTimesFound[x].strip())#, flush=True)
+                sys.stdout.flush()
                 continue
                 
             if dayWMOHEAD == day:
@@ -288,7 +297,8 @@ def wfo_rft_time(trimTimesFound,uniqueHours,wfo, uniqueKeyWords,makeAssume,iYear
                     
                 else:
                     if abs(dayWMOHEAD - day) >=3 and abs(dayWMOHEAD - day) < 27 :
-                        #print(trimTimesFound[x].strip(), "  ",uniqueHours[x].strip(), dayWMOHEAD,"  ",day, flush=True)
+                        #print(trimTimesFound[x].strip(), "  ",uniqueHours[x].strip(), dayWMOHEAD,"  ",day)#, flush=True)
+                        #sys.stdout.flush()
                         isAssumedInfo = True
                         
                         
@@ -306,14 +316,15 @@ def wfo_rft_time(trimTimesFound,uniqueHours,wfo, uniqueKeyWords,makeAssume,iYear
                 mo = int(mo) + 1
                 #day = 1
                 if mo == 13:
-                    ####print("TP: NO yearNEXT FLAG",trimTimesFound[x].strip(), iYear,"\\\///",uniqueHours[x], flush=True)
+                    ####print("TP: NO yearNEXT FLAG",trimTimesFound[x].strip(), iYear,"\\\///",uniqueHours[x])#, flush=True)
+                    ####sys.stdout.flush()
                     mo = 1
                     year+=1
                 isAssumedInfo == True
             elif yearNext == True:
                 year+=1
-                ####print("TP: NO MONTH CHANGE",trimTimesFound[x].strip(),iYear,"\\\///",uniqueHours[x], flush=True)
-            
+                ####print("TP: NO MONTH CHANGE",trimTimesFound[x].strip(),iYear,"\\\///",uniqueHours[x])#, flush=True)
+                ####sys.stdout.flush()
 
 # =============================================================================
 # DONE WITH EXTRACTING YEAR, MONTH, DAY
@@ -325,9 +336,10 @@ def wfo_rft_time(trimTimesFound,uniqueHours,wfo, uniqueKeyWords,makeAssume,iYear
                 year = year + 100
             else:
                 print("TP: ",wfo," - NON FATAL ERROR - YEAR REPLACED BY FILE-YEAR... Check: ",\
-                       str(year),"....",date, flush=True)
-                year = iYear
-                #continue  
+                       str(year),"....",date)#, flush=True)
+                sys.stdout.flush()
+                #year = iYear  ## idea?
+                continue  
             
 
         # puts it in a datetime tuple
@@ -347,11 +359,14 @@ def wfo_rft_time(trimTimesFound,uniqueHours,wfo, uniqueKeyWords,makeAssume,iYear
                         isAssumedInfo = True
                     except:
                         dtf = str(year) + str(mo) + str(dayWMOHEAD) + str(hrWMOHEAD) + str(minWMOHEAD)
-                        print("TP: FORMATTING FAILED", dtf,"  ",trimTimesFound[x].strip(), uniqueHours[x].strip(), flush=True)
+                        print("TP: FORMATTING FAILED", dtf,"  ",trimTimesFound[x].strip(), uniqueHours[x].strip())#, flush=True)
+                        sys.stdout.flush()
+
                         continue
                 else:
                     dtf = str(year) + str(mo) + str(dayWMOHEAD) + str(hrWMOHEAD) + str(minWMOHEAD)
-                    print("TP: FORMATTING FAILED", dtf,"  ",trimTimesFound[x].strip(), uniqueHours[x].strip(), flush=True)
+                    print("TP: FORMATTING FAILED", dtf,"  ",trimTimesFound[x].strip(), uniqueHours[x].strip())#, flush=True)
+                    sys.stdout.flush()
                     continue
 
         #Formats the date to a text string
@@ -362,7 +377,8 @@ def wfo_rft_time(trimTimesFound,uniqueHours,wfo, uniqueKeyWords,makeAssume,iYear
         local = pytz.timezone("UTC")
         #Assign that timezone to the time and localize the time
         final_time_string = local.localize(naive)
-        #print(final_time_string, flush=True)
+        #print(final_time_string)#, flush=True)
+        #sys.stdout.flush()
 
         
         #Handles Assumptions
