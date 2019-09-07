@@ -13,6 +13,8 @@
 #
 # Imports
 import os, shutil, glob
+from __future__ import print_function
+
 #INDIR = /TEXT_DATA/ directory location
 def CheckRemove_Data(indir):
     """If the dataset for any given ID is sufficiently small, remove all data for that ID. Less than 50 bytes.

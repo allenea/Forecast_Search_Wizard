@@ -14,6 +14,8 @@ has all the necessary info.
 """
 from src.split_list import split_list
 import sys
+from __future__ import print_function
+
 
 def print_info(usr_vars, isSetUp):
     welcome()

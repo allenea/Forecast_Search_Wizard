@@ -15,6 +15,8 @@
 import time as gettime
 import re, sys, os
 from src.utc_convert import utc_convert_reformat_time
+from __future__ import print_function
+
 
 stripwords = ["MIAMI","FL", "BRANCH", "ISSUED AT", "ISSUED","COR","HONOLULU HI","WASHINGTON DC",\
               "NWS NATIONAL HURRICANE CENTER","NWS CLIMATE PREDICTION CENTER COLLEGE PARK MD"]

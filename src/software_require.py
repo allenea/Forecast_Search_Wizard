@@ -14,6 +14,7 @@
 # publications.
 #
 # ONCE SETUP.PY WORKS GET RID OF THIS....
+from __future__ import print_function
 
 def setup_FSW():
     """ See if require software is available. If not ATTEMPT to download/install it."""

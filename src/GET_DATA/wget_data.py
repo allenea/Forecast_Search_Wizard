@@ -18,6 +18,7 @@
 # Imports
 import os, sys 
 import src.GET_DATA.wget as wget
+from __future__ import print_function
 
 #This program could be broken if something changes on Iowa Environmental Mesonet's end
 def get_data(lst, start, end):

@@ -20,6 +20,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 from src.trimwarnings import trim_warnings
 from src.print_search_info import final_message
 from src.finder import AFD_finder
+from __future__ import print_function
 
 class TimeoutException(Exception):   # Custom exception class
     pass
