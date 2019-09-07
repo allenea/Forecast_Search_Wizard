@@ -25,13 +25,13 @@ def setup_FSW():
         import time
         import getpass
         import shutil
-        import pathlib
+        #import pathlib ## Not pre 3.4
         import signal
         import subprocess
 
     except:
         print("One or more (expected) pre-installed python modules are not installed: ",\
-              "os, sys, re, glob, time, getpass, shutil, pathlib, signal, subprocess")#,\
+              "os, sys, re, glob, time, getpass, shutil, signal, subprocess")#,\
               #flush = True)
         sys.stdout.flush()
         return False
