@@ -1,10 +1,16 @@
 # Forecast_Search_Wizard
  The Forecast Search Wizard makes it easier than ever before to analyze archived NOAA text products to obtain valuable information. The Forecast Search Wizard is a program that allows researchers to search keywords in NOAA/NWS text products (e.g., Area Forecast Discussions, Local Storm Reports, Watches/Warnings, etc.) to identify the occurrence of case studies, particular weather events, or other specific information. This tool will not only save the researcher time, but it will also improve the depth and quality of research by opening a door to a new source of data in the weather enterprise.
  
+ git clone https://github.com/allenea/Forecast_Search_Wizard.git
  
- python setup.py install
+ Try (depending on your system... Tell it where to build):
+    python setup.py install
+    python setup.py build install --prefix $HOME/.local
+    python setup.py install --user
+
+
  
- TO RUN - IN RUN_ME folder:
+ ## TO RUN - RUN_ME folder:
  
      - Edit download_data.py to download your dataset. The preset configuration is AFDPHI and AFDLWX. You can remove that and use the list of all tested products, which is surrounded by """   """" in the file. 
      
@@ -16,6 +22,6 @@
      
      - run FSW_NAMELIST.py to run the Forecast Search Wizard
      
+     - Check out the outputs.
      
-     
-     A more complete set of instructions and documentation to come. Additional information can be found in the FSW_NAMELIST and download_data files.
+A more complete set of instructions and documentation to come. Additional information can be found in the FSW_NAMELIST and download_data files.
