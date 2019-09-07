@@ -138,7 +138,6 @@ def AFD_finder(FSW_SEARCH, run_start_time):
                         for idy in range(len(inputKey)):
                             keywordCounts[idy] += rCheck.count(inputKey[idy]) # Could be done faster by doing once per forecast file
                         testQuickCountFcst += rCheck.count(wfo)
-                        del rCheck
                     else:
                         testQuickCountFcst += rCheck.count(wfo)
                         #print("No Possible Search Matches in: ",wfo+"_"+sYear+" . Skipping...")#, flush=True)
@@ -150,7 +149,6 @@ def AFD_finder(FSW_SEARCH, run_start_time):
                         for idy in range(len(inputKey)):
                             keywordCounts[idy] += rCheck.count(inputKey[idy]) # Could be done faster by doing once per forecast file
                         testQuickCountFcst += rCheck.count(wfo)
-                        del rCheck
                     else:
                         testQuickCountFcst += rCheck.count(wfo)
                         #print("No Possible Search Matches in: ",wfo+"_"+sYear+" . Skipping...")#, flush=True)
