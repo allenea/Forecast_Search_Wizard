@@ -1,7 +1,7 @@
 # Forecast_Search_Wizard
  The Forecast Search Wizard makes it easier than ever before to analyze archived NOAA text products to obtain valuable information. The Forecast Search Wizard is a program that allows researchers to search keywords in NOAA/NWS text products (e.g., Area Forecast Discussions, Local Storm Reports, Watches/Warnings, etc.) to identify the occurrence of case studies, particular weather events, or other specific information. This tool will not only save the researcher time, but it will also improve the depth and quality of research by opening a door to a new source of data in the weather enterprise.
  
- git clone https://github.com/allenea/Forecast_Search_Wizard.git
+    - git clone https://github.com/allenea/Forecast_Search_Wizard.git
  
  Try (depending on your system... Tell it where to build):
  
