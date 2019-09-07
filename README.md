@@ -4,9 +4,12 @@
  git clone https://github.com/allenea/Forecast_Search_Wizard.git
  
  Try (depending on your system... Tell it where to build):
-    python setup.py install
-    python setup.py build install --prefix $HOME/.local
-    python setup.py install --user
+ 
+    - python setup.py install
+    
+    - python setup.py build install --prefix $HOME/.local
+    
+    - python setup.py install --user
 
 
  
