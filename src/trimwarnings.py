@@ -12,8 +12,8 @@
 # publications.
 #
 # Imports
-import os
 from __future__ import print_function
+import os
 
 def trim_warnings(warningfile):
     """ Trims down the files to save space and remove duplicate warnings.

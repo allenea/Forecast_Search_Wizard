@@ -12,6 +12,7 @@
 # publications.
 #
 # Imports
+from __future__ import print_function
 import sys, os
 import time as t
 import re
@@ -23,7 +24,6 @@ from src.print_search_info import algor_stats
 from src.write_output import write_output_file
 from search_options.search_options import Option
 from src.Pre2003_SPC import covertSPC, timezone_finder_SPC
-from __future__ import print_function
 
 
 total_forecast = ['NATIONAL WEATHER SERVICE','NATIONAL HURRICANE CENTER','STORM PREDICTION CENTER','TROPICAL PREDICTION CENTER',

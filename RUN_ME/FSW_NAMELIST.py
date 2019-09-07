@@ -14,12 +14,12 @@
 # Default: In honor of my sea breeze/coastal wind research
 #
 # Imports
+from __future__ import print_function
 import os, sys           
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from search_options.search_options import Option
 from src.driver import execute
 from src.setup import setup
-from __future__ import print_function
 
 def main():
    

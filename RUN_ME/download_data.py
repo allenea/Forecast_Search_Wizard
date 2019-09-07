@@ -12,12 +12,12 @@
 # publications.
 #
 # Imports
+from __future__ import print_function
 import time
 import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from src.print_search_info import data_acknowledgement
-from __future__ import print_function
 
 def main():
     """ This program serves as the "NAMELIST" which provides options that the user can input to configure his search dataset."""

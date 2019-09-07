@@ -12,13 +12,13 @@
 # publications.
 #
 # Imports
+from __future__ import print_function
 import time as gettime
 import re
 import sys
 import pytz
 import datetime
 from src.missing_time import wfo_rft_time_ALT
-from __future__ import print_function
 
 wk_days = ["MON","TUE","WED","THU","FRI","SAT","SUN", \
            "MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY","SUNDAY", \

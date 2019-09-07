@@ -12,9 +12,9 @@ This should help you find your files and see if/where something might be going
 wrong so you can fix it in the main file (calls the core.py which runs when it 
 has all the necessary info.
 """
+from __future__ import print_function
 from src.split_list import split_list
 import sys
-from __future__ import print_function
 
 
 def print_info(usr_vars, isSetUp):

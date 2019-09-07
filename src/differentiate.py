@@ -16,6 +16,7 @@
 # publications.
 #
 # Imports
+from __future__ import print_function
 import re
 
 def word_in_list_sym(keyCheck,lst):

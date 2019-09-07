@@ -12,8 +12,8 @@
 # publications.
 #
 # Imports
-import re,sys
 from __future__ import print_function
+import re,sys
  
 def covertSPC(wfo, iYear, text, DDHHMM):
     """TESTED"""

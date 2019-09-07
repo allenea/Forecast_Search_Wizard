@@ -12,9 +12,9 @@
 # publications.
 #
 # Imports
+from __future__ import print_function
 import sys, os 
 import time
-from __future__ import print_function
 
 def AndTrue_OrFalse(option):
     """ SETS THE isAnd OPTION PROVIDED IN THE FSW_NAMELIST. Prints to display."""

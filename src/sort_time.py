@@ -16,6 +16,7 @@
 # publications.
 #
 # Imports
+from __future__ import print_function
 import datetime
 from src.differentiate import word_in_list_sym
 

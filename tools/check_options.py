@@ -1,12 +1,10 @@
 # Copyright (C) 2018-2019 Eric Allen - All Rights Reserved
-
+#
 ## MODIFY FOR YOUR OWN USE...
-
-
+from __future__ import print_function
 import glob,sys,os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from search_options.search_options import Option
-from __future__ import print_function
 
 # TODO EDIT: YOUR DATA PATH
 data_dir = os.path.join(os.path.abspath('../'),'TEXT_DATA')

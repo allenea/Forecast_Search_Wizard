@@ -12,8 +12,8 @@
 # publications.
 #
 # Imports
-import os, shutil, glob
 from __future__ import print_function
+import os, shutil, glob
 
 #INDIR = /TEXT_DATA/ directory location
 def CheckRemove_Data(indir):

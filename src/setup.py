@@ -12,12 +12,12 @@
 # publications.
 #
 # Imports
+from __future__ import print_function
 import sys,os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from src.check_vars import search_option, input_words, AndTrue_OrFalse, byforecast, set_year_range, makeAssumptions, grep_check, debug_check
 from src.software_require import setup_FSW
 from src.print_search_info import print_info
-from __future__ import print_function
 
 def setup(input_word_list,forecast_product_list,start_year,end_year, AndOr, byForecast, make_assumptions, isGrep, debug_flag=False):
     """ Check to make sure everything passed to the FSW is valid. And the FSW is properly installed with required packages. No PyTests"""
