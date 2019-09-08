@@ -457,7 +457,7 @@ def AFD_finder(FSW_SEARCH, run_start_time):
                                         #try:
                                         date, time, tz_array = timezone_finder(readData,iHolder,last_tz)
                                         #except:
-                                        #    print("TZ WARNING: ", readData[iHolder-2:iHolder+2])#, flush = True)
+                                        #    print("WARNING TZ: ", readData[iHolder-2:iHolder+2])#, flush = True)
                                         #    sys.stdout.flush()
                                         iHolderLast = iHolder
                                         last_tz = tz_array
