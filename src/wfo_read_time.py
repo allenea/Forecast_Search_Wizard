@@ -68,6 +68,7 @@ def wfo_rft_time(trimTimesFound,uniqueHours,wfo, uniqueKeyWords,makeAssume,iYear
         except:
             alt_times ,alt_keys = wfo_rft_time_ALT(trimTimesFound[x],uniqueHours[x],wfo, timezone[x], uniqueKeyWords[x],makeAssume)
             if alt_times == None or alt_keys == None:
+                print("NONE_TYPE RETURNED FROM MISSING_TIME.PY... FIX! ", trimTimesFound[x].strip(), uniqueHours[x].strip())
                 continue
         
             ### IN UTC
@@ -75,7 +76,7 @@ def wfo_rft_time(trimTimesFound,uniqueHours,wfo, uniqueKeyWords,makeAssume,iYear
             hrWMOHEAD = alt_times.hour
             minWMOHEAD = alt_times.minute
             uniqueKeyWords[x] = alt_keys
-            continue
+            ###continue  ## WHY DO I HAVE THIS HERE? TAKING OUT
         
         tmp = re.sub(r" ?\([^)]+\)", "", trimTimesFound[x]) ## ( )
         date = re.sub(r" ?/([^)]+/)", "", tmp) ## / /

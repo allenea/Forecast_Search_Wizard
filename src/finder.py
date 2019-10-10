@@ -454,12 +454,15 @@ def AFD_finder(FSW_SEARCH, run_start_time):
                                 ## USE THE AUTO GENERATED DDHHMM
                                 if foundDDHHMM == True:
                                     try:
-                                        #try:
                                         date, time, tz_array = timezone_finder(readData,iHolder,last_tz)
-                                        #except:
-                                        #    print("WARNING TZ: ", readData[iHolder-2:iHolder+2])#, flush = True)
-                                        #    sys.stdout.flush()
-                                        iHolderLast = iHolder
+                                        if date == None and time == None and tz_array == None:
+                                            print("WARNING TZ: ", wfo, iYear, "Current: ", idx, "Last Good: ", iHolder, "   ", readData[iHolder-2:iHolder+2].strip())
+                                            sys.stdout.flush()
+                                            date, time, tz_array = timezone_finder(readData,iHolderLast,last_tz)
+                                            iHolderLast = iHolderLast
+                                        else:
+                                            iHolderLast = iHolder
+                                            
                                         last_tz = tz_array
                                         cFalse[idy] = True
                                         
@@ -474,29 +477,8 @@ def AFD_finder(FSW_SEARCH, run_start_time):
                                         keywordCountsFINAL[idy] += 1   ## COUNT NUMBER OF TIMES EACH KEYWORD THAT IS FORECASTED
         
                                     except:
-                                        # COULD NOT FIND DATE/TIME and the time zone.... use the last known forecast
-                                        try:
-                                            date, time, tz_array = timezone_finder(readData,iHolderLast,last_tz)
-                                            #print("TZ WARNING: ", readData[iHolder-2:iHolder+2])#, flush = True)
-                                            #    sys.stdout.flush()
-                                            ###isAssume = True
-                                            iHolderLast = iHolderLast
-                                            last_tz = tz_array
-                                            cFalse[idy] = True
-        
-                                            ## Save to arrays for each station being searched
-                                            # This is a little confusing but hourTime get's the date YEAR, MONTH, DAY, WEEKDAY
-                                            # findTime gets the hour, minute, AM/PM, timezone
-                                            hourTime.append(DDHHMM)         #hourTime gets the hour/minute
-                                            findTime.append(time)         #findTime gets the date string
-                                            timeZone.append(tz_array)
-                                            keyWord.append(inputKey[idy])
-                                            findString.append(readData[idx])
-                                            keywordCountsFINAL[idy] += 1   ## COUNT NUMBER OF TIMES EACH KEYWORD IS FORECASTED
-        
-                                        except:
-                                            countBad +=1
-                                            continue   # LEAVE GO TO THE NEXT IN THE LOOP
+                                        countBad +=1
+                                        continue   # LEAVE GO TO THE NEXT IN THE LOOP
                                 
                                 
                                 ## DDHHMM WAS NEVER FOUND SO USE THE TIME PROVIDED IN THE TEXT

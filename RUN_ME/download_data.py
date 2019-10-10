@@ -28,7 +28,7 @@ def main():
     # 2. Download only the latest year. 
         # Should be run whenever analyzing the current and fullest extent of the records... 
         # Switch to True after the initial dataset has been downloaded to maintain the dataset.
-    Get_Latest_Year = False
+    Get_Latest_Year = True
     
     # 3. Remove and identify PIL (forecast codes) with no data history (from start - end... empty files). You will be notified. 
     Remove_Empty = True

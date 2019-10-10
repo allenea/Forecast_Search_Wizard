@@ -254,9 +254,11 @@ def timezone_finder(readData,iHolder,last_tz):
     elif "AM" in line:
         date = line.split("AM")
         return date[0].strip(), date[1].strip(),last_tz
-      
-    #else:    #PRINT BADWARNING in finder.py
-    #    print("TZ_BADWARNING ", line)#, flush = True)
+    
+    else:
+        return "", "", ""
+    #else: ## THIS CAN BE DONE IN 
+    #    print("WARNING TZ ", line)#, flush = True)
     #    sys.stdout.flush()
     
     ### FOR TESTING PURPOSES ONLY... KEEP COMMENTED OUT

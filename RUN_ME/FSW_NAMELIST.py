@@ -28,9 +28,10 @@ def main():
     Not case sensitive. It is sensitive to spaces and characters.
     For robustness, try some possible common mispellings."""
     
-    input_word_list = ["Sea breeze", "Sea breaze", "SEA BREEZE", "SEABREEZES", "SEABREEZE", "SEABREAZES", "SEABREAZE", "SEA BREEZES", "SEA BREAZES"] 
-    
-    
+    #input_word_list = ["Sea breeze", "Sea breaze", "SEA BREEZE", "SEABREEZES", "SEABREEZE", "SEABREAZES", "SEABREAZE", "SEA BREEZES", "SEA BREAZES"] 
+    #input_word_list = ["rapid intensification"]
+    #input_word_list = ["dorian", "alabama"]
+    input_word_list = ["flooding", "Flash flOOding"]
     
     """2. List of forecast products you want to search....
     
@@ -43,7 +44,7 @@ def main():
     #list1.sort()
     #
     
-    forecast_product_list = Option.MT_HOLLY_PHILADELPHIA_NJ_AFD
+    forecast_product_list = ["AFDEPZ"]#Option.ALL_SPC #["AFDPHI"]
     
     
     
@@ -55,7 +56,7 @@ def main():
     then change the ADMIN variable in the src/finder_functions.py program
     """
     
-    start_year = 1996
+    start_year = 2006
     
     
     
@@ -64,7 +65,7 @@ def main():
     This cannot exceed the current year.
     """
     
-    end_year = 2019
+    end_year = 2006
     
     
     
@@ -77,7 +78,7 @@ def main():
     Boolean: True/False
     """
     
-    isAnd = False       
+    isAnd = True       
     
     
     
@@ -90,7 +91,7 @@ def main():
     Boolean: True/False
     """
     
-    byForecast = True 
+    byForecast = False 
     
     
     

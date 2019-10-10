@@ -64,9 +64,9 @@ def trim_warnings(warningfile):
                         utc_convert +=1
                     elif "TP:" in row:
                         countTP +=1
-                    elif "WARNING TZ_FINDER: " in row:
-                        countTZ +=1
-                    elif "WARNING TZ: " in row: # Guessing TZ if missing
+                    #elif "WARNING TZ_FINDER: " in row:
+                    #    countTZ +=1
+                    elif "WARNING TZ: " in row:
                         countTZ +=1
                     elif "OTHER:" in row: #missing_time.py
                         countOther +=1
