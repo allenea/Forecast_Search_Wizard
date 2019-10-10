@@ -13,7 +13,7 @@
 #
 # Imports
 from __future__ import print_function
-import re,sys
+import re #,sys
 
 wk_days = ["MON","TUE","WED","THU","FRI","SAT","SUN"]
 ST_lst = ["EST","CST","MST","PST","AST","SST","AKST","HAST","HST","CHST","ChST","GUAM LST","LST"]
@@ -32,6 +32,7 @@ def timezone_finder(readData,iHolder,last_tz):
         time (str): Actually the date! info
         timezone (str): pytz formatted time zone equivalent to the abbriviation
     """
+    
     line = readData[iHolder]
     line = line.split("..")[0]
     
@@ -207,7 +208,7 @@ def timezone_finder(readData,iHolder,last_tz):
             date = line.split("GUAM LST")
             return date[0].strip(), date[1].strip(),"Pacific/Guam"
         
-        elif "LST" in line and "TIYAN" in readData[iHolder-1] or "PAGO" in readData[iHolder-1]: ## NOT TESTED FOR BUT CHECKED THAT IT WORKS...
+        elif "LST" in line and "TIYAN" in readData[iHolder-1] or "PAGO" in readData[iHolder-1]:
             date = line.split("LST")
             return date[0].strip(), date[1].strip(),"Pacific/Guam"   
     
@@ -239,13 +240,17 @@ def timezone_finder(readData,iHolder,last_tz):
 
     elif len(line.strip()) < 9: # WAS 5... NOW 9
          iHolder +=1
-         return timezone_finder(readData,iHolder,last_tz)
-     
+         if iHolder < len(readData):
+             return timezone_finder(readData,iHolder,last_tz)
+         else:
+             return
     # Used in like 4 cases for SWPC
     elif "SERIAL NUMBER" in line:
-        iHolder+=1
-        return timezone_finder(readData,iHolder,last_tz)
-    
+         iHolder +=1
+         if iHolder < len(readData):
+             return timezone_finder(readData,iHolder,last_tz)
+         else:
+             return
     
     elif "PM" in line:
         date = line.split("PM")

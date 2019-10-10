@@ -105,14 +105,14 @@ def test_search_option():
     assert search_option(Option.ALL) == True
     assert search_option(Option.ALL_SPC) == True
     #assert search_option(Option.ALL - Option.ALL_SPC) == TypeError # PHYSICALLY IMPOSSIBLE - Python crashes anyways...
-    assert search_option(set(Option.ALL) - set(Option.ALL_SPC)) == False
+    assert search_option(set(Option.ALL) - set(Option.ALL_SPC)) == None
     assert search_option(list(set(Option.ALL) - set(Option.ALL_SPC))) == True
-    assert search_option(lst1) == False
+    assert search_option(lst1) == None
     assert search_option(lst2) == True
-    assert search_option(lst3) == False
+    assert search_option(lst3) == None
     assert search_option([lst3]) == True
-    assert search_option([]) == False
-    assert search_option([""]) == False
+    assert search_option([]) == None
+    assert search_option([""]) == None
     assert search_option(lst4) == True
 
         

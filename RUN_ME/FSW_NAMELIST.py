@@ -28,9 +28,9 @@ def main():
     Not case sensitive. It is sensitive to spaces and characters.
     For robustness, try some possible common mispellings."""
     
-    input_word_list = ["Sea breeze", "Sea breaze", "SEA BREEZE", "SEABREEZES", "SEABREEZE", "SEABREAZES", "SEABREAZE", "SEA BREEZES", "SEA BREAZES"] 
-    
-    
+    input_word_list = ["THE"]
+    # input_word_list = ["Sea breeze", "Sea breaze", "SEA BREEZE", "SEABREEZES", "SEABREEZE", "SEABREAZES", "SEABREAZE", "SEA BREEZES", "SEA BREAZES"]
+
     
     """2. List of forecast products you want to search....
     
@@ -43,7 +43,7 @@ def main():
     #list1.sort()
     #
     
-    forecast_product_list = Option.MT_HOLLY_PHILADELPHIA_NJ_AFD
+    forecast_product_list = Option.ALL
     
     
     

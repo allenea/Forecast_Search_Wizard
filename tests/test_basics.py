@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 from src.split_list import split_list
 from src.tz_finder import timezone_finder
 from src.differentiate import word_in_list_sym
-from src.utc_convert import utc_convert_reformat_time
+from src.convert_time import convert_time
 import datetime
 from datetime import timezone
 
@@ -88,10 +88,6 @@ def test_tz_finder():
     expect26 = ["2203 PM FRI SAT AUG 02 2002"]
     expect27 = ["0203 AM AUG 02 2002"]
     expect28 = ["2203 PM AUG 02 2002"]
-    
-    
-    #expect29 = ["HELLO BILLY BOB"]  --> SHOULD NOT WORK... NOT TESTING WITH A LIST IT CAN INDEX THROUGH
-    #expect30 = [""] --> SHOULD NOT WORK... NOT TESTING WITH A LIST IT CAN INDEX THROUGH with "" exception
     expect31 = ["JIMBO WENT TO THE EASTERN SHORE"]
     
     extra_space = [" 300 PM EST THU 21 NOV 2002"]
@@ -129,10 +125,7 @@ def test_tz_finder():
     assert timezone_finder(expect31,0,last_tz) == ("JIMBO WENT TO THE", "SHORE", "US/Eastern") # WILL BE TOSSED IN wfo_read_time
     assert timezone_finder(extra_space,0,last_tz) == ("300 PM", "THU 21 NOV 2002", "US/Eastern")
     assert timezone_finder(less_time,0,last_tz) == ("3 PM", "FRI DEC 20 2002", "US/Eastern")
-    
-    #assert timezone_finder(expect29,0,last_tz) == timezone_finder(expect29,1,last_tz) #SHOULD NOT WORK... NOT TESTING WITH A LIST IT CAN INDEX THROUGH
-    #assert timezone_finder(expect30,0,last_tz) == timezone_finder(expect30,1,last_tz) #--> SHOULD NOT WORK... NOT TESTING WITH A LIST IT CAN INDEX THROUGH with "" exception
-    
+        
     
     try1 = ["ISSUE TIME: 2018 Nov 05 0517 UTC"]
     try2 = [":ISSUED: 2018 Jan 01 0030 UTC"]
@@ -143,7 +136,6 @@ def test_tz_finder():
     try7 = ["NCEP PROGNOSTIC DISCUSSION FROM 0000 MON DEC 31 2001"]
     try8 = ["HPC FORECAST VALID 00 UTC 1 JAN THRU 00 UTC 8 JAN 2002"]
     
-    
     assert timezone_finder(try1,0,last_tz) == ("0517","2018 Nov 05","UTC")
     assert timezone_finder(try2,0,last_tz) == ("0030", "2018 Jan 01", "UTC")
     assert timezone_finder(try3,0,last_tz) == ("0030", "2018 Jan 01", "UTC")
@@ -153,6 +145,9 @@ def test_tz_finder():
     assert timezone_finder(try7,0,last_tz) == ("0000", "DEC 31 2001", "UTC")
     assert timezone_finder(try8,0,last_tz) == ("00", "1 JAN 2002", "UTC")
     
+    try9 = ["HPC FORECAST VALID 00 UTC 06 JAN 2001 THRU 00 UTC 13 JAN  2001"]
+    assert timezone_finder(try9,0,last_tz) == ("00", "06 JAN 2001 2001", "UTC")
+
     
 def test_WORD_TRIM_LST():
     """
@@ -173,27 +168,32 @@ def test_WORD_TRIM_LST():
     assert word_in_list_sym("SEA BREEZES",STEP4) == STEP5
     assert word_in_list_sym("SEA BREEZES*",STEP5) == STEP6
     
-    
-def test_UTC_CONVERT():
+def test_convert_time():
     tz1 = "US/Eastern"
     tz2 = "UTC"
     tz3 = "US/Central"
     tz4 = "US/Pacific"
-    
-    time1 = "201301010000"
-    time2 = "199512312359"
-    time3 = "201402301200"
-    time4 = "201905310345"
-    time5 = "201901310345"
-    time6 = "201306010000"
+    tz6 = "EST5EDT"
+    tz7 = ""
 
-    assert utc_convert_reformat_time(time1,tz1) == datetime.datetime(2013, 1, 1, 5, 0,tzinfo=timezone.utc)
-    assert utc_convert_reformat_time(time6,tz1) == datetime.datetime(2013, 6, 1, 4, 0,tzinfo=timezone.utc)
-    assert utc_convert_reformat_time(time2,tz2) == datetime.datetime(1995, 12, 31, 23, 59,tzinfo=timezone.utc)
-    assert utc_convert_reformat_time(time3,tz3) == None
-    assert utc_convert_reformat_time(time4,tz4) == datetime.datetime(2019, 5, 31, 10, 45,tzinfo=timezone.utc)
-    assert utc_convert_reformat_time(time5,tz4) == datetime.datetime(2019, 1, 31, 11, 45,tzinfo=timezone.utc)
+    assert convert_time(int("2013"),int("01"), int("01"),int("00"),int("00"),tz1) == datetime.datetime(2013, 1, 1, 5, 0,tzinfo=timezone.utc)
+    assert convert_time(int("1995"),int("12"), int("31"),int("23"),int("59"),tz2) == datetime.datetime(1995, 12, 31, 23, 59,tzinfo=timezone.utc)
+    assert convert_time(int("2014"),int("02"), int("30"),int("12"),int("00"),tz3) == None #RAISE VALUE ERROR
+    assert convert_time(int("2019"),int("05"), int("31"),int("03"),int("45"),tz4) == datetime.datetime(2019, 5, 31, 10, 45,tzinfo=timezone.utc)
+    assert convert_time(int("2019"),int("01"), int("31"),int("03"),int("45"),tz4) == datetime.datetime(2019, 1, 31, 11, 45,tzinfo=timezone.utc)    
+    assert convert_time(int("2013"),int("06"), int("01"),int("00"),int("00"),tz1) == datetime.datetime(2013, 6, 1, 4, 0,tzinfo=timezone.utc)
+    assert convert_time(int("2013"),int("06"), int("01"),int("00"),int("00"),tz7) == None # RAISE TIMEZONE_ERROR - EMPTY STRING
+
     
-    
+    assert convert_time(int("2013"),int("06"), int("01"),int("00"),int("00"),"US/BOOM") == None # RAISE TIMEZONE_ERROR - NON-PYTZ OPTION
+    assert convert_time(int("2013"),int("06"), int("01"),int("00"),int("00"),tz6) ==  datetime.datetime(2013, 6, 1, 4, 0,tzinfo=timezone.utc)
+    assert convert_time(int("2013"),int("06"), int("01"),int("00"),int("00"),"EDT") ==  None
+    assert convert_time(int("2013"),int("06"), int("01"),int("00"),int("00"),"EST") ==  datetime.datetime(2013, 6, 1, 5, 0,tzinfo=timezone.utc)
+
+
+    assert convert_time(int("1995"),int("12"), int("31"),int("23"),int("59")) == datetime.datetime(1995, 12, 31, 23, 59,tzinfo=timezone.utc) #USE UTC
+    assert convert_time(int("2019"),int("05"), int("31"),int("03"),int("45")) == datetime.datetime(2019, 5, 31, 3, 45,tzinfo=timezone.utc) # USE UTC
+
+
 #def test_Sort_Time():
     #assert sort_time(dt_tuple,KeyFound,byForecast) == (final_reformat_2_str[:count2],final_Key_Found[:count2])

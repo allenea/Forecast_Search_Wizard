@@ -1,5 +1,9 @@
 # Copyright (C) 2018-2019 Eric Allen - All Rights Reserved
 #
+# Programs in the tools directory are at the sole responsibility of the user to
+# modify for individual use. They can be used to get the user started on additional analysis. 
+#
+#
 ## MODIFY FOR YOUR OWN USE...
 from __future__ import print_function
 import glob,sys,os

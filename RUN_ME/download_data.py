@@ -18,6 +18,7 @@ import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from src.print_search_info import data_acknowledgement
+from search_options.search_options import Option ## IF you want to provide the MASTER_LIST with one of the preset options.
 
 def main():
     """ This program serves as the "NAMELIST" which provides options that the user can input to configure his search dataset."""
@@ -39,8 +40,9 @@ def main():
     # 5. The final year of the desired dataset (to include that year)
     end_year = int(time.ctime()[-4:]) ## CURRENT YEAR
     
-    # 6. The List of PILs for the NWS text products 
+    # 6. The List of PILs for the NWS text products. Alt. provide it a preset option from the search_options class.
     MASTER_LIST = ["AFDLWX","AFDPHI"]
+    
     ## Remove the 3- " in ther row below and at the end of the master list (green?) -  FOR FULL DATASET
     """
     MASTER_LIST = ['AFDABQ', 'AFDABR', 'AFDAFC', 'AFDAFG', 'AFDAJK', 'AFDAKQ', 'AFDALY', 'AFDAMA', 'AFDAPX', 'AFDARX',
@@ -97,8 +99,6 @@ def main():
               'WSWLWX', 'WSWPHI', "LSRADQ", "LSRAKN", "LSRANN", "LSRAT1", "LSRBA1", "LSRBET", "LSRBH1", "LSRBR1", "LSRCS1",
               "LSRHO1", "LSRJM1", "LSRMCG", "LSRNK1", "LSRNY5", "LSRNY6", "LSROME", "LSROTZ", "LSRPPG", "LSRSNP", "LSRTD1",
               "LSRYAK", "VOWLWX","VOWPHI"]
-    
-    
     """
 
 
@@ -113,29 +113,31 @@ def main():
     #Redict messages to out file over the course of the download
     f = sys.stdout
     strTime = time.ctime().replace(" ","_")
+    print("\n\nCheck: (", os.path.join(os.getcwd(),"Data_Download_Verbose"+strTime.replace(":","")+".out"),") to view the progress of the data download.")
+    
     sys.stdout = open(os.path.join(os.getcwd(),"Data_Download_Verbose"+strTime.replace(":","")+".out"),'w')
     
     #Timer
     start_time = time.time()
     
     #Print Statements
-    print("IEM Text-Data Retrieval is Powered by the Forecast Search Wizard\n")#, flush=True)
+    print("IEM Text-Data Retrieval is Powered by the Forecast Search Wizard\n")
     sys.stdout.flush()
 
-    print(time.ctime())#, flush=True)
+    print(time.ctime())
     sys.stdout.flush()
 
-    print("\nDownload Data? " + str(Download_Data))#, flush=True)
+    print("\nDownload Data? " + str(Download_Data))
     sys.stdout.flush()
 
-    print("Get the Latest Year? " + str(Get_Latest_Year))#, flush=True)
+    print("Get the Latest Year? " + str(Get_Latest_Year))
     if Get_Latest_Year == True:
-        print("Start: " + str(end_year)+"\t\t End: "+str(end_year))#, flush=True)
+        print("Start: " + str(end_year)+"\t\t End: "+str(end_year))
         sys.stdout.flush()
     else:
-        print("Start: " + str(start_year)+"\t\t End: "+str(end_year))#, flush=True)
+        print("Start: " + str(start_year)+"\t\t End: "+str(end_year))
         sys.stdout.flush()
-    print("Sorting text products alphabetically...")#, flush=True)
+    print("Sorting text products alphabetically...")
     sys.stdout.flush()
 
     #Sort the list
@@ -148,15 +150,14 @@ def main():
         MASTER_SPLIT[allen] = str(MASTER_SPLIT[allen]).replace("[", " ")
         MASTER_SPLIT[allen] = str(MASTER_SPLIT[allen]).replace("]", " ")
         if firstRow == False:
-            print("\t\t\t", MASTER_SPLIT[allen])#, flush=True)
+            print("\t\t\t", MASTER_SPLIT[allen])
             sys.stdout.flush()
 
         else:
-            print("Forecast Products: ", MASTER_SPLIT[allen])#, flush=True)
+            print("Forecast Products: ", MASTER_SPLIT[allen])
             sys.stdout.flush()
             firstRow = False
-    
-    #DOWNLOAD THE DATA
+            
     if Get_Latest_Year == True and Download_Data == True: 
         data_dir = get_data(MASTER_LIST, end_year, end_year)
         pass
@@ -164,7 +165,7 @@ def main():
         data_dir = get_data(MASTER_LIST, start_year, end_year)
         pass
     else:
-        print("Download Data was not set to true, therefore no data will be downloaded. Existing dataset will be preserved.")#, flush=True)
+        print("Download Data was not set to true, therefore no data will be downloaded. Existing dataset will be preserved.")
         sys.stdout.flush()
         sys.exit(0)
     
@@ -175,7 +176,7 @@ def main():
         pass
     
     #Print Lapse Time
-    print("--- %s seconds ---"%(time.time() - start_time))#, flush=True)
+    print("--- %s seconds ---"%(time.time() - start_time))
     sys.stdout.flush()
     data_acknowledgement()
     #Close log file

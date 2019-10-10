@@ -20,10 +20,11 @@ from src.software_require import setup_FSW
 from src.print_search_info import print_info
 
 def setup(input_word_list,forecast_product_list,start_year,end_year, AndOr, byForecast, make_assumptions, isGrep, debug_flag=False):
-    """ Check to make sure everything passed to the FSW is valid. And the FSW is properly installed with required packages. No PyTests"""
+    """ This should now just be a redundancy after using setup.py.
+        Check to make sure everything passed to the FSW is valid. And the FSW is properly installed with required packages. No PyTests..."""
 
-    if setup_FSW() != True:
-        print("INVALID SYSTEM REQUIREMENTS. Killed by software_require.py in setup.py")#,flush=True)
+    if setup_FSW() == False:
+        print("INVALID SYSTEM REQUIREMENTS! Killed by software_require.py in setup.py")#,flush=True)
         sys.stdout.flush()
         sys.exit(0)
     else:
@@ -35,6 +36,11 @@ def setup(input_word_list,forecast_product_list,start_year,end_year, AndOr, byFo
     search.get_default_variables()
     if search_option(forecast_product_list) == True:
         search.STATION_LIST = [x.upper() for x in forecast_product_list]
+    else:
+        print("FAILURE IN SETUP...INVALID SEARCH OPTION. Exiting....")#,flush=True)
+        print("Setup.py is designed to verify that only valid search criteria is passed to the Finder program.")#,flush=True)
+        sys.stdout.flush()
+        sys.exit(0)
     
     search.START_YEAR, search.END_YEAR = set_year_range(start_year, end_year)
     search.And_Or = AndTrue_OrFalse(AndOr)
@@ -43,10 +49,16 @@ def setup(input_word_list,forecast_product_list,start_year,end_year, AndOr, byFo
     search.Make_Assumptions = makeAssumptions(make_assumptions)
     search.isGrep = grep_check(isGrep)
     search.debug_mode = debug_check(debug_flag)
-
-    if input_words(input_word_list, search.isGrep) != None:
-        search.KEYWORD_LIST = input_words(input_word_list, search.isGrep) 
     
+    tmp_in_key = input_words(input_word_list, search.isGrep)
+    if  tmp_in_key is not None:
+        search.KEYWORD_LIST = tmp_in_key 
+    else:
+        print("FAILURE IN SETUP...INVALID INPUT KEYWORDS. Exiting....")#,flush=True)
+        print("Setup.py is designed to verify that only valid search criteria is passed to the Finder program.")#,flush=True)
+        sys.stdout.flush()
+        sys.exit(0)
+        
     FSW_SEARCH = search.status_variables()
  
     print_info(FSW_SEARCH, isSetUp)
