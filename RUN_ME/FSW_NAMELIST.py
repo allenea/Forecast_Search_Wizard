@@ -28,16 +28,12 @@ def main():
     Not case sensitive. It is sensitive to spaces and characters.
     For robustness, try some possible common mispellings."""
     
-<<<<<<< HEAD
     #input_word_list = ["Sea breeze", "Sea breaze", "SEA BREEZE", "SEABREEZES", "SEABREEZE", "SEABREAZES", "SEABREAZE", "SEA BREEZES", "SEA BREAZES"] 
     #input_word_list = ["rapid intensification"]
     #input_word_list = ["dorian", "alabama"]
-    input_word_list = ["flooding", "Flash flOOding"]
-=======
     input_word_list = ["THE"]
     # input_word_list = ["Sea breeze", "Sea breaze", "SEA BREEZE", "SEABREEZES", "SEABREEZE", "SEABREAZES", "SEABREAZE", "SEA BREEZES", "SEA BREAZES"]
 
->>>>>>> ac3063135729c5b958e70094232a6b6f5b908b6d
     
     """2. List of forecast products you want to search....
     
@@ -50,14 +46,7 @@ def main():
     #list1.sort()
     #
     
-<<<<<<< HEAD
-    forecast_product_list = ["AFDEPZ"]#Option.ALL_SPC #["AFDPHI"]
-=======
     forecast_product_list = Option.ALL
->>>>>>> ac3063135729c5b958e70094232a6b6f5b908b6d
-    
-    
-    
     
     """3. Set the start year....
     
@@ -67,7 +56,6 @@ def main():
     """
     
     start_year = 2006
-    
     
     
     
