@@ -161,39 +161,43 @@ def test_WORD_TRIM_LST():
     STEP4 =  ['SEA BREEZE*#', 'SEA BREEZES']
     STEP5 = ['SEA BREEZE*#', 'SEA BREEZES']
     STEP6 = ['SEA BREEZE*#', 'SEA BREEZES*']
-             
+    STEP7 = ['SEA BREEZE*#', 'SEA BREEZES*', "IRON MAN"]
+
     assert word_in_list_sym("SEA BREEZES",STEP1) == STEP2
     assert word_in_list_sym("SEA BREEZE*",STEP2) == STEP3
     assert word_in_list_sym("SEA BREEZE#",STEP3) == STEP4
     assert word_in_list_sym("SEA BREEZES",STEP4) == STEP5
     assert word_in_list_sym("SEA BREEZES*",STEP5) == STEP6
-    
+    assert word_in_list_sym("IRON MAN",STEP6) == STEP7
+
 def test_convert_time():
     tz1 = "US/Eastern"
     tz2 = "UTC"
     tz3 = "US/Central"
     tz4 = "US/Pacific"
-    tz6 = "EST5EDT"
+    tz6 = "EST5EDT" #VALID PYTZ OPTION WITHOUT TIME CHANGES
     tz7 = ""
 
-    assert convert_time(int("2013"),int("01"), int("01"),int("00"),int("00"),tz1) == datetime.datetime(2013, 1, 1, 5, 0,tzinfo=timezone.utc)
-    assert convert_time(int("1995"),int("12"), int("31"),int("23"),int("59"),tz2) == datetime.datetime(1995, 12, 31, 23, 59,tzinfo=timezone.utc)
-    assert convert_time(int("2014"),int("02"), int("30"),int("12"),int("00"),tz3) == None #RAISE VALUE ERROR
-    assert convert_time(int("2019"),int("05"), int("31"),int("03"),int("45"),tz4) == datetime.datetime(2019, 5, 31, 10, 45,tzinfo=timezone.utc)
-    assert convert_time(int("2019"),int("01"), int("31"),int("03"),int("45"),tz4) == datetime.datetime(2019, 1, 31, 11, 45,tzinfo=timezone.utc)    
-    assert convert_time(int("2013"),int("06"), int("01"),int("00"),int("00"),tz1) == datetime.datetime(2013, 6, 1, 4, 0,tzinfo=timezone.utc)
-    assert convert_time(int("2013"),int("06"), int("01"),int("00"),int("00"),tz7) == None # RAISE TIMEZONE_ERROR - EMPTY STRING
-
+    assert convert_time("AFDPHI", int("2013"),int("01"), int("01"),int("00"),int("00"),tz1) == datetime.datetime(2013, 1, 1, 5, 0,tzinfo=timezone.utc)
+    assert convert_time("AFDPHI", int("1995"),int("12"), int("31"),int("23"),int("59"),tz2) == datetime.datetime(1995, 12, 31, 23, 59,tzinfo=timezone.utc)
+    assert convert_time("AFDPHI", int("2014"),int("02"), int("30"),int("12"),int("00"),tz3) == None #RAISE VALUE ERROR
+    assert convert_time("AFDPHI", int("2019"),int("05"), int("31"),int("03"),int("45"),tz4) == datetime.datetime(2019, 5, 31, 10, 45,tzinfo=timezone.utc)
+    assert convert_time("AFDPHI", int("2019"),int("01"), int("31"),int("03"),int("45"),tz4) == datetime.datetime(2019, 1, 31, 11, 45,tzinfo=timezone.utc)    
+    assert convert_time("AFDPHI", int("2013"),int("06"), int("01"),int("00"),int("00"),tz1) == datetime.datetime(2013, 6, 1, 4, 0,tzinfo=timezone.utc)
+    assert convert_time("AFDPHI", int("2013"),int("06"), int("01"),int("00"),int("00"),tz7) == None # RAISE TIMEZONE_ERROR - EMPTY STRING
     
-    assert convert_time(int("2013"),int("06"), int("01"),int("00"),int("00"),"US/BOOM") == None # RAISE TIMEZONE_ERROR - NON-PYTZ OPTION
-    assert convert_time(int("2013"),int("06"), int("01"),int("00"),int("00"),tz6) ==  datetime.datetime(2013, 6, 1, 4, 0,tzinfo=timezone.utc)
-    assert convert_time(int("2013"),int("06"), int("01"),int("00"),int("00"),"EDT") ==  None
-    assert convert_time(int("2013"),int("06"), int("01"),int("00"),int("00"),"EST") ==  datetime.datetime(2013, 6, 1, 5, 0,tzinfo=timezone.utc)
+    assert convert_time("AFDPHI", int("2013"),int("06"), int("01"),int("00"),int("00"),"US/BOOM") == None # RAISE TIMEZONE_ERROR - NON-PYTZ OPTION
+    assert convert_time("AFDPHI", int("2013"),int("06"), int("01"),int("00"),int("00"),tz6) ==  datetime.datetime(2013, 6, 1, 4, 0,tzinfo=timezone.utc)
+    assert convert_time("AFDPHI", int("2013"),int("06"), int("01"),int("00"),int("00"),"EDT") ==  None #NOT A PYTZ OPTION
+    assert convert_time("AFDPHI", int("2013"),int("06"), int("01"),int("00"),int("00"),"EST") ==  datetime.datetime(2013, 6, 1, 5, 0,tzinfo=timezone.utc)
 
-
-    assert convert_time(int("1995"),int("12"), int("31"),int("23"),int("59")) == datetime.datetime(1995, 12, 31, 23, 59,tzinfo=timezone.utc) #USE UTC
-    assert convert_time(int("2019"),int("05"), int("31"),int("03"),int("45")) == datetime.datetime(2019, 5, 31, 3, 45,tzinfo=timezone.utc) # USE UTC
+    assert convert_time("AFDPHI", int("1995"),int("12"), int("31"),int("23"),int("59")) == datetime.datetime(1995, 12, 31, 23, 59,tzinfo=timezone.utc) #USE UTC
+    assert convert_time("AFDPHI", int("2019"),int("05"), int("31"),int("03"),int("45")) == datetime.datetime(2019, 5, 31, 3, 45,tzinfo=timezone.utc) # USE UTC
 
 
 #def test_Sort_Time():
     #assert sort_time(dt_tuple,KeyFound,byForecast) == (final_reformat_2_str[:count2],final_Key_Found[:count2])
+    
+    
+#def test_read_time():
+    #assert wfo_rft_time(trimTimesFound,uniqueHours,DDHHMM_LIST, wfo, uniqueKeyWords,makeAssume,iYear,timezone) == (FinalTimesFound,KeyFound)

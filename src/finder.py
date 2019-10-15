@@ -460,6 +460,7 @@ def AFD_finder(FSW_SEARCH, run_start_time):
                                     try:
                                         date, time, tz_array = timezone_finder(readData,iHolder,last_tz)
                                         iHolderLast = iHolder
+                                        ### IF "" "" "" CHECK IT OUT
 
                                     except:
                                         print("FINDER: WARNING TZ-1: ", iHolder, readData[iHolder-1:iHolder+1])#, flush = True)

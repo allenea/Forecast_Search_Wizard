@@ -17,18 +17,6 @@ from src.time_functions import get_Issuing_Time_text, get_Issuing_Date_text, get
 from src.convert_time import convert_time
 import sys
 
-wk_days = ["MON","TUE","WED","THU","FRI","SAT","SUN", \
-           "MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY","SUNDAY", \
-           "TUES","WEDS", "THURS","THUR"]
-
-mo_str = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC",\
-          "JANUARY","FEBRUARY","MARCH","APRIL","MAY","JUNE","JULY","AUGUST",\
-          "SEPTEMBER","OCTOBER","NOVEMBER","DECEMBER","SEPT","0CT","N0V","0CT0BER","N0VEMBER"]
-
-tzs = ["UTC","EST","EDT","CDT","CST","MST","MDT","PDT","PST", "AKDT", "AKST","HST",
-       "HAST", "HADT","GMT","GUAM LST","ADT","AST","CHST","SST","SDT","ChST"]
-
-
 fmtString = "%m-%d-%Y %H:%M"
 
 def wfo_rft_time(trimTimesFound,uniqueHours,DDHHMM_LIST, wfo, uniqueKeyWords,makeAssume,iYear,timezone):
@@ -94,12 +82,11 @@ def wfo_rft_time(trimTimesFound,uniqueHours,DDHHMM_LIST, wfo, uniqueKeyWords,mak
                         print("TF: ",wfo," - Possible IEM Error with an unexpected value. CONTINUING... Check File:",iYear," for  ",month,"-",text_day,"-",year," @",DDHHMM_LIST[x],"Z",trimTimesFound[x].strip(),"   ","___/",year,"/",iYear)
                         sys.stdout.flush()
                     
-                if timezone == "":
+                if timezone[x] == "":
                     timezone[x] = replace_tz
             else:
-                if timezone == "":
+                if timezone[x] == "":
                     timezone[x] = replace_tz
-    
     
             if _DD != None: #THEN ALL NONE
                 first_guess = getFirstGuess(year, month, int(_DD),int(_HH),int(_MM), timezone[x])
@@ -117,19 +104,19 @@ def wfo_rft_time(trimTimesFound,uniqueHours,DDHHMM_LIST, wfo, uniqueKeyWords,mak
     
             if isAssumedNew == False and isAssumed1 == True:
                 #No assumption just use the WMO HEADER
-                final_time_string = convert_time(int(fyr),int(fmon), int(fday),int(HH),int(MM))
+                final_time_string = convert_time(wfo, int(fyr),int(fmon), int(fday),int(HH),int(MM))
             
             elif isAssumedNew == False and isAssumed1 == False:
                 #No assumption just use the MND HEADER
-                final_time_string = convert_time(year,month, int(text_day),int(hour),int(minute), timezone=timezone[x])
+                final_time_string = convert_time(wfo, year,month, int(text_day),int(hour),int(minute), timezone=timezone[x])
                     
             elif(hour, minute, AMPM, isAssumed1) != (None, None, None, None) and isAssumed2 == False:
                 if missingDDHHMM == True:
-                    final_time_string = convert_time(int(year),int(month), int(text_day),int(hour),int(minute), timezone=timezone[x])
+                    final_time_string = convert_time(wfo, int(year),int(month), int(text_day),int(hour),int(minute), timezone=timezone[x])
                     #IF MND HEADER WAS GOOD FOR EVERYTHING BUT TIME.. EXCEPT NO DDHHMM header :(
                     majorAssume = True
                 else:
-                    final_time_string = convert_time(int(year),int(month), int(_DD),int(_HH),int(_MM))
+                    final_time_string = convert_time(wfo, int(year),int(month), int(_DD),int(_HH),int(_MM))
                     #IF MND HEADER WAS GOOD FOR EVERYTHING BUT TIME.. USE DDHHMM from WMO HEADER
                     minorAssume = True
                 
@@ -140,12 +127,12 @@ def wfo_rft_time(trimTimesFound,uniqueHours,DDHHMM_LIST, wfo, uniqueKeyWords,mak
                 else:
                     minorAssume = True
                 #YES assumption just use the MND HEADER
-                final_time_string = convert_time(year,month, int(text_day),int(hour),int(minute), timezone=timezone[x])
+                final_time_string = convert_time(wfo, year,month, int(text_day),int(hour),int(minute), timezone=timezone[x])
                 
             elif isAssumedNew == True and isAssumed1 == True:
                 #YES assumption just use the MND HEADER
                 majorAssume = True
-                final_time_string = convert_time(int(year),int(month), int(_DD),int(_HH),int(_MM))
+                final_time_string = convert_time(wfo, int(year),int(month), int(_DD),int(_HH),int(_MM))
     
             else:#isAssumedNew == None
                 if isAssumed2 == True:
@@ -153,13 +140,13 @@ def wfo_rft_time(trimTimesFound,uniqueHours,DDHHMM_LIST, wfo, uniqueKeyWords,mak
                     majorAssume = True
                 else:
                     minorAssume = True
-                final_time_string = convert_time(int(year),int(month), int(_DD),int(_HH),int(_MM))
+                final_time_string = convert_time(wfo, int(year),int(month), int(_DD),int(_HH),int(_MM))
     
     
     
             
             if isAssumedNew != None and final_time_string is not None:
-                Test3 = convert_time(int(fyr),int(fmon), int(fday),int(HH),int(MM))
+                Test3 = convert_time(wfo, int(fyr),int(fmon), int(fday),int(HH),int(MM))
                 difference_time = abs((Test3 - final_time_string).total_seconds()/(60*60))
                 if difference_time > 6:
                     minorAssume = True
@@ -167,7 +154,7 @@ def wfo_rft_time(trimTimesFound,uniqueHours,DDHHMM_LIST, wfo, uniqueKeyWords,mak
                     sys.stdout.flush()
             else:
                 if (hour, minute, AMPM, isAssumed1) != (None, None, None, None) and final_time_string is not None:
-                    Test3 = convert_time(year,month, int(text_day),int(hour),int(minute), timezone[x])
+                    Test3 = convert_time(wfo, year,month, int(text_day),int(hour),int(minute), timezone[x])
                     difference_time = abs((Test3 - final_time_string).total_seconds()/(60*60))
     
                     if difference_time > 6:
@@ -204,9 +191,10 @@ def wfo_rft_time(trimTimesFound,uniqueHours,DDHHMM_LIST, wfo, uniqueKeyWords,mak
                 #increase the count by 1 after the iteration
                 count +=1      
         except:
-            print("TP: CATASTROPHIC ERROR")
+            print("TP: CATASTROPHIC ERROR", trimTimesFound[x],uniqueHours[x],DDHHMM_LIST[x], wfo, uniqueKeyWords[x],makeAssume,iYear,timezone[x])
             sys.stdout.flush()
             continue
+        
     #Trim down to the size actually used
     FinalTimesFound = TimesFound[:count]
     KeyFound = uniqueKeyWords[:count]

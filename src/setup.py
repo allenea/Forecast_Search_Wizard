@@ -24,7 +24,7 @@ def setup(input_word_list,forecast_product_list,start_year,end_year, AndOr, byFo
         Check to make sure everything passed to the FSW is valid. And the FSW is properly installed with required packages. No PyTests..."""
 
     if setup_FSW() == False:
-        print("INVALID SYSTEM REQUIREMENTS! Killed by software_require.py in setup.py")#,flush=True)
+        print("INVALID SYSTEM REQUIREMENTS! Killed by software_require.py in setup.py")
         sys.stdout.flush()
         sys.exit(0)
     else:
@@ -37,8 +37,8 @@ def setup(input_word_list,forecast_product_list,start_year,end_year, AndOr, byFo
     if search_option(forecast_product_list) == True:
         search.STATION_LIST = [x.upper() for x in forecast_product_list]
     else:
-        print("FAILURE IN SETUP...INVALID SEARCH OPTION. Exiting....")#,flush=True)
-        print("Setup.py is designed to verify that only valid search criteria is passed to the Finder program.")#,flush=True)
+        print("FAILURE IN SETUP...INVALID SEARCH OPTION. Exiting....")
+        print("Setup.py is designed to verify that only valid search criteria is passed to the Finder program.")
         sys.stdout.flush()
         sys.exit(0)
     
@@ -54,8 +54,8 @@ def setup(input_word_list,forecast_product_list,start_year,end_year, AndOr, byFo
     if  tmp_in_key is not None:
         search.KEYWORD_LIST = tmp_in_key 
     else:
-        print("FAILURE IN SETUP...INVALID INPUT KEYWORDS. Exiting....")#,flush=True)
-        print("Setup.py is designed to verify that only valid search criteria is passed to the Finder program.")#,flush=True)
+        print("FAILURE IN SETUP...INVALID INPUT KEYWORDS. Exiting....")
+        print("Setup.py is designed to verify that only valid search criteria is passed to the Finder program.")
         sys.stdout.flush()
         sys.exit(0)
         
@@ -64,8 +64,8 @@ def setup(input_word_list,forecast_product_list,start_year,end_year, AndOr, byFo
     print_info(FSW_SEARCH, isSetUp)
 
     if None in FSW_SEARCH.values():
-        print("FAILURE IN SETUP...AT LEAST ONE USER DEFINED VARIABLE CAUSED A NoneType EXCEPTION. Exiting....")#,flush=True)
-        print("Setup.py is designed to verify that only valid search criteria is passed to the Finder program.")#,flush=True)
+        print("FAILURE IN SETUP...AT LEAST ONE USER DEFINED VARIABLE CAUSED A NoneType EXCEPTION. Exiting....")
+        print("Setup.py is designed to verify that only valid search criteria is passed to the Finder program.")
         sys.stdout.flush()
         sys.exit(0)
     else:
@@ -171,12 +171,12 @@ class SEARCH_VARIABLES(object):
         
         # IF DOES NOT EXIST... WHAT ARE YOU DOING!?
         if not os.path.exists(cls.APPLICATION_ROOT_DIRECTORY):
-            print("PROJECT MUST BE RUN FROM PACKAGED NWS_AFD_KEYWORD_FINDER folder (directory). Exiting...")#,flush=True)
+            print("PROJECT MUST BE RUN FROM PACKAGED NWS_AFD_KEYWORD_FINDER folder (directory). Exiting...")
             sys.stdout.flush()
             sys.exit(0)    
             
         if not os.path.exists(cls.TEXT_DATA_PATH):
-            print("THE ./TEXT_DATA/ FOLDER COULD NOT BE FOUND. CREATING NEW ONE. DOES NOT HAVE DATA. Exiting...")#,flush=True)
+            print("THE ./TEXT_DATA/ FOLDER COULD NOT BE FOUND. CREATING NEW ONE. DOES NOT HAVE DATA. Exiting...")
             sys.stdout.flush()
             os.makedirs(cls.TEXT_DATA_PATH) 
             sys.exit(0)
@@ -202,7 +202,3 @@ class SEARCH_VARIABLES(object):
                'debug_mode':cls.debug_mode}
                 
         return cls.user_vars
-    
-    
-    
-    

@@ -55,7 +55,7 @@ def test_checkYear():
     assert checkYear("01", 2001, "JAN") == 2001
     assert checkYear("01", 2000, "JAN") == 2001
     
-    #DEC TEXT MORE RECENT
+    #DEC TEXT LEAST RECENT
     assert checkYear("00", 1999, "DEC") == 1999
     assert checkYear("2001", 2000, "DEC") == 2000
     assert checkYear("1997", 1996, "DEC") == 1996
@@ -63,7 +63,7 @@ def test_checkYear():
     assert checkYear("01", 2001, "DEC") == 2001
     assert checkYear("01", 2000, "DEC") == 2000
     
-    #DEC iYEAR MORE RECENT
+    #DEC iYEAR LEAST RECENT
     assert checkYear("99", 2000, "DEC") == 1999
     assert checkYear("2000", 2001, "DEC") == 2000
     assert checkYear("1996", 1997, "DEC") == 1996

@@ -113,8 +113,6 @@ def make_string(DDHHMM, year, month, day,iYear,wfo):
                 else:  year = str(year)
         #RARELY HAPPENS
         else:
-            #print("PRE2003-SPC: DISCREPANCY BETWEEN DAY & DDHHMM TOO LARGE: ", DDHHMM, "Day: ", day, "Month: ", month, "Year/iYear: ", year, " / ", iYear)#, flush=True)
-            #sys.stdout.flush()
             isBad = True
         
     #PUT IT TOGETHER
@@ -122,8 +120,6 @@ def make_string(DDHHMM, year, month, day,iYear,wfo):
     strYEAR = checkYear(year,iYear,strMONTH)
 
     if strYEAR == -9999:
-        #print("PRE2003-SPC: AN UNSAFE ASSUMPTION WOULD HAVE TO BE MADE ON YEAR...", year,iYear, month)#, flush=True)
-        #sys.stdout.flush()
         isBad = True
 
     HHMM = str(DDHHMM[2:])

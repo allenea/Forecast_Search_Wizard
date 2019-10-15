@@ -46,7 +46,7 @@ def main():
     #list1.sort()
     #
     
-    forecast_product_list = Option.ALL
+    forecast_product_list = ["AFDSEW"]#Option.ALL
     
     """3. Set the start year....
     
@@ -55,7 +55,7 @@ def main():
     then change the ADMIN variable in the src/finder_functions.py program
     """
     
-    start_year = 2006
+    start_year = 1996
     
     
     
@@ -63,7 +63,7 @@ def main():
     This cannot exceed the current year.
     """
     
-    end_year = 2006
+    end_year = 2019
     
     
     
@@ -112,9 +112,6 @@ def main():
     """
     
     isGrep = True
-    
-    
-    
     
     
 # =============================================================================

@@ -47,7 +47,7 @@ def setup_FSW():
         try:
             import conda.cli
         except:
-            print("FAILED IMPORT OF  conda.cli")#, flush = True)
+            print("FAILED IMPORT OF  conda.cli")
             sys.stdout.flush()
         try:
             import datetime
@@ -72,7 +72,7 @@ def setup_FSW():
             print("Could not import one or more of the modules - "\
                   "Anaconda.\nTry restarting Anaconda and re-run the ",\
                   "program otherwise follow the documentation to download ",\
-                  "the necessary modules.")#, flush = True)
+                  "the necessary modules.")
             sys.stdout.flush()
             return False
             
@@ -97,7 +97,7 @@ def setup_FSW():
             print("Could not import one or more of the modules - "\
                   "Non-Anaconda.\nTry installing/upgrading pip or download/use Anaconda and re-run the ",\
                   "program otherwise follow the documentation to download ",\
-                  "the necessary modules.")#, flush = True)
+                  "the necessary modules.")
             sys.stdout.flush()
             return False
         

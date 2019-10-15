@@ -218,57 +218,59 @@ def test_checkYear():
     assert checkYear(1903,2003, 6, "PMDTHR") == (2003, False)
     
     
-    #PMDTHR - RARE
+    #PMDTHR - RARE - +100 to year
     assert checkYear(1901,2004, 12, "PMDTHR") == (2001, True)
     assert checkYear(1902,2006, 6, "PMDTHR") == (2002, True)
     assert checkYear(1903,2000, 6, "PMDTHR") == (2000, True)
 
     
-    #WEIRDNESS IN THE LIMITED CASES FOLLOW THE BELOW RULES
-    assert checkYear(1901,2000, 1, "PMDTHR") == (2001, False)
-    assert checkYear(1901,2002, 12, "PMDTHR") == (2001, False)
-    assert checkYear(1901,2000, 6, "PMDTHR") == (2000, True)
+    #WEIRDNESS IN THE LIMITED CASES FOLLOW THE BELOW RULES - RARE - +100 to year
+    assert checkYear(1901,2000, 1, "PMDTHR") == (2001, False) #2001 in the 2000 file for 1901
+    assert checkYear(1901,2002, 12, "PMDTHR") == (2001, False) #2001 in the 2002 file for 1901
+    assert checkYear(1901,2000, 6, "PMDTHR") == (2001, True)
     assert checkYear(1901,2002, 6, "PMDTHR") == (2001, True) #Year off by 1 and do conversion
     
-    #EXCEPTIONS AND ASSUMPTIONS
-    assert checkYear(2018,2017, 1, "PMDTHR") == (2018, False) # JAN -1YR EXCEPTION - USE HIGHER
+    #EXCEPTIONS AND ASSUMPTIONS-USE LOWER
+    assert checkYear(2018,2017, 1, "PMDTHR") == (2018, False) # JAN -1YR EXCEPTION - USE LOWER
     assert checkYear(2017,2017, 1, "PMDTHR") == (2017, False)
-    assert checkYear(2017,2018, 1, "PMDTHR") == (2017, True) # JAN +1YR EXCEPTION - USE HIGHER
+    
+    assert checkYear(2017,2018, 1, "PMDTHR") == (2017, True) # JAN +1YR EXCEPTION - USE LOWER
     assert checkYear(2017,2017, 12, "PMDTHR") == (2017, False)
-    assert checkYear(2018,2017, 12, "PMDTHR") == (2017, True) # DEC -1YR EXCEPTION - USE LOWER
-    assert checkYear(1903,1902, 12, "PMDTHR") == (1902, True) # DEC -1YR EXCEPTION - USE LOWER
-    assert checkYear(1903,1902, 12, "AFDLWX") == (1902, True) # DEC -1YR EXCEPTION - USE LOWER
+    assert checkYear(2018,2017, 12, "PMDTHR") == (2017, True)
+    assert checkYear(1903,1902, 12, "PMDTHR") == (1902, True)
+    assert checkYear(1903,1902, 12, "AFDLWX") == (1902, True)
 
-    assert checkYear(2017,2018, 12, "PMDTHR") == (2017, False) # DEC +1YR EXCEPTION - USE LOWER
-    assert checkYear(2018,2017, 6, "PMDTHR") == (2017, True) #WARN 2018 hasn't happened yet
-    assert checkYear(2017,2018, 6, "PMDTHR") == (2017, True) #WARN USE TEXT - MORE REALISTIC
-    assert checkYear(2018,2017, 7, "PMDTHR") == (2017, True) #WARN 2018 hasn't happened yet
-    assert checkYear(2017,2018, 7, "PMDTHR") == (2017, True) #WARN USE TEXT - MORE REALISTIC
+    assert checkYear(2017,2018, 12, "PMDTHR") == (2017, False)
+    assert checkYear(2018,2017, 6, "PMDTHR") == (2017, True)
+    assert checkYear(2017,2018, 6, "PMDTHR") == (2017, True)
+    assert checkYear(2018,2017, 7, "PMDTHR") == (2017, True)
+    assert checkYear(2017,2018, 7, "PMDTHR") == (2017, True)
     
     assert checkYear(2018,2017, 1, "AFDPHI") == (2018, False) # JAN -1YR EXCEPTION - USE HIGHER
     assert checkYear(2017,2017, 1, "AFDPHI") == (2017, False)
-    assert checkYear(2017,2018, 1, "AFDPHI") == (2017, True) # JAN +1YR EXCEPTION - USE HIGHER
+    assert checkYear(2017,2018, 1, "AFDPHI") == (2017, True)
     assert checkYear(2017,2017, 12, "AFDPHI") == (2017, False)
-    assert checkYear(2018,2017, 12, "AFDPHI") == (2017, True) # DEC -1YR EXCEPTION - USE LOWER
+    assert checkYear(2018,2017, 12, "AFDPHI") == (2017, True)
     assert checkYear(2017,2018, 12, "AFDPHI") == (2017, False) # DEC +1YR EXCEPTION - USE LOWER
-    assert checkYear(2018,2017, 6, "AFDPHI") == (2017, True) #WARN 2018 hasn't happened yet
-    assert checkYear(2017,2018, 6, "AFDPHI") == (2017, True) #WARN USE TEXT - MORE REALISTIC
-    assert checkYear(2018,2017, 7, "AFDPHI") == (2017, True) #WARN 2018 hasn't happened yet
-    assert checkYear(2017,2018, 7, "AFDPHI") == (2017, True) #WARN USE TEXT - MORE REALISTIC
+    assert checkYear(2018,2017, 6, "AFDPHI") == (2017, True)
+    assert checkYear(2017,2018, 6, "AFDPHI") == (2017, True) 
+    assert checkYear(2018,2017, 7, "AFDPHI") == (2017, True)
+    assert checkYear(2017,2018, 7, "AFDPHI") == (2017, True)
 
     
-    assert checkYear(2018,1995, 1, "AFDPHI") == (1995, True) # JAN -1YR EXCEPTION - USE HIGHER
-    assert checkYear(2012,2018, 1, "AFDPHI") == (2012, True) # JAN +1YR EXCEPTION - USE HIGHER
-    assert checkYear(2018,1998, 12, "AFDPHI") == (1998, True) # DEC -1YR EXCEPTION - USE LOWER
-    assert checkYear(2000,2018, 12, "AFDPHI") == (2000, True) # DEC +1YR EXCEPTION - USE LOWER
-    assert checkYear(2018,2001, 6, "AFDPHI") == (2001, True) #WARN 2018 hasn't happened yet
-    assert checkYear(2017,2019, 6, "AFDPHI") == (2017, True) #WARN USE TEXT - MORE REALISTIC
-    assert checkYear(2018,2009, 7, "AFDPHI") == (2009, True) #WARN 2018 hasn't happened yet
-    assert checkYear(2013,2017, 7, "AFDPHI") == (2013, True) #WARN USE TEXT - MORE REALISTIC
+    assert checkYear(2018,1995, 1, "AFDPHI") == (1995, True) 
+    assert checkYear(2012,2018, 1, "AFDPHI") == (2012, True)
+    assert checkYear(2018,1998, 12, "AFDPHI") == (1998, True)
+    assert checkYear(2000,2018, 12, "AFDPHI") == (2000, True)
+    assert checkYear(2018,2001, 6, "AFDPHI") == (2001, True) #WARN 2018 hasn't "happened yet"
+    assert checkYear(2017,2019, 6, "AFDPHI") == (2017, True)
+    assert checkYear(2018,2009, 7, "AFDPHI") == (2009, True)
+    assert checkYear(2013,2017, 7, "AFDPHI") == (2013, True)
 
 
 
 def test_getDay():
+    #IGNORE GUESS - ADJUSTED FOR TZ
     assert getDay(["1"], 31) == 1
     assert getDay(["1"], 30) == 1
     assert getDay(["1"], 29) == 1
@@ -298,7 +300,7 @@ def test_getDay():
 
     assert getDay(["14", "1893"], 15) == 14
     assert getDay(["1000","14"], 15) == 14
-    
+    #VERIFY WITH GUESS
     assert getDay(["14", "13"], 15) == None
     assert getDay(["14", "15"], 15) == 15
     assert getDay(["16","14","15"], 15) == 15
@@ -310,7 +312,6 @@ def test_getFirstGuess():
     assert getFirstGuess(2013, 0, 12, 12, 0, "UTC") == None
     assert getFirstGuess(2013, 12, 12, 12, 0, "UTC") == datetime(2013, 12, 12, 12, 0,tzinfo=timezone.utc)
     assert getFirstGuess(2013, 14, 12, 12, 0, "UTC") == None
-    
     
     assert getFirstGuess(2013, 6, 12, 0, 0, "UTC") == datetime(2013, 6, 12, 0, 0,tzinfo=timezone.utc)
     assert getFirstGuess(2013, 6, 12, 12, 0, "UTC") == datetime(2013, 6, 12, 12, 0,tzinfo=timezone.utc)
@@ -325,15 +326,10 @@ def test_getFirstGuess():
     assert getFirstGuess(2013, 12, 12, 23, 59, "UTC") == datetime(2013, 12, 12, 23, 59, tzinfo=timezone.utc)
     assert getFirstGuess(2013, 12, 12, 23, 60, "UTC") == None
     assert getFirstGuess(2013, 12, 12, 23, "01", "UTC") == None
-    
-
     assert getFirstGuess(2025, 6, 12, 12, 0, "UTC") == datetime(2025, 6, 12, 12, 0,tzinfo=timezone.utc)
     assert getFirstGuess(-1, 6, 12, 12, 0, "UTC") == None
-    
-    assert getFirstGuess(2013, 6, 12, 2, 32, "UTC") == datetime(2013, 6, 12, 2, 32, tzinfo=timezone.utc)
     assert getFirstGuess(2013, 6, 12, 2, 32, "UTC") == datetime(2013, 6, 12, 2, 32, tzinfo=timezone.utc)
     assert getFirstGuess(2013, 2, 28, 2, 32, "UTC") == datetime(2013, 2, 28, 2, 32,tzinfo=timezone.utc)
-    assert getFirstGuess(2018, 2, 28, 2, 32, "UTC") == datetime(2018, 2, 28, 2, 32,tzinfo=timezone.utc)
     assert getFirstGuess(2013, 2, 29, 2, 32, "UTC") == None
     assert getFirstGuess(2016, 2, 29, 2, 32, "UTC") == datetime(2016, 2, 29, 2, 32,tzinfo=timezone.utc)
 
@@ -348,28 +344,28 @@ def test_guessAMPM():
     assert guessAMPM(None, "US/Eastern") == None
     
     assert guessAMPM(datetime(2019, 6, 12, 0, 59, tzinfo=pytz.timezone("UTC")), "UTC") == "AM"
-    assert guessAMPM(datetime(2019, 6, 12, 21, 59,tzinfo= pytz.timezone("UTC")), "UTC") == "PM"
+    assert guessAMPM(datetime(2019, 6, 12, 17, 59,tzinfo= pytz.timezone("UTC")), "UTC") == "PM"
     assert guessAMPM(datetime(2019, 12, 12, 21, 59, tzinfo=pytz.timezone("UTC")), "UTC") == "PM"
     assert guessAMPM(datetime(2019, 12, 12, 10, 59, tzinfo=pytz.timezone("UTC")), "UTC") == "AM"
     assert guessAMPM(None, "UTC") == None
     
-    assert guessAMPM(datetime(2019, 6, 12, 0, 59, tzinfo=pytz.timezone("UTC")), "US/Central") == "PM"
+    assert guessAMPM(datetime(2019, 6, 12, 5, 59, tzinfo=pytz.timezone("UTC")), "US/Central") == "AM"
     assert guessAMPM(datetime(2019, 6, 12, 21, 59,tzinfo= pytz.timezone("UTC")), "US/Central") == "PM"
-    assert guessAMPM(datetime(2019, 12, 12, 7, 59, tzinfo=pytz.timezone("UTC")), "US/Central") == "AM"
+    assert guessAMPM(datetime(2019, 12, 12, 5, 59, tzinfo=pytz.timezone("UTC")), "US/Central") == "PM"
     assert guessAMPM(datetime(2019, 12, 12, 21, 59, tzinfo=pytz.timezone("UTC")), "US/Central") == "PM"
     assert guessAMPM(datetime(2019, 12, 12, 10, 59, tzinfo=pytz.timezone("UTC")), "US/Central") == "AM"
     assert guessAMPM(None, "US/Central") == None
     
-    assert guessAMPM(datetime(2019, 6, 12, 0, 59, tzinfo=pytz.timezone("UTC")), "US/Mountain") == "PM"
+    assert guessAMPM(datetime(2019, 6, 12, 6, 59, tzinfo=pytz.timezone("UTC")), "US/Mountain") == "AM"
     assert guessAMPM(datetime(2019, 6, 12, 21, 59,tzinfo= pytz.timezone("UTC")), "US/Mountain") == "PM"
-    assert guessAMPM(datetime(2019, 12, 12, 7, 59, tzinfo=pytz.timezone("UTC")), "US/Mountain") == "AM"
+    assert guessAMPM(datetime(2019, 12, 12, 6, 59, tzinfo=pytz.timezone("UTC")), "US/Mountain") == "PM"
     assert guessAMPM(datetime(2019, 12, 12, 21, 59, tzinfo=pytz.timezone("UTC")), "US/Mountain") == "PM"
     assert guessAMPM(datetime(2019, 12, 12, 10, 59, tzinfo=pytz.timezone("UTC")), "US/Mountain") == "AM"
     assert guessAMPM(None, "US/Mountain") == None
  
-    assert guessAMPM(datetime(2019, 6, 12, 0, 59, tzinfo=pytz.timezone("UTC")), "US/Pacific") == "PM"
+    assert guessAMPM(datetime(2019, 6, 12, 7, 59, tzinfo=pytz.timezone("UTC")), "US/Pacific") == "AM"
     assert guessAMPM(datetime(2019, 6, 12, 21, 59,tzinfo= pytz.timezone("UTC")), "US/Pacific") == "PM"
-    assert guessAMPM(datetime(2019, 12, 12, 8, 59, tzinfo=pytz.timezone("UTC")), "US/Pacific") == "AM"
+    assert guessAMPM(datetime(2019, 12, 12, 7, 59, tzinfo=pytz.timezone("UTC")), "US/Pacific") == "PM"
     assert guessAMPM(datetime(2019, 12, 12, 21, 59, tzinfo=pytz.timezone("UTC")), "US/Pacific") == "PM"
     assert guessAMPM(datetime(2019, 12, 12, 10, 59, tzinfo=pytz.timezone("UTC")), "US/Pacific") == "AM"
     assert guessAMPM(None, "US/Pacific") == None
@@ -384,18 +380,17 @@ def test_getAMPM():
     assert getAMPM("1130 PM",datetime(2013,12,6,4,30,tzinfo=pytz.timezone("UTC")), "US/Eastern") == ('PM', False)
     assert getAMPM("1159 A",datetime(2013,6,6,3,59,tzinfo=pytz.timezone("UTC")), "US/Eastern") == ('PM', False)
 
-    assert getAMPM("MIDNIGHT",datetime(2013,6,6,16,00,tzinfo=pytz.timezone("UTC")), "US/Eastern") == ('PM', True)
+    assert getAMPM("MIDNIGHT",datetime(2013,6,6,16,00,tzinfo=pytz.timezone("UTC")), "US/Eastern") == ('PM', True) #NOON
     assert getAMPM("MIDNIGHT",datetime(2013,6,6,4,00,tzinfo=pytz.timezone("UTC")), "US/Eastern") == ('AM', False)
 
 
     assert getAMPM("NOON",datetime(2013,6,6,16,00,tzinfo=pytz.timezone("UTC")), "US/Eastern") == ('PM', False)
-    assert getAMPM("NOON",datetime(2013,6,6,4,00,tzinfo=pytz.timezone("UTC")), "US/Eastern") == ('AM', True)
+    assert getAMPM("NOON",datetime(2013,6,6,4,00,tzinfo=pytz.timezone("UTC")), "US/Eastern") == ('AM', True) #MIDNIGHT
 
     assert getAMPM("1214 PM",datetime(2013,12,6,5,14,tzinfo=pytz.timezone("UTC")), "US/Eastern") == ('PM', True) #12:14 am but written as 12:14pm
     assert getAMPM("1130 AM",datetime(2013,12,6,4,30,tzinfo=pytz.timezone("UTC")), "US/Eastern") == ('AM', True) #11:30 pm but written as 11:30am
     
     
-    assert getAMPM("1159",datetime(2013,6,6,3,59,tzinfo=pytz.timezone("UTC")), "US/Eastern") == ('PM', False)
     assert getAMPM("1214 AMPM",datetime(2013,12,6,5,14,tzinfo=pytz.timezone("UTC")), "US/Eastern") == ('AM', False)
     assert getAMPM("1130 AMPM",datetime(2013,12,6,4,30,tzinfo=pytz.timezone("UTC")), "US/Eastern") == ('PM', True) # 11:30 am being confused with 11:30PM
     #^^ PM BECAUSE OF GUESS TIME AND PM IN THERE EVEN THOUGH AM IS THERE TOO....
@@ -532,7 +527,7 @@ def test_get_Issuing_Date_text():
     
     assert get_Issuing_Date_text("SUN JANUARY 1 2018",2017,"PMDTHR","010534") == (2018, 1, 1, False) # JAN -1YR EXCEPTION - USE HIGHER
     assert get_Issuing_Date_text("SUN JANUARY 7 2017",2017,"PMDTHR","070534")  == (2017, 1, 7, False)
-    assert get_Issuing_Date_text("SUN JANUARY 5 2017",2018,"PMDTHR","050534") == (2017, 1, 5, True)
+    assert get_Issuing_Date_text("SUN JANUARY 5 2017",2018,"PMDTHR","050534") == (2017, 1, 5, True)#FORGOT TO CHANGE THE YEAR
     assert get_Issuing_Date_text("SUN DECEMBER 23 2017",2017,"PMDTHR","230534")== (2017, 12, 23, False)
     assert get_Issuing_Date_text("SUN DECEMBER 15 2018",2017,"PMDTHR","150534") == (2017, 12, 15, True) # DEC -1YR EXCEPTION - USE LOWER
     assert get_Issuing_Date_text("SUN DECEMBER 19 2017",2018,"PMDTHR","190534") == (2017, 12, 19, False) # DEC +1YR EXCEPTION - USE LOWER
@@ -544,7 +539,7 @@ def test_get_Issuing_Date_text():
     
     assert get_Issuing_Date_text("SUN JANUARY 1 2018",2017,"AFDPHI","010534")  == (2018, 1, 1, False) # JAN -1YR EXCEPTION - USE HIGHER
     assert get_Issuing_Date_text("SUN JANUARY 7 2017",2017,"AFDPHI","070534") == (2017, 1, 7, False)
-    assert get_Issuing_Date_text("SUN JANUARY 5 2017",2018,"AFDPHI","050534") == (2017, 1, 5, True)
+    assert get_Issuing_Date_text("SUN JANUARY 5 2017",2018,"AFDPHI","050534") == (2017, 1, 5, True) #FORGOT TO CHANGE THE YEAR
     assert get_Issuing_Date_text("SUN DECEMBER 23 2017",2017,"AFDPHI","230534") == (2017, 12, 23, False)
     assert get_Issuing_Date_text("SUN DECEMBER 15 2018",2017,"AFDPHI","150534") == (2017, 12, 15, True) # DEC -1YR EXCEPTION - USE LOWER
     assert get_Issuing_Date_text("SUN DECEMBER 19 2017",2018,"AFDPHI","190534") == (2017, 12, 19, False) # DEC +1YR EXCEPTION - USE LOWER
@@ -586,10 +581,11 @@ def test_get_Issuing_Date_text():
     assert get_Issuing_Date_text("SUN JAN 15 1903",2003,"AFDPHI","150345") == (None, None , None ,None)
     assert get_Issuing_Date_text("MON FEB 15 1900", 2000,"AFDPHI","150345") == (None, None , None ,None)
     assert get_Issuing_Date_text("TUE DEC 2019", 2019,"AFDPHI","150345") == (2019, 12 , None ,True)
-    assert get_Issuing_Date_text("MON N0VEMBER 15 1893", 2013,"AFDPHI","150345") == (2013, 11 , 15 ,False) # USE iYEAR... False since year == None
-    assert get_Issuing_Date_text(" DECEMBER 15 1133", 2015,"AFDPHI","150345") == (2015, 12 , 15 ,False) # USE iYEAR
-    assert get_Issuing_Date_text("TUE DEC 31", 2019,"AFDPHI","150345") == (2019, 12 , 31 ,False) # USE iYEAR
+    assert get_Issuing_Date_text("MON N0VEMBER 15 1893", 2013,"AFDPHI","150345") == (2013, 11 , 15 ,True) # USE iYEAR...
+    assert get_Issuing_Date_text(" DECEMBER 15 1133", 2015,"AFDPHI","150345") == (2015, 12 , 15 ,True) # USE iYEAR
+    assert get_Issuing_Date_text("TUE DEC 31", 2019,"AFDPHI","150345") == (2019, 12 , 31 ,True) # USE iYEAR
     
+    #GO WITH SMALLER YEAR
     assert get_Issuing_Date_text("SUN JULY 21 2018",2017,"AFDPHI","210534") == (2017, 7, 21, True) #WARN 2018 hasn't happened yet
     assert get_Issuing_Date_text("SUN JULY 28 2017",2018,"AFDPHI","280534") == (2017, 7, 28, True) #WARN USE TEXT - MORE REALISTIC
     assert get_Issuing_Date_text("SUN JULY 30 2018",2017,"AFDPHI","300534") == (2017, 7, 30, True) #WARN 2018 hasn't happened yet
@@ -603,8 +599,8 @@ def test_get_Issuing_Date_text():
     assert get_Issuing_Date_text("SUN JULY 30 2018",2009,"AFDPHI","300534") == (2009,7, 30, True) #WARN 2018 hasn't happened yet
     assert get_Issuing_Date_text("SUN JULY 31 2013",2017,"AFDPHI","310534") == (2013,7, 31, True) #WARN USE TEXT - MORE REALISTIC
 
-    assert get_Issuing_Date_text("SUN JAN 15",2019,"AFDPHI","150345") == (2019, 1,15, False)  #MISSING YEAR
-    assert get_Issuing_Date_text("SUN FEB 15",1996,"AFDPHI","150345") == (1996,2, 15, False)  #MISSING YEAR
+    assert get_Issuing_Date_text("SUN JAN 15",2019,"AFDPHI","150345") == (2019, 1,15, True)  #MISSING YEAR
+    assert get_Issuing_Date_text("SUN FEB 15",1996,"AFDPHI","150345") == (1996, 2, 15, True)  #MISSING YEAR
     
     #assert get_Issuing_Date_text(,"AFDPHI","150345") == 
     assert get_Issuing_Date_text("SUN JAN 15 2019",2019,"AFDPHI","150345") == (2019, 1, 15 ,False)
@@ -803,7 +799,7 @@ def test_checkEverything():
 
    assert checkEverything("010623", 2016, 12, 31, 2018) ==  (2017, 1, 1, "06", "23", False)
    assert checkEverything("010623", 2018, 12, 31, 2016) ==  (2019, 1, 1, "06", "23", True)
-   assert checkEverything("010623", 1995, 12, 31, 1990) == (1996, 1, 1, "06", "23", True)   
+   assert checkEverything("010623", 1995, 12, 31, 1990) == (1996, 1, 1, "06", "23", True)
    
    #JANUARY BACK TO DECEMBER
    assert checkEverything("310623", 2018, 1, 1, 2018) ==  (2017, 12, 31, "06", "23", False) #Go backwards a day from Jan 1 to last day of december. no year change IEM

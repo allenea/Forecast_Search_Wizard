@@ -67,7 +67,6 @@ def debug_check(option):
         
 def input_words(lst, isGrep):
     """ SETS THE LIST OF KEYWORDS PROVIDED IN THE FSW_NAMELIST. Prints them to display."""
-
     if isinstance(lst,list) and all(isinstance(item, str) for item in lst):
         if " " in lst:
             lst.remove(" ")
@@ -77,7 +76,7 @@ def input_words(lst, isGrep):
             
         inputKeyLst = []
         if len(lst) < 1:
-            print("Empty List of Words")#, flush=True)
+            print("Empty List of Words")
             sys.stdout.flush()
             return None
         else:

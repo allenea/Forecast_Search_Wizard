@@ -23,7 +23,7 @@ for tz in pytz.all_timezones:
     
 """
 
-def convert_time(year, month, day, hour, minute, timezone="UTC"):   
+def convert_time(wfo, year, month, day, hour, minute, timezone="UTC"):   
     """Converts date/time information to UTC time given the specified or implied time zone.
 
     If you are in UTC time function call without timezone="UTC"
@@ -44,7 +44,12 @@ def convert_time(year, month, day, hour, minute, timezone="UTC"):
         dt = datetime.datetime(int(year),int(month), int(day),int(hour),int(minute)) ## RAISE VALUE_ERROR -> RETURN NONE
         local = pytz.timezone(timezone) #RAISE TIMEZONE_ERROR -> RETURN NONE
     except:
-        return None
+        if wfo == "LSRNY1":
+            dt = datetime.datetime(int(year),int(month), int(day),int(hour),int(minute))
+            local = pytz.timezone("US/Eastern")
+        else:
+            print("Convert_Time FAILURE: ",year, month, day, hour, minute, timezone)
+            return None
     
     # Formats the date to a text string
     fmtDate=dt.strftime(fmtString)

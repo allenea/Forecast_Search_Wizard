@@ -13,7 +13,7 @@
 #
 # Imports
 from __future__ import print_function
-import re, sys, time, pytz, datetime#, os
+import re, time, pytz, datetime#, os, sys
 
 ADMIN_EARLIEST_YEAR = 1996
 ADMIN_CURRENT_YEAR = int(time.ctime()[-4:])
@@ -99,9 +99,9 @@ def getMonth(month):
 
 def getDDHHMM(DDHHMM):
     """ Get the DDHHMM variable from header. NO ASSUMPTIONS."""
-    if DDHHMM == "999999":
-        return None, None, None
-    elif len(DDHHMM) == 6:
+    if len(DDHHMM) == 6:
+        if DDHHMM == "999999":
+            return None, None, None
         dayWMOHEAD = int(DDHHMM[:2])
         hrWMOHEAD  = DDHHMM[2:4]
         minWMOHEAD = DDHHMM[4:6]
@@ -135,7 +135,6 @@ def getYear(date,iYear):
 
    else:
        year = None
-       
        if len(date_nums) > 0 and date_nums[0] == "0":
            date_nums.remove("0")
 
@@ -156,6 +155,20 @@ def getYear(date,iYear):
            elif str(iYear) in t_arr:
                year = iYear
                date_nums = [t_arr.split(str(year))[0]]
+               return year, date_nums
+           
+           elif str(iYear+1) in t_arr:
+               year = iYear+1
+               date_nums = [t_arr.split(str(year))[0]]
+               return year, date_nums
+           
+           elif str(iYear-1) in t_arr:
+               year = iYear-1
+               date_nums = [t_arr.split(str(year))[0]]
+               return year, date_nums
+           
+           else:
+               print("time function - else")
                return year, date_nums
 
        else:
@@ -186,12 +199,12 @@ def checkYear(year,iYear, month, wfo):
         elif  abs(iYear - year) == 1:
             if year > iYear: # year == iYear + 1
                 if month == 1: return year, False
-                else: return iYear, True
+                else: return year, True
             else: #year == iYear - 1
                 if month == 12: return year, False
                 else:  return year, True
         elif abs(iYear - year) > 1:
-            if year > iYear: return iYear, True
+            if year > iYear: return iYear, True #Shouldn't have happened yet. use iYear (when stored)
             else: return year, True
         else:
             return None, True
@@ -204,7 +217,7 @@ def checkYear(year,iYear, month, wfo):
                 if month == 12: return year, False
                 else: return year, True
         elif abs(iYear - year) > 1 and year > ADMIN_EARLIEST_YEAR:
-            if year > iYear: return iYear, True
+            if year > iYear: return iYear, True #Shouldn't have happened yet. use iYear (when stored)
             else: return year, True
         else:
             return None, True
@@ -251,31 +264,32 @@ def get_Issuing_Date_text(trimTimesFound,iYear,wfo,DDHHMM):
 
     #Gets/Checks/Sets year against all known information.
     tmp_year, t_nums = getYear(date, iYear)
-    year, assume = checkYear(tmp_year,iYear, month, wfo)
 
-    if getYear is None:
+    if tmp_year is None:
         tmp_year = iYear
+        year, assume = checkYear(tmp_year,iYear, month, wfo)
         assume = True
         isAssumed = True
-
+    else:
+        year, assume = checkYear(tmp_year,iYear, month, wfo)
+        
     #Gets/Checks/Sets day against all known information.
     text_day = getDay(t_nums, dayWMOHEAD)
-
-    if text_day == None:
-        assume = True
-      
+    
     if month == None:  
         #USE PREVIOUS/NEXT MONTH IN THE FUTURE TO RESOLVE MORE CASES?
         return None, None, None, None
     
+    if text_day == None:
+        if year == None:
+            return None, None, None, None
+        return year, month,None, True
+      
     if assume == True:
         if year == None:
             return None, None, None, None
         else:
-            if text_day == None:
-                return year, month,None, True
-            else:
-                return year, month, text_day, True
+            return year, month, text_day, True
         
     return year, month, text_day, isAssumed
 
@@ -350,6 +364,7 @@ def getAMPM(timepre, first_guess, timezone):
                 return "PM", True 
             else:#SHOULD NEVER REACH HERE
                 return likely, True
+            
         elif "N00N" in timepre.replace("O","0"):
             if "PM" == likely:
                 return "PM", False
@@ -403,7 +418,7 @@ def getAMPM(timepre, first_guess, timezone):
         elif "MIDNIGHT" in timepre:
             return "AM", True
         else:
-            return None, True    
+            return None, True
 
 
 
