@@ -67,8 +67,8 @@ def debug_check(option):
         
 def input_words(lst, isGrep):
     """ SETS THE LIST OF KEYWORDS PROVIDED IN THE FSW_NAMELIST. Prints them to display."""
-    if all(isinstance(item, str) for item in lst) and isinstance(lst,list):
-        
+
+    if isinstance(lst,list) and all(isinstance(item, str) for item in lst):
         if " " in lst:
             lst.remove(" ")
             
@@ -100,7 +100,7 @@ def input_words(lst, isGrep):
                 inputKeyLst = check_if_substring(inputKeyLst)
             return inputKeyLst
         
-    elif all(isinstance(item, str) for item in lst) and isinstance(lst,str): # NOT A LIST...
+    elif isinstance(lst,str) and all(isinstance(item, str) for item in lst): # NOT A LIST...
         inputKeyLst = []
         if lst.strip() == "":
             return None
@@ -119,23 +119,23 @@ def input_words(lst, isGrep):
             inputKeyLst = check_if_substring(inputKeyLst)
         return inputKeyLst
     else:
-        print("List of keywords contains something other than all strings...")#,flush=True)
+        print("FAILURE: List of keywords contains something other than all strings...")#,flush=True)
         sys.stdout.flush()
         return None
 
 def search_option(option):
     """ SETS THE LIST OF SEARCH OPTION PROVIDED IN THE FSW_NAMELIST. Prints to display."""
 
-    if all(isinstance(item, str) for item in option) and isinstance(option,list):
+    if isinstance(option,list) and all(isinstance(item, str) for item in option):
         if "" in option:
             option.remove("") 
         if not option:
-            return False
-        return True
+            return None
+        return True        
     else:
-        print("FAILURE... USE DEFAULT SEARCH OPTIONS")
+        print("FAILURE FROM SEARCH OPTIONS.")
         sys.stdout.flush()
-        return False
+        return None
 
 
 def set_year_range(start, end):

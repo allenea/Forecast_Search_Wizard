@@ -33,7 +33,7 @@ def trim_warnings(warningfile):
     
     #constants
     be4Begin = False ; afterEnd = False
-    countTP = 0; countTZ = 0; utc_convert = 0; countOther=0; countCR = 0; rowLast = "";
+    countTP = 0; countTZ = 0; utc_convert = 0; countTF=0; countCR = 0; rowLast = "";
     
     #Iterate through file
     for row in f:
@@ -68,8 +68,8 @@ def trim_warnings(warningfile):
                     #    countTZ +=1
                     elif "WARNING TZ: " in row:
                         countTZ +=1
-                    elif "OTHER:" in row: #missing_time.py
-                        countOther +=1
+                    elif "TF" in row: #missing_time.py
+                        countTF +=1
                     elif "FINDER:" in row: #finder.py
                         countCR +=1 
                         continue
@@ -83,7 +83,7 @@ def trim_warnings(warningfile):
     outfile.write("TZ: Timezone Errors: %d\n" % countTZ)
     outfile.write("TP: Time Problem Errors: %d\n" % countTP)
     outfile.write("UTC Conversion Error: %d\n" % utc_convert)
-    outfile.write("Other Issues: %d\n" % countOther)
+    outfile.write("TF: Time Finder Issues: %d\n" % countTF)
     
     outfile.write("\n\n\n** LOGGING POSSIBLE FORECASTS NOT ACCESSIBLE **\n\n")
     

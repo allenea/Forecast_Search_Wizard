@@ -58,25 +58,25 @@ def execute(FSW_SEARCH):
         try:
             AFD_finder(FSW_SEARCH, run_start_time)
         except TimeoutException:
-            print("The search was limited to 6 hours. No search should take more than 6 hours at this time.")#, flush=True)
-            print("If second run yields the same problem. Try narrowing your search and/or contact: allenea@udel.edu")#, flush=True)
-            print("--- %s seconds ---\n\n" % (time.time() - start_time))#, flush=True)
+            print("The search was limited to 6 hours. No search should take more than 6 hours at this time.")
+            print("If second run yields the same problem. Try narrowing your search and/or contact: allenea@udel.edu")
+            print("--- %s seconds ---\n\n" % (time.time() - start_time))
             # close the file
             sys.stdout.close()
             sys.stdout = f
         
         #? Is it needed or what happened that one time. I think it was a computer thing and not the code....
         except UnicodeEncodeError:
-            print("Failed UnicodeEncodeError... Possibly caused by a corrupt file.")#, flush=True)
-            print("--- %s seconds ---\n\n" % (time.time() - start_time))#, flush=True)
+            print("Failed UnicodeEncodeError... Possibly caused by a corrupt file.")
+            print("--- %s seconds ---\n\n" % (time.time() - start_time))
             #close the files
             f.close()
             sys.stdout.close()
             sys.stdout = f
 
         except:       # ALL OTHER EXCEPTIONS  
-            print("Program Failed To Run To Completion. Please alert allenea@udel.edu to identify the problem and fix it.")#, flush=True)
-            print("--- %s seconds ---\n\n" % (time.time() - start_time))#, flush=True)
+            print("Program Failed To Run To Completion. Please alert allenea@udel.edu to identify the problem and fix it.")
+            print("--- %s seconds ---\n\n" % (time.time() - start_time))
             #close the files
             f.close()
             sys.stdout.close()
@@ -87,7 +87,7 @@ def execute(FSW_SEARCH):
             signal.alarm(0)
             #write error outputs then write the statistics to the file at the end.
             final_message()
-            print("--- %s seconds ---\n\n" % (time.time() - start_time))#, flush=True)
+            print("--- %s seconds ---\n\n" % (time.time() - start_time))
             # close the file
             sys.stdout.close()
             sys.stdout = f

@@ -28,13 +28,16 @@ def covertSPC(wfo, iYear, text, DDHHMM):
         elif "NWS STORM PREDICTION CENTER NORMAN OK" in text[lineIDX]:
             if sYear in text[lineIDX + 1]:
                 DATETIME_STRING = text[lineIDX + 1].strip()
-                if DATETIME_STRING != "": isSuccess = True
-                return DATETIME_STRING, isSuccess
+                if DATETIME_STRING != "":  
+                    isSuccess = True
+                    return DATETIME_STRING, isSuccess
+            
             
             elif str(iYear + 1) in text[lineIDX + 1]:
                 DATETIME_STRING = text[lineIDX + 1].strip()
-                if DATETIME_STRING != "": isSuccess = True
-                return DATETIME_STRING, isSuccess
+                if DATETIME_STRING != "":  
+                    isSuccess = True
+                    return DATETIME_STRING, isSuccess
             
         elif "...." in re.sub('[^.]+', '', text[lineIDX]):
             if  "//" in re.sub('[^/]+', '', text[lineIDX]):
@@ -68,6 +71,7 @@ def covertSPC(wfo, iYear, text, DDHHMM):
                     if int(day) > 31: continue
                         
                     if str(day) == str(DDHHMM[:2]):  day = DDHHMM[:2]
+                    
                     ## EVERYTHING IS GOOD
                     DATETIME_STRING, isBad = make_string(DDHHMM, year, month, day,iYear,wfo)
                     

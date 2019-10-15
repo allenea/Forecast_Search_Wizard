@@ -149,7 +149,7 @@ def write_output_file(outputfile, inputKey, station_list, start,end, eTime, isGr
             text_file.write("Stats are limited to first instance of each keyword for that day:\n")
         text_file.write("\tTotal Mentions:  %d\n" % total_mentions)        
         text_file.write("\tUnique Mentions: %d\n"  % no_dups)
-        text_file.write("\tTimezone Errors: %d\n\n"  % countBad)
+        text_file.write("\tTimezone Errors: %d\n\n"  % countBad)  #REMOVE IN THE FUTURE?
         
         ## This should be used to identify start of the dates when analyzing the outputs
         text_file.write("!!TIMES ARE IN UTC!!\n") 
