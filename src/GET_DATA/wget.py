@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 Download utility as an easy way to get file from the net
  
