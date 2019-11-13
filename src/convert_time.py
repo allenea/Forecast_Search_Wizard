@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2019 Eric Allen - All Rights Reserved
+"""Copyright (C) 2018-2019 Eric Allen - All Rights Reserved"""
 #
 # You may use, distribute and modify this code under the
 # terms of the GNU General Public License v3.0 license.
@@ -13,52 +13,54 @@
 #
 # Imports
 from __future__ import print_function
-import datetime, pytz
+import datetime
+import pytz
 
-"""
-TO SEE VALID PYTZ TIMEZONES
+# =============================================================================
+#
+# TO SEE VALID PYTZ TIMEZONES
+#
+# for tz in pytz.all_timezones:
+#     print(tz)
+#
+#
+# =============================================================================
 
-for tz in pytz.all_timezones:
-    print(tz)
-    
-"""
-
-def convert_time(wfo, year, month, day, hour, minute, timezone="UTC"):   
+def convert_time(wfo, year, month, day, hour, minute, timezone="UTC"):
     """Converts date/time information to UTC time given the specified or implied time zone.
 
     If you are in UTC time function call without timezone="UTC"
-    
+
     Parameters:
         year (int)
         month (int)
         day (int)
         hour (int)
-        minute (int) 
+        minute (int)
         timezone (str): Timezone string name - As required by Pytz for supported TZs
-        
+
     Returns:
         utc_dt (datetime tuple): Datetime tuple with timezone info
     """
-    fmtString = "%m-%d-%Y %H:%M"
+
+    #fmt_string = "%m-%d-%Y %H:%M"
     try:
-        dt = datetime.datetime(int(year),int(month), int(day),int(hour),int(minute)) ## RAISE VALUE_ERROR -> RETURN NONE
-        local = pytz.timezone(timezone) #RAISE TIMEZONE_ERROR -> RETURN NONE
+        dtime = datetime.datetime(int(year), int(month), int(day), int(hour), int(minute))
+        local = pytz.timezone(timezone)
     except:
         if wfo == "LSRNY1":
-            dt = datetime.datetime(int(year),int(month), int(day),int(hour),int(minute))
+            dtime = datetime.datetime(int(year), int(month), int(day), int(hour), int(minute))
             local = pytz.timezone("US/Eastern")
         else:
-            print("Convert_Time FAILURE: ",year, month, day, hour, minute, timezone)
+            ## RAISE VALUE_ERROR -> RETURN NONE
+            print("CT: Convert_Time Failure: ", year, month, day, hour, minute, timezone)
             return None
-    
-    # Formats the date to a text string
-    fmtDate=dt.strftime(fmtString)
-    # Gets the datetime tuple again
-    naive = datetime.datetime.strptime(fmtDate,fmtString)
-    # What the computer originally thinks the time-zone info is (what it was given by tz_finder)
+
     # Assign that timezone to the time and localize the time
-    local_dt = local.localize(naive)
+    local_dt = local.localize(dtime)
+
     # Assign the tuple a UTC time so convert it over to UTC from local tz
-    utc_dt=local_dt.astimezone(pytz.utc)    
+    utc_dt = local_dt.astimezone(pytz.utc)
+
     # Everything worked and it's reformatted as dt tuple
     return utc_dt

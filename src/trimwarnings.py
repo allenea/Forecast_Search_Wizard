@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2019 Eric Allen - All Rights Reserved
+"""Copyright (C) 2018-2019 Eric Allen - All Rights Reserved"""
 #
 # You may use, distribute and modify this code under the
 # terms of the GNU General Public License v3.0 license.
@@ -19,37 +19,44 @@ def trim_warnings(warningfile):
     """ Trims down the files to save space and remove duplicate warnings.
 
     Parameters:
-        warningfile (str):The string filename and path for the file with the logged messages.
+        warningfile (str): The string filename and path for the file with the logged messages.
 
     Returns:
-        trim_warn_file (str1):The trimmed time removing duplicate warnings and errors for the same forecast.
+        trim_warn_file (str1): The trimmed time removing duplicate warnings and
+                                errors for the same forecast.
     """
     #switch suffix
-    trim_warn_file = warningfile.replace("_errors.txt","_errors_trm.txt")
-    
+    trim_warn_file = warningfile.replace("_errors.txt", "_errors_trm.txt")
+
     #open file and the new file
-    f = open(warningfile,'r').readlines()
-    outfile = open(trim_warn_file,'w')
-    
+    f = open(warningfile, 'r').readlines()
+    outfile = open(trim_warn_file, 'w')
+
     #constants
-    be4Begin = False ; afterEnd = False
-    countTP = 0; countTZ = 0; utc_convert = 0; countTF=0; countCR = 0; rowLast = "";
-    
+    be4Begin = False
+    afterEnd = False
+    countTP = 0
+    countTZ = 0
+    utc_convert = 0
+    countTF = 0
+    countCR = 0
+    rowLast = ""
+
     #Iterate through file
     for row in f:
         #Begin Search marks the starting point
-        if "Begin Search" in row and be4Begin==False:
+        if "Begin Search" in row and not be4Begin:
             outfile.write("%s" % row)
             be4Begin = True
-            
-        elif afterEnd == True:
+
+        elif afterEnd:
             outfile.write("%s" % row)
-    
-        elif "Begin Search" not in row and be4Begin==False:
-             outfile.write("%s" % row)
-        
+
+        elif "Begin Search" not in row and not be4Begin:
+            outfile.write("%s" % row)
+
         # Outputs once the search has begun
-        elif "Begin Search" not in row and be4Begin == True:
+        elif "Begin Search" not in row and be4Begin:
             if row == "End Search":
                 outfile.write("%s" % row)
                 afterEnd = True
@@ -59,42 +66,43 @@ def trim_warnings(warningfile):
                 elif row == rowLast:
                     continue
                 else:
-                    ## TODO UPDATE THESE FOR FINAL VERSION
+
                     if "ERROR CONVERTING" in row: # utc_convert.py
-                        utc_convert +=1
+                        utc_convert += 1
                     elif "TP:" in row:
-                        countTP +=1
+                        countTP += 1
                     #elif "WARNING TZ_FINDER: " in row:
                     #    countTZ +=1
                     elif "WARNING TZ: " in row:
-                        countTZ +=1
+                        countTZ += 1
                     elif "TF" in row: #missing_time.py
-                        countTF +=1
+                        countTF += 1
                     elif "FINDER:" in row: #finder.py
-                        countCR +=1 
+                        countCR += 1
                         continue
 
                     outfile.write("%s" % row)
                     rowLast = row
-                    
-                    
-    #Write some numbers   
-    outfile.write("\nFINDER: Could Not Access An Expected Forecast: %d\n" % countCR)             
+
+
+    #Write some numbers
+    outfile.write("\nFINDER: Could Not Access An Expected Forecast: %d\n" % countCR)
     outfile.write("TZ: Timezone Errors: %d\n" % countTZ)
     outfile.write("TP: Time Problem Errors: %d\n" % countTP)
     outfile.write("UTC Conversion Error: %d\n" % utc_convert)
     outfile.write("TF: Time Finder Issues: %d\n" % countTF)
-    
+
     outfile.write("\n\n\n** LOGGING POSSIBLE FORECASTS NOT ACCESSIBLE **\n\n")
-    
-    be4Begin = False ; rowLast = "";
+
+    be4Begin = False
+    rowLast = ""
     for row in f:
         #Begin Search marks the starting point
-        if "Begin Search" in row and be4Begin==False:
+        if "Begin Search" in row and not be4Begin:
             be4Begin = True
 
         # Outputs once the search has begun
-        elif "Begin Search" not in row and be4Begin == True:
+        elif "Begin Search" not in row and be4Begin:
             if row == "End Search":
                 outfile.write("%s" % row)
             else:
@@ -109,9 +117,9 @@ def trim_warnings(warningfile):
 
     #Close file
     outfile.close()
-    
+
     #Remove the long-version of the warning file
     os.remove(warningfile)
-    
+
     #Return the trimmed warning file that removes duplicate consecutive warnings
     return trim_warn_file

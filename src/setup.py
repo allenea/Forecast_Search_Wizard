@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2019 Eric Allen - All Rights Reserved
+"""Copyright (C) 2018-2019 Eric Allen - All Rights Reserved"""
 #
 # You may use, distribute and modify this code under the
 # terms of the GNU General Public License v3.0 license.
@@ -13,35 +13,30 @@
 #
 # Imports
 from __future__ import print_function
-import sys,os
+import sys
+import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from src.check_vars import search_option, input_words, AndTrue_OrFalse, byforecast, set_year_range, makeAssumptions, grep_check, debug_check
-from src.software_require import setup_FSW
 from src.print_search_info import print_info
+from src.check_vars import search_option, input_words, AndTrue_OrFalse, byforecast,\
+                            set_year_range, makeAssumptions, grep_check, debug_check
 
-def setup(input_word_list,forecast_product_list,start_year,end_year, AndOr, byForecast, make_assumptions, isGrep, debug_flag=False):
-    """ This should now just be a redundancy after using setup.py.
-        Check to make sure everything passed to the FSW is valid. And the FSW is properly installed with required packages. No PyTests..."""
+def setup(input_word_list, forecast_product_list, start_year, end_year, AndOr, byForecast,\
+          make_assumptions, isGrep, debug_flag=False):
+    """Check for valid search criteria. Validate Search."""
 
-    if setup_FSW() == False:
-        print("INVALID SYSTEM REQUIREMENTS! Killed by software_require.py in setup.py")
-        sys.stdout.flush()
-        sys.exit(0)
-    else:
-        isSetUp = True
-        
     search = SEARCH_VARIABLES()
-    
+
     #DEFAULT VARIABLES
     search.get_default_variables()
-    if search_option(forecast_product_list) == True:
-        search.STATION_LIST = [x.upper() for x in forecast_product_list]
+    if search_option(forecast_product_list):
+        search.STATION_LIST = list(map(str.upper, forecast_product_list))
     else:
         print("FAILURE IN SETUP...INVALID SEARCH OPTION. Exiting....")
-        print("Setup.py is designed to verify that only valid search criteria is passed to the Finder program.")
+        print("Setup.py is designed to verify that only valid search criteria"+\
+              " is passed to the Finder program.")
         sys.stdout.flush()
         sys.exit(0)
-    
+
     search.START_YEAR, search.END_YEAR = set_year_range(start_year, end_year)
     search.And_Or = AndTrue_OrFalse(AndOr)
     search.ByForecast_ByDay = byforecast(byForecast)
@@ -49,23 +44,27 @@ def setup(input_word_list,forecast_product_list,start_year,end_year, AndOr, byFo
     search.Make_Assumptions = makeAssumptions(make_assumptions)
     search.isGrep = grep_check(isGrep)
     search.debug_mode = debug_check(debug_flag)
-    
+
     tmp_in_key = input_words(input_word_list, search.isGrep)
+
     if  tmp_in_key is not None:
-        search.KEYWORD_LIST = tmp_in_key 
+        search.KEYWORD_LIST = tmp_in_key
     else:
         print("FAILURE IN SETUP...INVALID INPUT KEYWORDS. Exiting....")
-        print("Setup.py is designed to verify that only valid search criteria is passed to the Finder program.")
+        print("Setup.py is designed to verify that only valid search criteria is"+\
+              " passed to the Finder program.")
         sys.stdout.flush()
         sys.exit(0)
-        
+
     FSW_SEARCH = search.status_variables()
- 
-    print_info(FSW_SEARCH, isSetUp)
+
+    print_info(FSW_SEARCH)
 
     if None in FSW_SEARCH.values():
-        print("FAILURE IN SETUP...AT LEAST ONE USER DEFINED VARIABLE CAUSED A NoneType EXCEPTION. Exiting....")
-        print("Setup.py is designed to verify that only valid search criteria is passed to the Finder program.")
+        print("FAILURE IN SETUP...AT LEAST ONE USER DEFINED VARIABLE CAUSED A NoneType EXCEPTION."+\
+              " Exiting....")
+        print("Setup.py is designed to verify that only valid search criteria is passed "+\
+              "to the Finder program.")
         sys.stdout.flush()
         sys.exit(0)
     else:
@@ -73,15 +72,15 @@ def setup(input_word_list,forecast_product_list,start_year,end_year, AndOr, byFo
 
 
 # SETS DEFAULT VARIABLES
-class SEARCH_VARIABLES(object):
-    
+class SEARCH_VARIABLES:
+    """SEARCH VARIABLES CLASS"""
     def __init__(self,
-                 APPLICATION_ROOT_DIRECTORY = "",
-                 TEXT_DATA_PATH = "",
-                 WARNING_PATH="",
-                 OUTPUT_PATH="",
-                 STATION_LIST=[],
-                 KEYWORD_LIST=[],
+                 APPLICATION_ROOT_DIRECTORY=os.path.abspath('../'),
+                 TEXT_DATA_PATH=os.path.abspath('../TEXT_DATA'),
+                 WARNING_PATH=os.path.abspath('../FSW_WARN'),
+                 OUTPUT_PATH=os.path.abspath('../FSW_OUTPUT'),
+                 STATION_LIST=None,#[],
+                 KEYWORD_LIST=None,#[],
                  START_YEAR=1996,
                  END_YEAR=2019,
                  And_Or=False,
@@ -90,52 +89,51 @@ class SEARCH_VARIABLES(object):
                  isGrep=True,
                  debug_mode=False):
 
-        
-        #USER_ID = getpass.getuser()
-        OS_SYSTEM = sys.platform
-        
-        #FOR NOT CODED THIS STRUCTURE IN CASE I NEED TO DO SOMETHING WITH IT THAT I AM NOT FORSEEING....? #Needed it for installing Exiftools on different os for the PyDatPicture program...
-        if APPLICATION_ROOT_DIRECTORY == "":
-            if OS_SYSTEM == "darwin":
-                self.APPLICATION_ROOT_DIRECTORY = os.path.abspath('../') 
-                
-            # FOR MICROSOFT - WINDOWS USERS
-            elif OS_SYSTEM == "win32" or OS_SYSTEM == "cygwin":
-                self.APPLICATION_ROOT_DIRECTORY = os.path.abspath('../') 
-                
-            # FOR LINUX USERS   
-            else: 
-               self.APPLICATION_ROOT_DIRECTORY = os.path.abspath('../') 
-        else:
-            self.APPLICATION_ROOT_DIRECTORY=APPLICATION_ROOT_DIRECTORY
-            
-        #Output path.. try to keep all the outputs together - by default
-        if TEXT_DATA_PATH == "":
-            self.TEXT_DATA_PATH = os.path.abspath("../")#+'/TEXT_DATA/'
-            self.TEXT_DATA_PATH = os.path.join(self.APPLICATION_ROOT_DIRECTORY,'TEXT_DATA')
+#        os_system = sys.platform
 
+        if APPLICATION_ROOT_DIRECTORY == "":
+            self.APPLICATION_ROOT_DIRECTORY = os.path.abspath('../')
+# =============================================================================
+#
+#             if os_system == "darwin":
+#                 self.APPLICATION_ROOT_DIRECTORY = os.path.abspath('../')
+#
+#             # FOR MICROSOFT - WINDOWS USERS
+#             elif os_system in ("win32", "cygwin"):
+#                 self.APPLICATION_ROOT_DIRECTORY = os.path.abspath('../')
+#
+#             # FOR LINUX USERS
+#             else:
+#                 self.APPLICATION_ROOT_DIRECTORY = os.path.abspath('../')
+# =============================================================================
         else:
-            self.TEXT_DATA_PATH = TEXT_DATA_PATH  ## Run directory?
-            
-         #Output path.. try to keep all the outputs together - by default
+            self.APPLICATION_ROOT_DIRECTORY = APPLICATION_ROOT_DIRECTORY
+
+
+        if TEXT_DATA_PATH == "":
+            #self.TEXT_DATA_PATH = os.path.abspath("../")
+            self.TEXT_DATA_PATH = os.path.join(self.APPLICATION_ROOT_DIRECTORY, 'TEXT_DATA')
+        else:
+            self.TEXT_DATA_PATH = TEXT_DATA_PATH
+
+
         if WARNING_PATH == "":
-            self.WARNING_PATH = os.path.join(self.APPLICATION_ROOT_DIRECTORY,'FSW_WARN')
+            self.WARNING_PATH = os.path.join(self.APPLICATION_ROOT_DIRECTORY, 'FSW_WARN')
         else:
-            self.WARNING_PATH = WARNING_PATH  ## Run directory?
-        
-        #Output path.. try to keep all the outputs together - by default
+            self.WARNING_PATH = WARNING_PATH
+
+
         if OUTPUT_PATH == "":
-            self.OUTPUT_PATH = os.path.join(self.APPLICATION_ROOT_DIRECTORY,'FSW_OUTPUT')
+            self.OUTPUT_PATH = os.path.join(self.APPLICATION_ROOT_DIRECTORY, 'FSW_OUTPUT')
         else:
-            self.OUTPUT_PATH = OUTPUT_PATH  ## Run directory?
-            
-            
+            self.OUTPUT_PATH = OUTPUT_PATH
+
         #File Names
         self.STATION_LIST = STATION_LIST
         self.KEYWORD_LIST = KEYWORD_LIST
         self.START_YEAR = START_YEAR
         self.END_YEAR = END_YEAR
-        
+
         #Booleans and associated QC
         self.And_Or = And_Or
         self.ByForecast_ByDay = ByForecast_ByDay
@@ -143,62 +141,63 @@ class SEARCH_VARIABLES(object):
         self.isGrep = isGrep
         self.debug_mode = debug_mode
 
-        
+
         #Dictionary of Variables... Used by the other programs
-        self._user_vars = {'APPLICATION_ROOT_DIRECTORY':self.APPLICATION_ROOT_DIRECTORY,\
-               'TEXT_DATA_PATH':self.TEXT_DATA_PATH,\
-               'WARNING_PATH':self.WARNING_PATH,\
-               'OUTPUT_PATH':self.OUTPUT_PATH,\
-               'STATION_LIST':self.STATION_LIST,\
-               'KEYWORD_LIST':self.KEYWORD_LIST,\
-               'START_YEAR':self.START_YEAR,\
-               'END_YEAR':self.END_YEAR,
-               'And_Or':self.And_Or,\
-               'ByForecast_ByDay':self.ByForecast_ByDay,\
-               'Make_Assumptions':self.Make_Assumptions,\
-               'isGrep':self.isGrep,\
-               'debug_mode':self.debug_mode}
+        self.user_vars = {'APPLICATION_ROOT_DIRECTORY':self.APPLICATION_ROOT_DIRECTORY,\
+                          'TEXT_DATA_PATH':self.TEXT_DATA_PATH,\
+                          'WARNING_PATH':self.WARNING_PATH,\
+                          'OUTPUT_PATH':self.OUTPUT_PATH,\
+                          'STATION_LIST':self.STATION_LIST,\
+                          'KEYWORD_LIST':self.KEYWORD_LIST,\
+                          'START_YEAR':self.START_YEAR,\
+                          'END_YEAR':self.END_YEAR,
+                          'And_Or':self.And_Or,\
+                          'ByForecast_ByDay':self.ByForecast_ByDay,\
+                          'Make_Assumptions':self.Make_Assumptions,\
+                          'isGrep':self.isGrep,\
+                          'debug_mode':self.debug_mode}
 
-        
+
         SEARCH_VARIABLES.get_default_variables(self)
-    
+
     def get_default_variables(self):
-        return self._user_vars 
+        """docstring"""
+        return self.user_vars
 
 
-    def status_variables(cls):
+    def status_variables(self):
         """ CALL/SET BEFORE PASSING TO MAIN"""
-        
+
         # IF DOES NOT EXIST... WHAT ARE YOU DOING!?
-        if not os.path.exists(cls.APPLICATION_ROOT_DIRECTORY):
-            print("PROJECT MUST BE RUN FROM PACKAGED NWS_AFD_KEYWORD_FINDER folder (directory). Exiting...")
+        if not os.path.exists(self.APPLICATION_ROOT_DIRECTORY):
+            print("PROJECT MUST BE RUN FROM PACKAGED FORECAST_SEARCH_WIZARD folder. Exiting...")
             sys.stdout.flush()
-            sys.exit(0)    
-            
-        if not os.path.exists(cls.TEXT_DATA_PATH):
-            print("THE ./TEXT_DATA/ FOLDER COULD NOT BE FOUND. CREATING NEW ONE. DOES NOT HAVE DATA. Exiting...")
-            sys.stdout.flush()
-            os.makedirs(cls.TEXT_DATA_PATH) 
             sys.exit(0)
-            
-        if not os.path.exists(cls.WARNING_PATH):
-            os.makedirs(cls.WARNING_PATH)    
-        
-        if not os.path.exists(cls.OUTPUT_PATH):
-            os.makedirs(cls.OUTPUT_PATH)          
-        
-        cls.user_vars = {'APPLICATION_ROOT_DIRECTORY':cls.APPLICATION_ROOT_DIRECTORY,\
-               'TEXT_DATA_PATH':cls.TEXT_DATA_PATH,\
-               'WARNING_PATH':cls.WARNING_PATH,\
-               'OUTPUT_PATH':cls.OUTPUT_PATH,\
-               'STATION_LIST':cls.STATION_LIST,\
-               'KEYWORD_LIST':cls.KEYWORD_LIST,\
-               'START_YEAR':cls.START_YEAR,\
-               'END_YEAR':cls.END_YEAR,
-               'And_Or':cls.And_Or,\
-               'ByForecast_ByDay':cls.ByForecast_ByDay,\
-               'Make_Assumptions':cls.Make_Assumptions,\
-               'isGrep':cls.isGrep,\
-               'debug_mode':cls.debug_mode}
-                
-        return cls.user_vars
+
+        if not os.path.exists(self.TEXT_DATA_PATH):
+            print("THE ./TEXT_DATA/ FOLDER COULD NOT BE FOUND. Creating... Exiting...")
+            sys.stdout.flush()
+            os.makedirs(self.TEXT_DATA_PATH)
+            sys.exit(0)
+
+        if not os.path.exists(self.WARNING_PATH):
+            os.makedirs(self.WARNING_PATH)
+
+        if not os.path.exists(self.OUTPUT_PATH):
+            os.makedirs(self.OUTPUT_PATH)
+
+        self.user_vars = {'APPLICATION_ROOT_DIRECTORY':self.APPLICATION_ROOT_DIRECTORY,\
+                          'TEXT_DATA_PATH':self.TEXT_DATA_PATH,\
+                          'WARNING_PATH':self.WARNING_PATH,\
+                          'OUTPUT_PATH':self.OUTPUT_PATH,\
+                          'STATION_LIST':self.STATION_LIST,\
+                          'KEYWORD_LIST':self.KEYWORD_LIST,\
+                          'START_YEAR':self.START_YEAR,\
+                          'END_YEAR':self.END_YEAR,
+                          'And_Or':self.And_Or,\
+                          'ByForecast_ByDay':self.ByForecast_ByDay,\
+                          'Make_Assumptions':self.Make_Assumptions,\
+                          'isGrep':self.isGrep,\
+                          'debug_mode':self.debug_mode}
+
+        return self.user_vars

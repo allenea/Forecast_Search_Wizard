@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2019 Eric Allen - All Rights Reserved
+"""Copyright (C) 2018-2019 Eric Allen - All Rights Reserved"""
 #
 # You may use, distribute and modify this code under the
 # terms of the GNU General Public License v3.0 license.
@@ -13,39 +13,37 @@
 #
 # Imports
 from __future__ import print_function
-import sys, os
+import sys
+import os
 import time as t
 import re
 # MY PACKAGES
 from src.tz_finder import timezone_finder
-from src.remake_read_time import wfo_rft_time
+from src.read_time import wfo_rft_time
 from src.sort_time import sort_time
 from src.print_search_info import algor_stats
 from src.write_output import write_output_file
 from search_options.search_options import Option
 from src.Pre2003_SPC import covertSPC, timezone_finder_SPC
+from src.find_header import find_header, find_header_nws
 
+NWS = 'NATIONAL WEATHER SERVICE'
+STR_SWPC = ":PRODUCT: DAILY SPACE WEATHER SUMMARY AND FORCAST DAYDSF.TXT"
+TOTAL_FORECAST = ['NATIONAL WEATHER SERVICE', 'NATIONAL HURRICANE CENTER',\
+                  'STORM PREDICTION CENTER', 'TROPICAL PREDICTION CENTER',\
+                 'NWS WEATHER PREDICTION CENTER', 'NWS CLIMATE PREDICTION CENTER',\
+                 'OCEAN PREDICTION CENTER', 'NCEP PROGNOSTIC DISCUSSION FROM',\
+                 'CENTRAL PACIFIC HURRICANE CENTER', 'HYDROMETEOROLOGICAL PREDICTION CENTER',\
+                 'MARINE PREDICTION CENTER', 'SPACE WEATHER MESSAGE CODE', ':ISSUED:',\
+                 'HPC FORECAST VALID', 'ALASKA FORECAST DISCUSSION',\
+                 'SOUTHCENTRAL AND SOUTHWEST ALASKA', "IN SPC BACKUP CAPACITY",\
+                 "NATIONAL CENTERS FOR ENVIRONMENTAL PREDICTION",\
+                 "CLIMATE PREDICTION CENTER NCEP",\
+                 "NEW YORK STATEWIDE POLICE INFORMATION NETWORK", "HIGH SEAS FORECAST"]
 
-total_forecast = ['NATIONAL WEATHER SERVICE','NATIONAL HURRICANE CENTER','STORM PREDICTION CENTER','TROPICAL PREDICTION CENTER',
-                 'NWS WEATHER PREDICTION CENTER','NWS CLIMATE PREDICTION CENTER','OCEAN PREDICTION CENTER',
-                 'NCEP PROGNOSTIC DISCUSSION FROM','CENTRAL PACIFIC HURRICANE CENTER','HYDROMETEOROLOGICAL PREDICTION CENTER',
-                 'MARINE PREDICTION CENTER', 'SPACE WEATHER MESSAGE CODE',':ISSUED:','HPC FORECAST VALID','ALASKA FORECAST DISCUSSION',
-                 'SOUTHCENTRAL AND SOUTHWEST ALASKA',"IN SPC BACKUP CAPACITY", "NATIONAL CENTERS FOR ENVIRONMENTAL PREDICTION",
-                 "CLIMATE PREDICTION CENTER NCEP","NEW YORK STATEWIDE POLICE INFORMATION NETWORK","HIGH SEAS FORECAST"]
-
-ID_TOP_FCST = ["OCEAN PREDICTION CENTER",'MARINE PREDICTION CENTER','NATIONAL WEATHER SERVICE','NATIONAL HURRICANE CENTER',\
-               'TROPICAL PREDICTION CENTER','ALASKA FORECAST DISCUSSION','SOUTHCENTRAL AND SOUTHWEST ALASKA'] #'TROPICAL ANALYSIS AND FORECAST BRANCH'
-
-ID_TOP_FCST2 = ['NWS CLIMATE PREDICTION CENTER','NWS WEATHER PREDICTION CENTER', "IN SPC BACKUP CAPACITY",\
-                'STORM PREDICTION CENTER','HYDROMETEOROLOGICAL PREDICTION CENTER',"CENTRAL PACIFIC HURRICANE CENTER",\
-                "NATIONAL CENTERS FOR ENVIRONMENTAL PREDICTION","CLIMATE PREDICTION CENTER NCEP"]
-
-ID_TOP_FCST3= ["NCEP PROGNOSTIC DISCUSSION FROM","HPC FORECAST VALID",'SPACE WEATHER MESSAGE CODE',':ISSUED:',\
-               "NEW YORK STATEWIDE POLICE INFORMATION NETWORK","HIGH SEAS FORECAST"]
-
-def AFD_finder(FSW_SEARCH, run_start_time): 
+def AFD_finder(FSW_SEARCH, run_start_time):
     """ Primary searching function to identify keywords and starts of forecasts...
-    
+
     Parameters:
         inputKey (list): List of keywords
         station_list (list): List of products to be searched
@@ -56,44 +54,64 @@ def AFD_finder(FSW_SEARCH, run_start_time):
         andor (bool): Search for all words or any words
         byforecast (bool): Search by forecast or by day
         makeAssume (bool): Make assumptions
-            
+
     Returns:
         outputfileOUT (file): Search results
-    """   
-    startT = t.time()
-    print("Start Time: " + t.ctime())
+    """
+    start_time = t.time()
+    print("Start Time: " + str(start_time))
     sys.stdout.flush()
     ## SET SOME DIRECTORY PATHS
     extension = ".txt"           # INPUT AND OUTPUT FILE THE SAME FORMAT
     indir = FSW_SEARCH['TEXT_DATA_PATH']
     outdir = FSW_SEARCH['OUTPUT_PATH']
     inputKey = FSW_SEARCH['KEYWORD_LIST']
-    shortestword = len(min(inputKey, key=len)) # skip rows len shorter than shortest word.... but what if the word is longer than one row.....
+    shortestword = len(min(inputKey, key=len)) # skip rows len shorter
     biggestword = len(max(inputKey, key=len))
+    upper = str.upper
+    replace = str.replace
+    strip = str.strip
+    count_frequency_str = str.count
+    len_inputkey = len(inputKey)
     testQuickCountFcst = 0
 # =============================================================================
 #  OUTFILE NAMING ...    --- REMOVE AND MODIFY FOR WEBSITE
 # =============================================================================
-    stLEN = len(FSW_SEARCH['STATION_LIST'])
-    outfile = run_start_time +"_"+ inputKey[0].replace(" ", "_")+"_"+str(stLEN)+"_"+str(FSW_SEARCH['START_YEAR'])+"_"+str(FSW_SEARCH['END_YEAR']) +"_Forecast_Search_Wizard" + extension  
+    str_len = str(len(FSW_SEARCH['STATION_LIST']))
+    outfile = run_start_time +"_"+ replace(inputKey[0], " ", "_")+"_"+str_len+\
+            "_"+str(FSW_SEARCH['START_YEAR'])+"_"+str(FSW_SEARCH['END_YEAR']) +\
+            "_Forecast_Search_Wizard" + extension
     print("Outfile: "+outfile)
     print()
     sys.stdout.flush()
 
 # =============================================================================
-#  Sets variables and constants --- KEEP
-# =============================================================================    
+# Sets variables and constants --- KEEP
+# =============================================================================
     ## FINAL OUTPUT FILE AND DIRECTORY LOCATION
-    outputfile = os.path.join(outdir,outfile)
+    outputfile = os.path.join(outdir, outfile)
     ## Initialize Parameters and local variables
-    masterList = []; masterList2 = []; masterList3 = []; ## Time ## Location
-    no_dups = 0; prodsIssued = 0; countBad = 0; countDupFcst=0;countTry=0;
-    reset_count=0; #lastIdxFnd = 0;lastfile_str="";
-    
-    # total = total_mentions # good = can be assertained by subtracting TZ Errors from Total Mentions
-    keywordCounts = [0] * len(inputKey)    # USED TO COUNT FREQUENCY OF KEYWORDS
-    keywordCountsFINAL = [0] * len(inputKey)    # USED TO COUNT FREQUENCY OF KEYWORDS
-    falseList = [False] * len(inputKey)  # PERMENANT... ONLY MAKE A COPY OF THIS LATER
+    master_list = []
+    extend_ml1 = master_list.extend
+    master_list2 = []
+    extend_ml2 = master_list2.extend
+    master_list3 = []
+    extend_ml3 = master_list3.extend
+
+    no_dups = 0
+    prods_issued = 0
+    count_bad = 0
+    countDupFcst = 0
+    countTry = 0
+    reset_count = 0
+    #lastIdxFnd = 0
+    #lastfile_str = ""
+
+    # total = total_mentions
+    # good = can be assertained by subtracting TZ Errors from Total Mentions
+    keywordCounts = [0] * len_inputkey   # USED TO COUNT FREQUENCY OF KEYWORDS
+    keywordCountsFINAL = [0] * len_inputkey    # USED TO COUNT FREQUENCY OF KEYWORDS
+    falseList = [False] * len_inputkey  # PERMENANT... ONLY MAKE A COPY OF THIS LATER
 
 # =============================================================================
 # ITERATE THROUGH PRODUCTS TO BE SEARCHED   -- KEEP
@@ -105,120 +123,148 @@ def AFD_finder(FSW_SEARCH, run_start_time):
     for wfo in FSW_SEARCH['STATION_LIST']:
         # Reset for each issuing branch
         last_tz = ""  # Uses last sucessful timezone if current is bad
-        wfo = wfo.strip()
-
+        wfo = strip(wfo)
 # =============================================================================
 # INFILE NAMING?  -- MODIFY
 # =============================================================================
         partInFile = indir + wfo + "/" + wfo + "_"
         print("Searching: ", wfo)
         sys.stdout.flush()
-        partInFile = os.path.join(indir,wfo)
+        partInFile = os.path.join(indir, wfo)
 # =============================================================================
-#  Iterate through the file for each product (years)   --- KEEP
-# =============================================================================   
+# Iterate through the file for each product (years)   --- KEEP
+# =============================================================================
         #Loops through all the years specified for that particular file
-        for iYear in range(int(FSW_SEARCH['START_YEAR']),int(FSW_SEARCH['END_YEAR'])+1,1):
-            sYear = str(iYear); sYear1 = str(iYear+1)
+        for iYear in range(int(FSW_SEARCH['START_YEAR']), int(FSW_SEARCH['END_YEAR'])+1, 1):
+
             fname = wfo + "_"+str(iYear)+extension
-            data_file = os.path.join(partInFile,fname)
+            data_file = os.path.join(partInFile, fname)
 
             ## OPEN/READ DATA FILE WITH ARCHIVED AFD
-            if os.path.isfile(data_file) == True:
-                readData = open(data_file,'r').readlines()
-                readData = [rD.upper() for rD in readData]
+            if os.path.isfile(data_file):
     # =============================================================================
     #        ONLY INCREASES PERFORMANCE WHEN "GOOD SEARCHES" are made.
-    #           Searching for something like "THE" will slow it a little bit...       
+    #           Searching for something like "THE" will slow it a little bit...
     # =============================================================================
                 # IF ANY OF THE KEYWORDS ARE IN THAT WFO/YEAR FILE THEN CONTINUE/ELSE SKIP
-                rCheck = open(data_file,'r').read() # READ IN FILE
-                rCheck = rCheck.replace("\n", " ") # FLATTEN AND REMOVE LINE SEPARATORS
-                rCheck = rCheck.upper() ## MAKE EVERYTHING UPPER CASE
-                
-                
-                if FSW_SEARCH['And_Or'] == False:
+                read_check = open(data_file, 'r').read() # READ IN FILE
+                read_check = replace(read_check, "\n", " ") # FLATTEN AND REMOVE LINE SEPARATORS
+                read_check = upper(read_check) ## MAKE EVERYTHING UPPER CASE
+
+
+                if not FSW_SEARCH['And_Or']:
                     ## NEW - ANY SEARCH
-                    if any(keyword in rCheck for keyword in inputKey):
-                        for idy in range(len(inputKey)):
-                            keywordCounts[idy] += rCheck.count(inputKey[idy]) # Could be done faster by doing once per forecast file
-                        testQuickCountFcst += rCheck.count(wfo)
+                    if any(keyword in read_check for keyword in inputKey):
+                        for idy in range(len_inputkey):
+                            keywordCounts[idy] += count_frequency_str(read_check, inputKey[idy])
+                            # Could be done faster by doing once per forecast file
+                        testQuickCountFcst += count_frequency_str(read_check, wfo)
                     else:
                         #NO KEYWORD MATCHES
-                        testQuickCountFcst += rCheck.count(wfo)
+                        testQuickCountFcst += count_frequency_str(read_check, wfo)
                         continue
-                    
+
                 ### IF ALL OF THE KEYWORDS ARE IN THAT WFO/YEAR FILE THEN CONTINUE/ELSE SKIP
-                elif FSW_SEARCH['And_Or'] == True:
-                    if all(keyword in rCheck for keyword in inputKey):
-                        for idy in range(len(inputKey)):
-                            keywordCounts[idy] += rCheck.count(inputKey[idy]) # Could be done faster by doing once per forecast file
-                        testQuickCountFcst += rCheck.count(wfo)
+                elif FSW_SEARCH['And_Or']:
+                    if all(keyword in read_check for keyword in inputKey):
+                        for idy in range(len_inputkey):
+                            keywordCounts[idy] += count_frequency_str(read_check, inputKey[idy])
+                            # Could be done faster by doing once per forecast file
+                        testQuickCountFcst += count_frequency_str(read_check, wfo)
                     else:
                         #NO KEYWORD MATCHES
-                        testQuickCountFcst += rCheck.count(wfo)
+                        testQuickCountFcst += count_frequency_str(read_check, wfo)
                         continue
-    # =============================================================================
-    # 
-    # =============================================================================
-    
+# =============================================================================
+#
+# =============================================================================
             else:
                 print("MISSING FILE: ", data_file)
                 sys.stdout.flush()
                 continue
-
+# =============================================================================
+#        ACTUALLY READ THE DATA. THIS FILE IS WORTH READING
+# =============================================================================
+            readData = open(data_file, 'r').readlines()
+            readData = list(map(str.upper, readData))#[upper(rD) for rD in readData]
 # =============================================================================
 #  Iterate through the file
-# =============================================================================   
+# =============================================================================
             ## Initialize Parameters // Setup blank lists to hold data
-            findTime = []; findString = []; foundHEADER=False; foundDDHHMM=False;
-            hourTime = []; keyWord = []; timeZone = []; countZ = 0; DDHHMM_lst =[];
-            iHolder = 0 ; iHolderLast = 0; cFalse = falseList[:] #copy of the flaselist
+            findTime = []
+            append_findTime = findTime.append
+            findString = []
+            append_findString = findString.append
+            hourTime = []
+            append_hourTime = hourTime.append
+            keyWord = []
+            append_keyWord = keyWord.append
+            timeZone = []
+            append_timeZone = timeZone.append
+            DDHHMM_lst = []
+            append_DDHHMM_lst = DDHHMM_lst.append
+
+            found_header = False
+            foundDDHHMM = False
+            countZ = 0
+            idx_holder = 0
+            holder_last = 0
+            copy_false = falseList[:] #copy of the flaselist
 
             ## Index through the file [ line by line ]
             ## But stop before the last line of the file so we don't get a fatal error.
-            ##      There should be nothing meaningful there anyways: forecaster names or blank line.
+            ## There should be nothing meaningful there anyways: forecaster names or blank line.
             length_file = len(readData)
 
-            #Search Each row in the file            
+            #Search Each row in the file
             for idx in range(length_file-1):
-                
-                #print("Count: ", countZ, "||", countTry-reset_count, reset_count, prodsIssued, wfo, iYear, idx) 
+
+                #print("Count: ", countZ, "||", countTry-reset_count,\
+                    #reset_count, prods_issued, wfo, iYear, idx)
 
                 #if the row is empty skip
-                if readData[idx] == "\n":         continue
-                # If the keyword can't be in the row because it isn't long enough
-
+                if readData[idx] == "\n":
+                    continue
 # =============================================================================
 # FIND FILE HEADERS FOR EACH PRODUCT ISSUED - Find Date/Time Info On Next Line. Store Index.
 # =============================================================================
-                #511 
-                #AXNT20 KNHC 010534   <=== DDHHMM in UTC/Z.. should be the last part...
-                #TWDAT 
-                elif wfo == readData[idx].strip():
+                #511
+                #AXNT20 KNHC 010534   <==  = DDHHMM in UTC/Z.. should be the last part...
+                #TWDAT
+                elif wfo == strip(readData[idx]):
                     #FOUND TOP BUT NOT DATE/LINE
-                    if foundDDHHMM == True and foundHEADER == False:
-                        if reset_count != prodsIssued:
-                            reset_count -=1
-                            #We already know to present... There is 100% data availability in SWPC products.. But some formatting complicates this step
+                    if foundDDHHMM and not found_header:
+                        #TODO ONCE VERIFIED REMOVE AND UNTAB THIS BLOCK
+                        if reset_count != prods_issued:
+                            reset_count -= 1
+                            #We already know to present...
+                            #There is 100% data availability in SWPC products..
+                            # But some formatting complicates this step
                             if wfo in Option.ALL_SWPC:
                                 if "SPACE WEATHER MESSAGE CODE:" in readData[idx]:
                                     pass
-                                elif ":PRODUCT: DAILY SPACE WEATHER SUMMARY AND FORCAST DAYDSF.TXT" in readData[idx]:
+                                elif STR_SWPC in readData[idx]:
                                     pass
                                 elif "SWXALTK" in readData[idx]:
                                     pass
                                 else:
-                                    print("FINDER: NO FORECAST HEADER WAS FOUND, ", wfo, iYear, "Current: ", idx, "Last Good: ", iHolder)
-                                    sys.stdout.flush()
+                                    #print("FINDER: NO FORECAST HEADER WAS FOUND, ", wfo,\
+                                    #      iYear, "Current: ",\
+                                    #      idx, "Last Good: ", idx_holder)
+                                    #sys.stdout.flush()
+                                    pass
                             else:
-                                if abs(idx-iHolder) < 8:
-                                    #print("FINDER: DUPLICATE AWIPS ID IN HEADER", wfo, iYear, "Current: ", idx, "Last Good: ", iHolder)
+                                if abs(idx-idx_holder) < 8:
+                                    #print("FINDER: DUPLICATE AWIPS ID IN HEADER",\
+                                        #wfo, iYear, "Current: ",\
+                                        #idx, "Last Good: ", idx_holder)
                                     sys.stdout.flush()
                                     countTry -= 1
                                     continue
-                                print("FINDER: NO FORECAST HEADER WAS FOUND, ", wfo, iYear, "Current: ", idx, "Last Good: ", iHolder)
-                                sys.stdout.flush()
+                                #print("FINDER: NO FORECAST HEADER WAS FOUND, ", wfo,\
+                                #      iYear, "Current: ", idx,\
+                                #      "Last Good: ", idx_holder)
+                                #sys.stdout.flush()
 
                     # FOUND THE TOP.... TRY TO FIND THE TIME DDHHMM
                     foundDDHHMM = False
@@ -229,364 +275,258 @@ def AFD_finder(FSW_SEARCH, run_start_time):
                             DDHHMM = (re.sub('[^0-9 ]+', '', readData[idx-2])).split()[-1]
                     except:
                         DDHHMM = ""
-                        
+
                     if len(DDHHMM) == 6 and DDHHMM.isdigit():
-                        countTry +=1
-                        reset_count +=1
+                        countTry += 1
+                        reset_count += 1
                         #lastfile_str = wfo+"_"+sYear
                         #lastIdxFnd = idx
                         foundDDHHMM = True
-                        foundHEADER = False
-                    
-                        
-                    ## IF IT IS SPC TAKE SPECIAL APPROACH TO FIND DATE/TIME... BOTTOM OF THE FORECAST
-                    if wfo in Option.ALL_SPC and "SWO" in wfo and foundHEADER == False:
+                        found_header = False
+
+
+                    ## IF IT IS SPC TAKE SPECIAL APPROACH TO FIND DATE/TIME. BOTTOM OF THE FORECAST
+                    if wfo in Option.ALL_SPC and "SWO" in wfo and not found_header:
                         if iYear <= 2003:
                             ADMIN_MAX_ALLOW = 150
                             text = readData[idx:idx+ADMIN_MAX_ALLOW]
-                            DATETIME_STRING, isSuccess = covertSPC(wfo, iYear, text, DDHHMM)
-                            if isSuccess == True:
-                                iHolder = -999
-                                prodsIssued +=1; 
-                                cFalse = falseList[:];
-                                foundHEADER = True
+                            DATETIME_STRING, isSuccess = covertSPC(iYear, text, DDHHMM)#(wfo,
+                            if isSuccess:
+                                idx_holder = -999
+                                prods_issued += 1
+                                copy_false = falseList[:]
+                                found_header = True
                             else:
-                                countZ +=1;
+                                countZ += 1
                                 continue
-                                
-                                
 
-                if len(readData[idx]) < shortestword:                  continue
-                elif any(TIPTOP in readData[idx] for TIPTOP in total_forecast) and foundHEADER == False:    
-                    #DUPLICATE FOR TESTING ONLY....  
-                    if any(TOP2 in readData[idx] for TOP2 in ID_TOP_FCST2) and ("ISSUED BY" not in readData[idx]):
-                        #check and see if the expected year is in the next row
-                        if sYear in readData[idx+1]:                iHolder = idx+1; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                        # if next line says product was issued by someone else 
-                        elif "ISSUED BY" in readData[idx+1]:
-                            #Check one line further for correct year
-                            if sYear in readData[idx+2]:            iHolder = idx+2; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                            #see if the next line down is empty and go the the next
-                            elif len(readData[idx+2].strip()) < 4:
-                                # Does the next line have the year if not then skip
-                                if sYear in readData[idx+3]:        iHolder=idx + 3; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                                elif sYear1 in readData[idx+3]:     iHolder=idx + 3; prodsIssued +=1; cFalse = falseList[:];  foundHEADER = True 
-                            #if the next line has the next year because it's at the end/start of year
-                            elif sYear1 in readData[idx+2]:         iHolder = idx+2; prodsIssued +=1; cFalse = falseList[:]; foundHEADER = True
-                        #if the next line has the next year because it's at the end/start of year
-                        elif sYear1 in readData[idx+1]:             iHolder = idx+1; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                        elif str(iYear) in readData[idx]:       iHolder = idx; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                        ## REQUIRED FOR PSR 1999 - December.. 2 upside down backwards ? were causing problems
-                        elif '\n' == readData[idx+1]:
-                             #If it's the expected year
-                             if sYear in readData[idx+2]:           iHolder = idx+2; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                             #If the next year
-                             elif sYear1 in readData[idx+2]:        iHolder = idx+2; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                             elif str(iYear-1) in readData[idx+2]:       iHolder = idx+2; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                             elif str(iYear-1) in readData[idx]:       iHolder = idx; prodsIssued +=1; cFalse = falseList[:]; foundHEADER = True        
-                        elif "CENTRAL PACIFIC HURRICANE CENTER" in readData[idx]:
-                            if "HONOLULU HI" in readData[idx+1]:
-                                #If it's the expected year
-                                if sYear in readData[idx+2]:           iHolder = idx+2; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                                #If the next year
-                                elif sYear1 in readData[idx+2]:        iHolder = idx+2; prodsIssued +=1; cFalse = falseList[:];   foundHEADER = True  
-                            else:
-                                 #If it's the expected year
-                                 if sYear in readData[idx+1]:           iHolder = idx+1; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                                 #If the next year
-                                 elif sYear1 in readData[idx+1]:        iHolder = idx+1; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                                 elif str(iYear-1) in readData[idx+1]:       iHolder = idx+1; prodsIssued +=1; cFalse = falseList[:]; foundHEADER = True
-                        elif str(iYear-1) in readData[idx+1]:       iHolder = idx+1; prodsIssued +=1; cFalse = falseList[:];     foundHEADER = True     
-                        ### EXCEPTION BECAUSE AUTOFORMATTING OF PRODUCT DIDN'T ACCOUNT FOR THE TURN OF THE CENTURY - NWS END
-                        elif wfo == "PMDTHR" and "CLIMATE PREDICTION CENTER NCEP" in readData[idx]:
-                            if sYear in readData[idx+1]: iHolder = idx+1; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True;
-                            elif str(iYear-100) in readData[idx+1]: iHolder = idx+1; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True;
-                            elif str(iYear-100) in readData[idx+2]: iHolder = idx+2; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True;
-                            elif sYear in readData[idx+2]: iHolder = idx+2; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True;
-                        elif readData[idx+1].strip() == "":
-                             if sYear in readData[idx+2]:           iHolder = idx+2; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                             elif sYear1 in readData[idx+2]:        iHolder = idx+2; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                    elif any(TOP in readData[idx] for TOP in ID_TOP_FCST) and ("FORECASTER" not in readData[idx]):
-                        #check and see if the expected year is in the next row
-                        if sYear in readData[idx+1]:                iHolder = idx+1; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                        # if next line says product was issued by someone else 
-                        elif "ISSUED BY" in readData[idx+1]:
-                            #Check one line further for correct year
-                            if sYear in readData[idx+2]:            iHolder = idx+2; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                            #see if the next line down is empty and go the the next
-                            elif len(readData[idx+2].strip()) < 4:
-                                # Does the next line have the year if not then skip
-                                if sYear in readData[idx+3]:        iHolder=idx + 3; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                                elif sYear1 in readData[idx+3]:     iHolder=idx + 3; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                            #if the next line has the next year because it's at the end/start of year
-                            elif sYear1 in readData[idx+2]:         iHolder = idx+2; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                        #if the next line has the next year because it's at the end/start of year
-                        elif sYear1 in readData[idx+1]:             iHolder = idx+1; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                        ## REQUIRED FOR PSR 1999 - December.. 2 upside down backwards ? were causing problems
-                        elif '\n' == readData[idx+1]:
-                             #If it's the expected year
-                             if sYear in readData[idx+2]:           iHolder = idx+2; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                             #If the next year
-                             elif sYear1 in readData[idx+2]:        iHolder = idx+2; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                             elif sYear in readData[idx]:           iHolder = idx; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                        elif str(iYear-1) in readData[idx+1]:       iHolder = idx+1; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                        elif str(iYear) in readData[idx]:       iHolder = idx; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True  
-                        #FOR OFFNT PRODUCTS
-                        elif "ANALYSIS AND FORECAST BRANCH" in readData[idx+1]: 
-                            #Check one line further for correct year
-                            if sYear in readData[idx+2]:            iHolder = idx+2; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                            #see if the next line down is empty and go the the next
-                            elif len(readData[idx+2].strip()) < 4:
-                                # Does the next line have the year if not then skip
-                                if sYear in readData[idx+3]:        iHolder=idx + 3; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                                elif sYear1 in readData[idx+3]:     iHolder=idx + 3; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                            #if the next line has the next year because it's at the end/start of year
-                            elif sYear1 in readData[idx+2]:         iHolder = idx+2; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True  
-                        elif readData[idx+1].strip() == "":
-                             if sYear in readData[idx+2]:           iHolder = idx+2; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                             elif sYear1 in readData[idx+2]:        iHolder = idx+2; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                            
-                    elif any(TOP3 in readData[idx] for TOP3 in ID_TOP_FCST3):
-                        ## FOR OLD NCEP PRODUCTS - WORKING
-                        if"NCEP PROGNOSTIC DISCUSSION FROM" in readData[idx]:
-                            prodsIssued +=1
-                            iHolder = idx                       
-                            cFalse = falseList[:];
-                            foundHEADER = True
-                        ## FOR OLD NCEP HI PRODUCTS - WORKING
-                        elif "HPC FORECAST VALID" in readData[idx]: 
-                            prodsIssued +=1
-                            iHolder = idx       
-                            cFalse = falseList[:];
-                            foundHEADER = True
-                        ## ALL CASES FOR SWPC
-                        elif 'SPACE WEATHER MESSAGE CODE' in readData[idx]:
-                            if "SERIAL NUMBER" in readData[idx+1]:
-                                if 'ISSUED BY' in readData[idx+2]:  
-                                    if sYear in readData[idx+2]:        iHolder = idx +2; cFalse = falseList[:];prodsIssued +=1;foundHEADER = True
-                                    elif sYear1 in readData[idx+2]:        iHolder = idx +2; cFalse = falseList[:];prodsIssued +=1;foundHEADER = True
-                                elif 'ISSUE TIME' in readData[idx+2]:  
-                                    if sYear in readData[idx+2]:        iHolder = idx +2; cFalse = falseList[:];prodsIssued +=1;foundHEADER = True
-                                    elif sYear1 in readData[idx+2]:        iHolder = idx +2; cFalse = falseList[:];prodsIssued +=1;   foundHEADER = True
-                            else:
-                                if 'ISSUED BY' in readData[idx]:  
-                                    if sYear in readData[idx+1]:    iHolder =idx+1; cFalse = falseList[:]; prodsIssued +=1;foundHEADER = True
-                                    elif sYear1 in readData[idx+1]:    iHolder =idx+1; cFalse = falseList[:]; prodsIssued +=1;foundHEADER = True
-                        elif ':ISSUED:' in readData[idx]:
-                            if sYear in readData[idx]:        iHolder = idx; cFalse = falseList[:];prodsIssued +=1; foundHEADER = True
-                            elif sYear1 in readData[idx]:        iHolder = idx; cFalse = falseList[:];prodsIssued +=1;   foundHEADER = True                 
-                        #LSRNY products
-                        #LSRNY4 - 2009 did not have a date/time
-                        elif "TROOP" in readData[idx+1]:
-                            if len(readData[idx+2].strip()) < 6:
-                                if sYear in readData[idx+3]:        iHolder = idx+3; cFalse = falseList[:];prodsIssued +=1; foundHEADER = True
-                                elif sYear1 in readData[idx+3]:        iHolder = idx+3; cFalse = falseList[:];prodsIssued +=1;   foundHEADER = True 
-                            if sYear in readData[idx+2]:        iHolder = idx+2; cFalse = falseList[:];prodsIssued +=1; foundHEADER = True
-                            elif sYear1 in readData[idx+2]:        iHolder = idx+2; cFalse = falseList[:];prodsIssued +=1;   foundHEADER = True 
-                        elif len(readData[idx+1].strip()) < 6:
-                            if "TROOP" in readData[idx+2]:
-                                 if sYear in readData[idx+3]:        iHolder = idx+3; cFalse = falseList[:];prodsIssued +=1; foundHEADER = True
-                                 elif sYear1 in readData[idx+3]:        iHolder = idx+3; cFalse = falseList[:];prodsIssued +=1;   foundHEADER = True             
-                                 elif len(readData[idx+3].strip()) < 6:
-                                     if sYear in readData[idx+4]:        iHolder = idx+4; cFalse = falseList[:];prodsIssued +=1; foundHEADER = True
-                                     elif sYear1 in readData[idx+4]:        iHolder = idx+4; cFalse = falseList[:];prodsIssued +=1;   foundHEADER = True                                
+                #keyword can't be in the row because it isn't long enough
+                if len(readData[idx]) < shortestword:
+                    continue
+                elif found_header:
+                    pass
+                #SPENDS LIKE 41 MINUTES HERE
+                elif not found_header:
+                    if NWS in readData[idx] and "ISSUED BY" not in readData[idx]:
+                        idx_h, found = find_header_nws(readData, idx, iYear)
+                        if found:
+                            found_header = True
+                            idx_holder = idx_h
+                            copy_false = falseList[:]
+                            prods_issued += 1
+                    elif any(TIPTOP in readData[idx] for TIPTOP in TOTAL_FORECAST):
+                        idx_h, found = find_header(readData, idx, iYear, wfo)
+                        if found:
+                            found_header = True
+                            idx_holder = idx_h
+                            copy_false = falseList[:]
+                            prods_issued += 1
 
-                        elif sYear in readData[idx+1]:         iHolder = idx+1; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                        elif sYear1 in readData[idx+1]:        iHolder = idx+1; cFalse = falseList[:];prodsIssued +=1;   foundHEADER = True   
-                        elif sYear in readData[idx+2]:         iHolder = idx+2; prodsIssued +=1; cFalse = falseList[:];foundHEADER = True
-                        elif sYear1 in readData[idx+2]:        iHolder = idx+2; cFalse = falseList[:];prodsIssued +=1;   foundHEADER = True    
-
-                # CHECK TO SEE IF KEYWORDS ARE USED IN THE LINE     -  GET DATE/TIME     
+                # FIND KEYWORDS: CHECK TO SEE IF KEYWORDS ARE USED IN THE LINE
                 # =============================================================================
-                # FIND KEYWORDS: If any keyword is in the row + partial row and not at before the first date/time (header)
-                if any(keyword in readData[idx]+readData[idx+1][:biggestword] for keyword in inputKey) and foundHEADER ==True:
-                    #print(wfo,"  ",sYear,"  ",iHolder, readData[iHolder])
+                long_string = readData[idx]+readData[idx+1][:biggestword]
+                if found_header and any(keyword in long_string for keyword in inputKey):
+                    #print(wfo, "  ", sYear, "  ", idx_holder, readData[idx_holder])
                     #Figure out which word was used.....
-                    for idy in range(len(inputKey)):
+                    for idy in range(len_inputkey):
                         if inputKey[idy] in readData[idx]:
                             linestring = readData[idx]
-                        # THIS MEANS THE WORD IS SPLIT BETWEEN TWO LINES.... If it goes to ELSE that means it's only in the next row....skip
-                        elif inputKey[idy] not in readData[idx+1][:biggestword] and inputKey[idy] not in readData[idx]:
-                            linestring = readData[idx]+readData[idx+1][:biggestword]
+                        # THIS MEANS THE WORD IS SPLIT BETWEEN TWO LINES....
+                        # If it goes to ELSE that means it's only in the next row....skip
+                        elif inputKey[idy] not in readData[idx+1][:biggestword] and\
+                                                inputKey[idy] not in readData[idx]:
+                            linestring = long_string
                         else: #Get it on the next iteration
                             continue
-                        if inputKey[idy] in linestring: 
-                            if iHolder == -999:
+                        if inputKey[idy] in linestring:
+                            if idx_holder == -999:
                                 if "UTC" in DATETIME_STRING:
-                                    
+
                                     tmp = DATETIME_STRING.split("UTC")
-                                    date = tmp[0].strip() #TIME
-                                    time = tmp[1].strip() #DATE
+                                    date = strip(tmp[0]) #TIME
+                                    time = strip(tmp[1]) #DATE
                                     tz_array = "UTC"
-                                    
+
                                     last_tz = tz_array
-                                    cFalse[idy] = True
-                                    
-                                    hourTime.append(date)         #hourTime gets the hour/minute
-                                    DDHHMM_lst.append(DDHHMM)
-                                    findTime.append(time)         #findTime gets the date string
-                                    timeZone.append(tz_array)
-                                    keyWord.append(inputKey[idy])
-                                    findString.append(readData[idx])
-                                    keywordCountsFINAL[idy] += 1   ## COUNT NUMBER OF TIMES EACH KEYWORD THAT IS FORECASTED
+                                    copy_false[idy] = True
+
+                                    append_hourTime(date)         #hourTime gets the hour/minute
+                                    append_DDHHMM_lst(DDHHMM)
+                                    append_findTime(time)         #findTime gets the date string
+                                    append_timeZone(tz_array)
+                                    append_keyWord(inputKey[idy])
+                                    append_findString(readData[idx])
+                                    keywordCountsFINAL[idy] += 1
+                                    ## COUNT NUMBER OF TIMES EACH KEYWORD THAT IS FORECASTED
 
                                 else:
-                                    date, time, tz_array = timezone_finder_SPC(DATETIME_STRING,last_tz)
-                                    
+                                    date, time, tz_array = timezone_finder_SPC(DATETIME_STRING,\
+                                                                               last_tz)
+
                                     last_tz = tz_array
-                                    cFalse[idy] = True
-   
-                                    hourTime.append(date)         #hourTime gets the hour/minute
-                                    DDHHMM_lst.append(DDHHMM)
-                                    findTime.append(time)         #findTime gets the date string
-                                    timeZone.append(tz_array)
-                                    keyWord.append(inputKey[idy])
-                                    findString.append(readData[idx])
-                                    keywordCountsFINAL[idy] += 1   ## COUNT NUMBER OF TIMES EACH KEYWORD THAT IS FORECASTED
+                                    copy_false[idy] = True
+
+                                    append_hourTime(date)         #hourTime gets the hour/minute
+                                    append_DDHHMM_lst(DDHHMM)
+                                    append_findTime(time)         #findTime gets the date string
+                                    append_timeZone(tz_array)
+                                    append_keyWord(inputKey[idy])
+                                    append_findString(readData[idx])
+                                    keywordCountsFINAL[idy] += 1
+                                    ## COUNT NUMBER OF TIMES EACH KEYWORD THAT IS FORECASTED
                             else:
                                 ## DUPLICATE KEYWORD IN FORECAST - skip- don't add to the list
-                                if readData[iHolder] == readData[iHolderLast]:
+                                if readData[idx_holder] == readData[holder_last]: 
+                                    #TODO WHAT IF BOTH ARE 0?
                                     ## SAME FORECAST BUT KEYWORD WAS ALREADY USED
-                                    if iHolder == iHolderLast and cFalse[idy] == True:
+                                    if idx_holder == holder_last and copy_false[idy]:
                                         continue
-                                    ## DUPLICATE FORECAST ISSUED ... Or had to use the previous (more recent) forecast - skip- don't add to the list
-                                    elif iHolder != iHolderLast:
-                                        countDupFcst +=1
-                                        iHolderLast= iHolder
+                                    ## DUPLICATE FORECAST ISSUED ...
+                                    #  Or had to use the previous (more recent)
+                                    # forecast - skip- don't add to the list
+                                    elif idx_holder != holder_last:
+                                        countDupFcst += 1
+                                        holder_last = idx_holder
                                         continue
-                                
+
                                 ## USE THE AUTO GENERATED DDHHMM
-                                if foundDDHHMM == True:
+                                if foundDDHHMM:
                                     try:
-                                        date, time, tz_array = timezone_finder(readData,iHolder,last_tz)
-                                        iHolderLast = iHolder
+                                        date, time, tz_array = timezone_finder(readData,\
+                                                                               idx_holder,\
+                                                                               last_tz)
+                                        holder_last = idx_holder
                                         ### IF "" "" "" CHECK IT OUT
 
                                     except:
-                                        print("FINDER: WARNING TZ-1: ", iHolder, readData[iHolder-1:iHolder+1])#, flush = True)
-                                        try:
-                                            # COULD NOT FIND DATE/TIME and the time zone.... use the last known forecast
-                                            date, time, tz_array = timezone_finder(readData,iHolderLast,last_tz)
-                                            iHolderLast = iHolderLast
-                                            ###isAssume = True
-                                        except:
-                                            print("FINDER: WARNING TZ-2: ", iHolder, readData[iHolder-1:iHolder+1])#, flush = True)
-                                            countBad +=1
-                                            sys.stdout.flush()
-                                            continue   # LEAVE GO TO THE NEXT IN THE LOOP
-                                        
-                                    sys.stdout.flush()
-                                            
+                                        print("FINDER: WARNING TZ: ", idx_holder,\
+                                              readData[idx_holder-1:idx_holder+1])
+                                        count_bad += 1
+                                        sys.stdout.flush()
+                                        continue   # LEAVE GO TO THE NEXT IN THE LOOP
+
                                     last_tz = tz_array
-                                    cFalse[idy] = True
-                                    
-                                    ## Save to arrays for each station being searched
-                                    # This is a little confusing but hourTime get's the date YEAR, MONTH, DAY, WEEKDAY
-                                    # findTime gets the hour, minute, AM/PM, timezone
-                                    hourTime.append(date)         #hourTime gets the hour/minute
-                                    DDHHMM_lst.append(DDHHMM)
-                                    findTime.append(time)         #findTime gets the date string
-                                    timeZone.append(tz_array)
-                                    keyWord.append(inputKey[idy])
-                                    findString.append(readData[idx])
-                                    keywordCountsFINAL[idy] += 1   ## COUNT NUMBER OF TIMES EACH KEYWORD THAT IS FORECASTED
+                                    copy_false[idy] = True
+
+                                    append_hourTime(date)         #hourTime gets the hour/minute
+                                    append_DDHHMM_lst(DDHHMM)
+                                    append_findTime(time)         #findTime gets the date string
+                                    append_timeZone(tz_array)
+                                    append_keyWord(inputKey[idy])
+                                    append_findString(readData[idx])
+                                    keywordCountsFINAL[idy] += 1
+                                    ## COUNT NUMBER OF TIMES EACH KEYWORD THAT IS FORECASTED
 
                                 ## DDHHMM WAS NEVER FOUND SO USE THE TIME PROVIDED IN THE TEXT
-                                else:   
-                                    if iHolder == 0:
-                                        print("FINDER: iHolder == 0.... DDHHMM could not be found")
-                                        countBad +=1
+                                else:
+                                    if idx_holder == 0:
+                                        print("FINDER: idx_holder == 0. DDHHMM could not be found")
+                                        count_bad += 1
                                         continue
-                                    
-                                    date, time, tz_array = timezone_finder(readData,iHolder,last_tz)
-                                    iHolderLast = iHolder
+
+                                    date, time, tz_array = timezone_finder(readData,\
+                                                                           idx_holder,\
+                                                                           last_tz)
+                                    holder_last = idx_holder
                                     last_tz = tz_array
-                                    cFalse[idy] = True
-                                    
-                                    ## Save to arrays for each station being searched
-                                    # This is a little confusing but hourTime get's the date YEAR, MONTH, DAY, WEEKDAY
-                                    # findTime gets the hour, minute, AM/PM, timezone
-                                    hourTime.append(date)         #hourTime gets the hour/minute
-                                    DDHHMM_lst.append("999999")
-                                    findTime.append(time)         #findTime gets the date string
-                                    timeZone.append(tz_array)
-                                    keyWord.append(inputKey[idy])
-                                    findString.append(readData[idx])
-                                    keywordCountsFINAL[idy] += 1   ## COUNT NUMBER OF TIMES EACH KEYWORD THAT IS FORECASTED
-                               
-                                
+                                    copy_false[idy] = True
+
+                                    append_hourTime(date)         #hourTime gets the hour/minute
+                                    append_DDHHMM_lst("999999")
+                                    append_findTime(time)         #findTime gets the date string
+                                    append_timeZone(tz_array)
+                                    append_keyWord(inputKey[idy])
+                                    append_findString(readData[idx])
+                                    keywordCountsFINAL[idy] += 1
+                                    ## COUNT NUMBER OF TIMES EACH KEYWORD THAT IS FORECASTED
+
+
 # END OF FILE NO HEADER FOUND... MUST BE WITHIN FOR LOOP @ END...
-# =============================================================================      
-                if idx == (length_file-1) and foundHEADER == False and foundDDHHMM == True:
-                    reset_count -=1
-                    print("FINDER: NO FORECAST HEADER WAS FOUND (EOF), ", wfo, iYear, "Current: ", idx, "Last Good: ", iHolder)   
+# =============================================================================
+                if idx == (length_file-1) and not found_header and foundDDHHMM:
+                    reset_count -= 1
+                    print("FINDER: NO FORECAST HEADER WAS FOUND (EOF), ", wfo, iYear, "Current: ",\
+                          idx, "Last Good: ", idx_holder)
                     sys.stdout.flush()
-                
+
 # TIME HANDLE FUNCTIONS FOR ALL CASES FOUND   - AFTER EACH FILE... OUTSIDE FOR LOOP
 # =============================================================================
-            ## If time was found and stored 
-            if len(findTime) != 0:  
+            ## If time was found and stored
+            if len(findTime) != 0:
                 # REFORMAT TIME STRING TO BE SORTABLE AND NUMERICAL
                 #TODO SPC2003 is getting lost here
-                #TimesFound,keyFound = wfo_rft_time(findTime,hourTime, wfo,keyWord,FSW_SEARCH['Make_Assumptions'],iYear,timeZone)
-                TimesFound,keyFound = wfo_rft_time(findTime,hourTime,DDHHMM_lst, wfo,keyWord,FSW_SEARCH['Make_Assumptions'],iYear,timeZone)
+                #TimesFound, key_found = wfo_rft_time(findTime, hourTime, wfo, keyWord,\
+                                    #FSW_SEARCH['Make_Assumptions'], iYear, timeZone)
+                TimesFound, key_found = wfo_rft_time(findTime, hourTime, DDHHMM_lst,\
+                                                    wfo, keyWord, FSW_SEARCH['Make_Assumptions'],\
+                                                    iYear, timeZone)
                 if len(TimesFound) != 0:
                     #sort the date time objects created above
-                    final_reformat_2_str,final_Key_Found = sort_time(TimesFound,keyFound,FSW_SEARCH['ByForecast_ByDay'])
-                    
+                    final_reformat_2_str, final_key_found = sort_time(TimesFound,\
+                                                        key_found, FSW_SEARCH['ByForecast_ByDay'])
+
                     #  IF ALL SEARCH WORDS FOUND IN THAT FORECAST
-                    if FSW_SEARCH['And_Or'] == True:
+                    if FSW_SEARCH['And_Or']:
                         trimFKF = []
+                        append_trimFKF = trimFKF.append
                         trimFR2S = []
+                        append_trimFR2S = trimFR2S.append
                         for ijk2 in range(len(final_reformat_2_str)):
-                            if len(final_Key_Found[ijk2]) == len(inputKey):
-                                trimFR2S.append(final_reformat_2_str[ijk2])
-                                trimFKF.append(final_Key_Found[ijk2])
+                            if len(final_key_found[ijk2]) == len_inputkey:
+                                append_trimFR2S(final_reformat_2_str[ijk2])
+                                append_trimFKF(final_key_found[ijk2])
 
                         #Append to master list(s)
-                        masterList.extend(trimFR2S)  
-                        masterList2.extend([wfo] * len(trimFR2S))
-                        masterList3.extend(trimFKF)
+                        extend_ml1(trimFR2S)
+                        extend_ml2([wfo] * len(trimFR2S))
+                        extend_ml3(trimFKF)
 
                     #  IF ANY SEARCH WORDS FOUND IN THAT FORECAST
                     else:
                         ## Append to master list(s)
-                        masterList.extend(final_reformat_2_str)  
-                        masterList2.extend([wfo] * len(final_reformat_2_str))
-                        masterList3.extend(final_Key_Found)
+                        extend_ml1(final_reformat_2_str)
+                        extend_ml2([wfo] * len(final_reformat_2_str))
+                        extend_ml3(final_key_found)
             ## Calculate Algorithm Statistics
             no_dups += len(list(set(findString)))
-            
-    
+
+
 # PRINT STATISTICS - SEARCH = DONE...
-# =============================================================================   
+# =============================================================================
     print("End Search")
     sys.stdout.flush()
-    endT = t.time()
-    eTime = endT-startT
-    
-    num_days = len(masterList) # NUMBER OF CASES/DAYS
-    total_mentions = sum(keywordCountsFINAL) # TOTAL MENTIONS: SUM OF FORECAST FREQUENCY OF EACH KEYWORD
+    elapsed_time = t.time() - start_time
+
+    num_days = len(master_list) # NUMBER OF CASES/DAYS
+    total_mentions = sum(keywordCountsFINAL)
+    # TOTAL MENTIONS: SUM OF FORECAST FREQUENCY OF EACH KEYWORD
 
     #Print Algorithm Statistics to the console
-    algor_stats(FSW_SEARCH['STATION_LIST'],inputKey, total_mentions,num_days,no_dups,FSW_SEARCH['START_YEAR'],FSW_SEARCH['END_YEAR'],countBad)
+    algor_stats(FSW_SEARCH['STATION_LIST'], inputKey, total_mentions, num_days, no_dups,\
+                FSW_SEARCH['START_YEAR'], FSW_SEARCH['END_YEAR'])#, count_bad)
     sys.stdout.flush()
-    print("Estimated Forecasts: ",testQuickCountFcst)
-    print("Total Forecasts Attempted: ",countTry)
-    print("Total Forecasts Searched: ",prodsIssued)
-    print("\nIndeterminable Forecasts", countTry-prodsIssued)  
-    print("Duplicate Forecasts Issued", countDupFcst)  
-    experimental = testQuickCountFcst  - ((testQuickCountFcst - reset_count) - (countTry-prodsIssued))
+    print("Estimated Forecasts: ", testQuickCountFcst)
+    print("Total Forecasts Attempted: ", countTry)
+    print("Total Forecasts Searched: ", prods_issued)
+    print("\nIndeterminable Forecasts", countTry-prods_issued)
+    print("Duplicate Forecasts Issued", countDupFcst)
+    experimental = testQuickCountFcst  - ((testQuickCountFcst - reset_count) -\
+                                          (countTry-prods_issued))
     print("\nExpected Forecasts (Experimental): ", experimental)
     sys.stdout.flush()
 
 # WRITE OUTPUT
-# =============================================================================   
-    outputfileOUT = write_output_file(outputfile, inputKey, FSW_SEARCH['STATION_LIST'], FSW_SEARCH['START_YEAR'],FSW_SEARCH['END_YEAR'], eTime, FSW_SEARCH['isGrep'], FSW_SEARCH['And_Or'],\
-                 FSW_SEARCH['ByForecast_ByDay'],FSW_SEARCH['Make_Assumptions'],keywordCounts,keywordCountsFINAL,num_days,prodsIssued,\
-                 countDupFcst,total_mentions,no_dups,countBad,masterList,masterList2,masterList3)
-   
-    print("\nMain-Search Elapsed Time:",endT-startT)
+# =============================================================================
+    outputfileOUT = write_output_file(outputfile, inputKey, FSW_SEARCH['STATION_LIST'],\
+                                      FSW_SEARCH['START_YEAR'], FSW_SEARCH['END_YEAR'],\
+                                      elapsed_time, FSW_SEARCH['isGrep'],\
+                                      FSW_SEARCH['And_Or'],\
+                 FSW_SEARCH['ByForecast_ByDay'], FSW_SEARCH['Make_Assumptions'],\
+                 keywordCounts, keywordCountsFINAL, num_days, prods_issued, \
+                 countDupFcst, total_mentions, no_dups, count_bad, master_list,\
+                 master_list2, master_list3)
+
+    print("\nMain-Search Elapsed Time:", elapsed_time)
     print()
     sys.stdout.flush()
 

@@ -1,7 +1,7 @@
-#!/usr/bin/env python
 """
 Download utility as an easy way to get file from the net
- 
+  SLIGHT MODIFICATIONS BY ERIC ALLEN
+
   python -m wget <URL>
   python wget.py <URL>
 
@@ -19,17 +19,19 @@ Copyright (c) 2010-2015 anatoly techtonik
 __version__ = "3.2"
 
 
-import sys, shutil, os
+import sys
+import shutil
+import os
 import tempfile
 import math
 
 PY3K = sys.version_info >= (3, 0)
 if PY3K:
-  import urllib.request as ulib
-  import urllib.parse as urlparse
+    import urllib.request as ulib
+    import urllib.parse as urlparse
 else:
-  import urllib as ulib
-  import urlparse
+    import urllib as ulib
+    import urlparse
 
 
 # --- workarounds for Python misbehavior ---
@@ -93,7 +95,8 @@ def win32_unicode_console():
         GetFileType = WINFUNCTYPE(DWORD, DWORD)(("GetFileType", windll.kernel32))
         FILE_TYPE_CHAR = 0x0002
         FILE_TYPE_REMOTE = 0x8000
-        GetConsoleMode = WINFUNCTYPE(BOOL, HANDLE, POINTER(DWORD))(("GetConsoleMode", windll.kernel32))
+        GetConsoleMode = WINFUNCTYPE(BOOL, HANDLE, POINTER(DWORD))(("GetConsoleMode",\
+                                    windll.kernel32))
         INVALID_HANDLE_VALUE = DWORD(-1).value
 
         def not_a_console(handle):
@@ -125,7 +128,8 @@ def win32_unicode_console():
                 real_stderr = False
 
         if real_stdout or real_stderr:
-            WriteConsoleW = WINFUNCTYPE(BOOL, HANDLE, LPWSTR, DWORD, POINTER(DWORD), LPVOID)(("WriteConsoleW", windll.kernel32))
+            WriteConsoleW = WINFUNCTYPE(BOOL, HANDLE, LPWSTR, DWORD, POINTER(DWORD),\
+                                        LPVOID)(("WriteConsoleW", windll.kernel32))
 
             class UnicodeOutput:
                 def __init__(self, hConsole, stream, fileno, name):
@@ -176,7 +180,8 @@ def win32_unicode_console():
                                 # There is a shorter-than-documented limitation on the
                                 # length of the string passed to WriteConsoleW (see
                                 # <http://tahoe-lafs.org/trac/tahoe-lafs/ticket/1232>.
-                                retval = WriteConsoleW(self._hConsole, text, min(remaining, 10000), byref(n), None)
+                                retval = WriteConsoleW(self._hConsole, text,\
+                                                       min(remaining, 10000), byref(n), None)
                                 if retval == 0 or n.value == 0:
                                     raise IOError("WriteConsoleW returned %r, n.value = %r" % (retval, n.value))
                                 remaining -= n.value
@@ -198,12 +203,14 @@ def win32_unicode_console():
             if real_stdout:
                 sys.stdout = UnicodeOutput(hStdout, None, STDOUT_FILENO, '<Unicode console stdout>')
             else:
-                sys.stdout = UnicodeOutput(None, sys.stdout, old_stdout_fileno, '<Unicode redirected stdout>')
+                sys.stdout = UnicodeOutput(None, sys.stdout, old_stdout_fileno,\
+                                           '<Unicode redirected stdout>')
 
             if real_stderr:
                 sys.stderr = UnicodeOutput(hStderr, None, STDERR_FILENO, '<Unicode console stderr>')
             else:
-                sys.stderr = UnicodeOutput(None, sys.stderr, old_stderr_fileno, '<Unicode redirected stderr>')
+                sys.stderr = UnicodeOutput(None, sys.stderr, old_stderr_fileno,\
+                                           '<Unicode redirected stderr>')
     except Exception as e:
         _complain("exception %r while fixing up sys.stdout and sys.stderr" % (e,))
 
@@ -219,7 +226,7 @@ def to_unicode(filename):
         # [ ] add test to repository / Travis
         return filename
     else:
-        if isinstance(filename, unicode): 
+        if isinstance(filename, unicode):
             return filename
         else:
             return unicode(filename, 'utf-8')
@@ -271,10 +278,8 @@ def filename_fix_existing(filename):
     names = [x.rsplit('.', 1)[0] for x in names]
     suffixes = [x.replace(name, '') for x in names]
     # filter suffixes that match ' (x)' pattern
-    suffixes = [x[2:-1] for x in suffixes
-                   if x.startswith(' (') and x.endswith(')')]
-    indexes  = [int(x) for x in suffixes
-                   if set(x) <= set('0123456789')]
+    suffixes = [x[2:-1] for x in suffixes if x.startswith(' (') and x.endswith(')')]
+    indexes  = [int(x) for x in suffixes if set(x) <= set('0123456789')]
     idx = 1
     if indexes:
         idx += sorted(indexes)[-1]
@@ -291,9 +296,9 @@ def get_console_width():
     """
 
     if os.name == 'nt':
-        STD_INPUT_HANDLE  = -10
+        STD_INPUT_HANDLE = -10
         STD_OUTPUT_HANDLE = -11
-        STD_ERROR_HANDLE  = -12
+        STD_ERROR_HANDLE = -12
 
         # get console handle
         from ctypes import windll, Structure, byref
@@ -396,43 +401,41 @@ def bar_adaptive(current, total, width=80):
     #   [x] choose top priority element min_width < avail_width
     #   [x] lessen avail_width by value if min_width
     #   [x] exclude element from priority list and repeat
-    
+
     #  10% [.. ]  10/100
     # pppp bbbbb sssssss
 
     min_width = {
-      'percent': 4,  # 100%
-      'bar': 3,      # [.]
-      'size': len("%s" % total)*2 + 3, # 'xxxx / yyyy'
-    }
+            'percent': 4,  # 100%
+            'bar': 3,      # [.]
+            'size': len("%s" % total)*2 + 3, # 'xxxx / yyyy'
+            }
+
     priority = ['percent', 'bar', 'size']
 
     # select elements to show
     selected = []
     avail = width
     for field in priority:
-      if min_width[field] < avail:
-        selected.append(field)
-        avail -= min_width[field]+1   # +1 is for separator or for reserved space at
-                                      # the end of line to avoid linefeed on Windows
+        if min_width[field] < avail:
+            selected.append(field)
+            avail -= min_width[field]+1   # +1 is for separator or for reserved space at
+                                          # the end of line to avoid linefeed on Windows
     # render
     output = ''
     for field in selected:
-
-      if field == 'percent':
-        # fixed size width for percentage
-        output += ('%s%%' % (100 * current // total)).rjust(min_width['percent'])
-      elif field == 'bar':  # [. ]
-        # bar takes its min width + all available space
-        output += bar_thermometer(current, total, min_width['bar']+avail)
-      elif field == 'size':
-        # size field has a constant width (min == max)
-        output += ("%s / %s" % (current, total)).rjust(min_width['size'])
-
-      selected = selected[1:]
-      if selected:
-        output += ' '  # add field separator
-
+        if field == 'percent':
+            # fixed size width for percentage
+            output += ('%s%%' % (100 * current // total)).rjust(min_width['percent'])
+        elif field == 'bar':  # [. ]
+            # bar takes its min width + all available space
+            output += bar_thermometer(current, total, min_width['bar']+avail)
+        elif field == 'size':
+            # size field has a constant width (min == max)
+            output += ("%s / %s" % (current, total)).rjust(min_width['size'])
+        selected = selected[1:]
+        if selected:
+            output += ' '  # add field separator
     return output
 
 # --/ console helpers
@@ -457,7 +460,7 @@ def callback_progress(blocks, block_size, total_size, bar_function):
     :param bar_function: another callback function to visualize progress
     """
     global __current_size
- 
+
     width = min(100, get_console_width())
 
     if sys.version_info[:3] == (3, 3, 0):  # regression workaround

@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2019 Eric Allen - All Rights Reserved
+"""Copyright (C) 2018-2019 Eric Allen - All Rights Reserved"""
 #
 # You may use, distribute and modify this code under the
 # terms of the GNU General Public License v3.0 license.
@@ -13,19 +13,25 @@
 #
 # Imports
 from __future__ import print_function
-import os, shutil, glob
+import os
+import shutil
+import glob
 
 #INDIR = /TEXT_DATA/ directory location
 def CheckRemove_Data(indir):
-    """If the dataset for any given ID is sufficiently small, remove all data for that ID. Less than 50 bytes.
-    Pass the data directory so regardless of where you run it from it can work without having to change the code
-    
-    There is a chance this is not cross-platform compatible... That just means empty data won't get removed...
-    The output will show if it worked or not. If not then use the os.walk and loop through and don't use glob...
+    """If the dataset for any given ID is sufficiently small (50bytes).
+    Then remove all data for that ID.
+
+    Input: TEXT_DATA directory location.
+
+    There is a chance this is not cross-platform compatible...
+    That just means empty data won't get removed...
+    The output will show if it worked or not.
+    If not then use the os.walk and loop through and don't use glob...
     """
-    
+
     print("Data Directory", indir)
-    lst_paths =  glob.glob(indir+"/*")
+    lst_paths = glob.glob(indir+"/*")
     print("Starting Number: ", len(lst_paths))
     lst_paths.sort()
     count = 0
@@ -39,7 +45,7 @@ def CheckRemove_Data(indir):
                     size_lst.append(fsize)
             else:
                 print("FILE NOT FOUND", fname)
-                
+
         if len(size_lst) < 1:
             if "LSR" in ID or "VOW" in ID:
                 try:
@@ -51,35 +57,36 @@ def CheckRemove_Data(indir):
                     print("Already Removed: ", ID)
             else:
                 print("KEEP: ", ID)
-                pass
+
     print("Total Products: ", len(lst_paths) - count)
 
 
-""" EXPECTED RESULT:
-KEEP: AFDDPQ
-KEEP: HSFEP
-DELETE: LSRADQ
-DELETE: LSRAKN
-DELETE: LSRANN
-DELETE: LSRAT1
-DELETE: LSRBA1
-DELETE: LSRBET
-DELETE: LSRBH1
-DELETE: LSRBR1
-DELETE: LSRCS1
-DELETE: LSRHO1
-DELETE: LSRJM1
-DELETE: LSRMCG
-DELETE: LSRNK1
-DELETE: LSRNY5
-DELETE: LSRNY6
-DELETE: LSROME
-DELETE: LSROTZ
-DELETE: LSRPPG
-DELETE: LSRSNP
-DELETE: LSRTD1
-DELETE: LSRYAK
-KEEP: TCUCP4
-DELETE: VOWLWX
-DELETE: VOWPHI
-"""
+# =============================================================================
+# EXPECTED RESULT:
+# KEEP: AFDDPQ
+# KEEP: HSFEP
+# DELETE: LSRADQ
+# DELETE: LSRAKN
+# DELETE: LSRANN
+# DELETE: LSRAT1
+# DELETE: LSRBA1
+# DELETE: LSRBET
+# DELETE: LSRBH1
+# DELETE: LSRBR1
+# DELETE: LSRCS1
+# DELETE: LSRHO1
+# DELETE: LSRJM1
+# DELETE: LSRMCG
+# DELETE: LSRNK1
+# DELETE: LSRNY5
+# DELETE: LSRNY6
+# DELETE: LSROME
+# DELETE: LSROTZ
+# DELETE: LSRPPG
+# DELETE: LSRSNP
+# DELETE: LSRTD1
+# DELETE: LSRYAK
+# KEEP: TCUCP4
+# DELETE: VOWLWX
+# DELETE: VOWPHI
+# =============================================================================

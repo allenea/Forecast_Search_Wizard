@@ -1,4 +1,4 @@
-# Copyright (C) 2018-2019 Eric Allen - All Rights Reserved
+"""Copyright (C) 2018-2019 Eric Allen - All Rights Reserved"""
 #
 # You may use, distribute and modify this code under the
 # terms of the GNU General Public License v3.0 license.
@@ -13,8 +13,10 @@
 #
 # Imports
 from __future__ import print_function
-import sys, os
-import time, datetime
+import sys
+import os
+import time
+import datetime
 import signal
 import getpass
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -22,66 +24,76 @@ from src.trimwarnings import trim_warnings
 from src.print_search_info import final_message
 from src.finder import AFD_finder
 
-class TimeoutException(Exception):   # Custom exception class
-    pass
+class TimeoutException(Exception):
+    """Custom exception class"""
+    #pass
 
-class UnicodeException(Exception):
-    pass
-
-def timeout_handler(signum, frame):   # Custom signal handler
+def timeout_handler(signum, frame):
+    """Custom signal handler"""
     raise TimeoutException
-        
-def execute(FSW_SEARCH): 
+
+def execute(FSW_SEARCH):
     """ Executes the Forecast Search Wizard... Only if it passes the checks in Setup.py
-    
+
     Parameters:
         FSW_SEARCH (Dictionary): Contains search specifications
-    """           
+    """
     start_time = time.time()
 
     run_start_time = datetime.datetime.today().strftime('%y%m%d_%H%M')
-    wfname = run_start_time+"_"+FSW_SEARCH['KEYWORD_LIST'][0][:9]+"_"+str(len(FSW_SEARCH['STATION_LIST']))+"_"+getpass.getuser()+"_errors.txt"
-    warningfile = os.path.join(FSW_SEARCH['WARNING_PATH'],wfname)
+
+    wfname = run_start_time+"_"+FSW_SEARCH['KEYWORD_LIST'][0][:9]+"_"+\
+        str(len(FSW_SEARCH['STATION_LIST']))+"_"+getpass.getuser()+"_errors.txt"
+
+    warningfile = os.path.join(FSW_SEARCH['WARNING_PATH'], wfname)
 
 
-    if FSW_SEARCH['debug_mode'] == False:
-        f = sys.stdout
+    if not FSW_SEARCH['debug_mode']:
+
+        filen = sys.stdout
         sys.stdout = open(warningfile, 'w')
+
         # Change the behavior of SIGALRM
         signal.signal(signal.SIGALRM, timeout_handler)
+
         # Start the timer. Once time is up, a SIGALRM signal is sent.
-        ADMIN_MAX_HOURS = 6
-        signal.alarm(ADMIN_MAX_HOURS*3600)
-    
-        print()
-        # This try/except loop ensures that you'll catch TimeoutException when it happens. 
+        admin_max_hours = 6
+        signal.alarm(admin_max_hours*3600)
+
+        # This try/except loop ensures that you'll catch TimeoutException when it happens.
         try:
             AFD_finder(FSW_SEARCH, run_start_time)
+
         except TimeoutException:
-            print("The search was limited to 6 hours. No search should take more than 6 hours at this time.")
-            print("If second run yields the same problem. Try narrowing your search and/or contact: allenea@udel.edu")
+            print("The search was limited to 6 hours. No search should take more than"+\
+                  " 6 hours at this time.")
+            print("If second run yields the same problem. Try narrowing your search"+\
+                  " and/or contact: allenea@udel.edu")
             print("--- %s seconds ---\n\n" % (time.time() - start_time))
             # close the file
+            filen.close()
             sys.stdout.close()
-            sys.stdout = f
-        
-        #? Is it needed or what happened that one time. I think it was a computer thing and not the code....
+            sys.stdout = filen
+
+        #RARE - REDOWNLOAD DATA OR CORRUPT DATA
         except UnicodeEncodeError:
             print("Failed UnicodeEncodeError... Possibly caused by a corrupt file.")
             print("--- %s seconds ---\n\n" % (time.time() - start_time))
             #close the files
-            f.close()
+            filen.close()
             sys.stdout.close()
-            sys.stdout = f
+            sys.stdout = filen
 
-        except:       # ALL OTHER EXCEPTIONS  
-            print("Program Failed To Run To Completion. Please alert allenea@udel.edu to identify the problem and fix it.")
+        # ALL OTHER EXCEPTIONS
+        except:
+            print("Program Failed To Run To Completion. Please alert allenea@udel.edu to"+\
+                  " identify the problem and fix it.")
             print("--- %s seconds ---\n\n" % (time.time() - start_time))
             #close the files
-            f.close()
+            filen.close()
             sys.stdout.close()
-            sys.stdout = f
-            
+            sys.stdout = filen
+
         else:
             # Reset the alarm
             signal.alarm(0)
@@ -89,12 +101,13 @@ def execute(FSW_SEARCH):
             final_message()
             print("--- %s seconds ---\n\n" % (time.time() - start_time))
             # close the file
+            filen.close()
             sys.stdout.close()
-            sys.stdout = f
-    
+            sys.stdout = filen
+
         ## Remove duplicate consecutive warnings from the verbose output file
         trim_warnings(warningfile)
-         
+
     else:
         ## DEBUG MODE: YOU WILL SEE THE ERRORS IN CMD LINE
         AFD_finder(FSW_SEARCH, run_start_time)

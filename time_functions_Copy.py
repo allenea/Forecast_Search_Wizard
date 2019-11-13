@@ -211,11 +211,13 @@ def getYear(date, iYear):
         return year, date_nums
 
 
-def checkYear(year, iYear, wfo):
-    """See if it is valid or if we should look into it later. YES ASSUMPTIONS
-    for missing or invalid years"""
+def checkYear(year, iYear, month, wfo):
+    """ CHECKS THE YEAR AGAINST KNOWN INFORMATION. ASSUMPTIONS ARE MADE AND NOTED.
+    wfo only matters for PMDTHR all others are treated the same."""
+    isAssumed = False
+
     if year == iYear:
-        return year, False
+        return year, isAssumed
     # ASSUMPTION - YEAR MISSING USE iYear
     elif year is None:
         return iYear, True
@@ -223,20 +225,60 @@ def checkYear(year, iYear, wfo):
     elif wfo == "PMDTHR" and year < 1950:
         year = year + 100
         if year == iYear:
-            return year, False
+            return year, isAssumed
+        elif  abs(iYear - year) == 1:
+            # year is iYear + 1
+            if year > iYear:
+                if month == 1:
+                    return year, False
+                else:
+                    return year, True
+            else: # year < iYear
+                if month == 12:
+                    return year, False
+                else:
+                    return year, True
+        elif abs(iYear - year) > 1:
+            #Shouldn't have happened yet. use iYear (when stored)
+            if year > iYear:
+                return iYear, True
+            else:
+                return year, True
         else:
-            return year, True
-    elif year < ADMIN_EARLIEST_YEAR:
-        return iYear, True
+            return None, True
     else:
-        return year, True
+        #forecast indicates that it's stored in the wrong year
+        if  abs(iYear - year) == 1:
+            # year == iYear + 1
+            if year > iYear:
+                if month == 1:
+                    return year, False
+                else:
+                    return iYear, True
+            else: #year < iYear
+                if month == 12:
+                    return year, False
+                else:
+                    return year, True
+        elif year < ADMIN_EARLIEST_YEAR:
+            return iYear, True
+        elif abs(iYear - year) > 1:
+            #Shouldn't have happened yet. use iYear (when stored)
+            if year > iYear:
+                return iYear, True
+            else:
+                return year, True
+        else:
+            return None, True
+
 
 
 def get_Issuing_Date_text(trimTimesFound, iYear, wfo, DDHHMM):
-    """NO ASSUMPTIONS. COMPILE DATE INFO"""
+    """doc-string"""
     # GET AUTOMATED INFO - SHOULD BE CORRECT UNLESS NOT FOUND
     dayWMOHEAD, _, _ = getDDHHMM(DDHHMM) #NO ASSUMPTIONS
 
+    isAssumed = False
 
     tmp = re.sub(r" ?\([^)]+\)", "", trimTimesFound) ## ( )
     date = re.sub(r" ?/([^)]+/)", "", tmp) ## / /
@@ -252,7 +294,13 @@ def get_Issuing_Date_text(trimTimesFound, iYear, wfo, DDHHMM):
     #Gets/Checks/Sets year against all known information.
     tmp_year, t_nums = getYear(date, iYear) #NO ASSUMPTIONS
 
-    year, assume = checkYear(tmp_year, iYear, wfo) #YES MINOR ASSUMPTIONS
+    if tmp_year is None:
+        tmp_year = iYear
+        year, assume = checkYear(tmp_year, iYear, month, wfo) #YES ASSUMPTIONS
+        assume = True
+        isAssumed = True
+    else:
+        year, assume = checkYear(tmp_year, iYear, month, wfo) #YES ASSUMPTIONS
 
     #Gets/Checks/Sets day against all known information.
     text_day = getDay(t_nums, dayWMOHEAD) #NO ASSUMPTIONS
@@ -262,16 +310,25 @@ def get_Issuing_Date_text(trimTimesFound, iYear, wfo, DDHHMM):
         return None, None, None, None
 
     if text_day is None:
+        if year is None:
+            return None, None, None, None
         return year, month, None, True
 
-    return year, month, text_day, assume
+    if assume:
+        if year is None:
+            return None, None, None, None
+        else:
+            return year, month, text_day, True
+    #ELSE
+    return year, month, text_day, isAssumed
+
 
 
 def getFirstGuess(year, month, DD, HH, MM):
     """Guess the issuing date/time in utc... Timezone not needed
     NO ASSUMPTION... First Guess Only Given True Info"""
     try:
-        return datetime.datetime(year, month, DD, int(HH), int(MM), tzinfo=pytz.timezone("UTC"))
+        return datetime.datetime(year, month, DD, HH, MM, tzinfo=pytz.timezone("UTC"))
     except:
         return None
 
@@ -293,16 +350,16 @@ def guessAMPM(first_guess, timezone):
 
 
 def getAMPM(timepre):
-    """Get AMPM from the time data. ASSUMPTIONS will be made.Will not necessarily
-    impact the output unless the WMO Header is missing
-    """
-
+    """Get AMPM from the time data, redundant check to make sure it matches up with the guess.
+    If a first guess cannot be made then only sure things will not be marked as assumptions"""
+    
     if not timepre:
         return None, True
 
     time22 = (re.sub('[^APMZ]+', '', timepre)).lstrip("M")
     numTime = (re.sub('[^0-9O]+', '', timepre)).lstrip("O")
     numTime = numTime.replace("O", "0")
+
     if time22 == "AM":
         return "AM", False
     elif time22 == "PM":
@@ -354,22 +411,30 @@ def getAMPM(timepre):
                 return "PM", False
             else:
                 return None, True
-        else:
-            return None, True
+
 
 
 def checkMinute(minute):
     """Check the minute found and properly format it"""
+    #"{:02d}".format(hour) isn't adaquate
     if minute is None:
         return None
-    elif 0 <= minute < 60:
-        return "{:02d}".format(minute)
     else:
-        return None
+        if minute < 0: #Includes -1 which means not assigned
+            return None
+        #If minute is a single digit less than 10 add a 0 to make it 2 digits
+        elif minute < 10:
+            return '0'+ str(minute)
+        # If minute less than  60
+        elif minute < 60:
+            return str(minute)
+        else:
+            return None
+
 
 
 def checkHour(hour, AMPM):
-    """Check the hour found and properly format it. DECISIONS BASED ON getAMPM"""
+    """Check the hour found and properly format it"""
     #"{:02d}".format(hour) isn't adaquate
     if hour == None or hour < 0:
         return None
@@ -443,7 +508,7 @@ def getHHMM(short_time, AMPM):
 
 
 def get_Issuing_Time_text(uniqueHours, first_guess, timezone):
-    """NO ASSUMPTIONS OUTSIDE OF getAMPM"""
+    """doc-string"""
     if first_guess:
         first_guess_adj = first_guess.astimezone(pytz.timezone(timezone))
     else:
@@ -451,14 +516,12 @@ def get_Issuing_Time_text(uniqueHours, first_guess, timezone):
 
     if len(uniqueHours) == 0:
         if first_guess_adj:
-            hhmm_str = "{:02d}".format(first_guess_adj.hour)+\
-                            "{:02d}".format(first_guess_adj.minute)
+            hhmm_str = "{:02d}".format(first_guess_adj.hour)+"{:02d}".format(first_guess_adj.minute)
             return None, hhmm_str, None
         else:
             return None, None, None
     else:
         timepre = "".join((uniqueHours.strip()).split()[-3:]) ## WAS 2
-
         AMPM, Time_Assume = getAMPM(timepre) #ASSUMPTION
 
         short_time = ""
@@ -474,16 +537,14 @@ def get_Issuing_Time_text(uniqueHours, first_guess, timezone):
         if len(timeTMP2) > 0:
             numTime = re.sub('[^0-9]+', '', timeTMP2[0])
         elif first_guess_adj:
-            hhmm_str = "{:02d}".format(first_guess_adj.hour)+\
-                                "{:02d}".format(first_guess_adj.minute)
+            hhmm_str = "{:02d}".format(first_guess_adj.hour)+"{:02d}".format(first_guess_adj.minute)
             return None, hhmm_str, None
         else:
             return None, None, None
 
         if "N00N" in uniqueHours.replace("O", "0") or "MIDNIGHT" in uniqueHours:
             if "AFTERNOON" in uniqueHours and first_guess_adj:
-                hhmm_str = "{:02d}".format(first_guess_adj.hour)+\
-                                "{:02d}".format(first_guess_adj.minute)
+                hhmm_str = "{:02d}".format(first_guess_adj.hour)+"{:02d}".format(first_guess_adj.minute)
                 return None, hhmm_str, None
             else:
                 if "N00N" in uniqueHours.replace("O", "0"):
@@ -493,8 +554,7 @@ def get_Issuing_Time_text(uniqueHours, first_guess, timezone):
                 else:
                     pass
         elif first_guess_adj:
-            hhmm_str = "{:02d}".format(first_guess_adj.hour)+\
-                                "{:02d}".format(first_guess_adj.minute)
+            hhmm_str = "{:02d}".format(first_guess_adj.hour)+"{:02d}".format(first_guess_adj.minute)
             return None, hhmm_str, None
         else:
             return None, None, None
@@ -513,8 +573,7 @@ def get_Issuing_Time_text(uniqueHours, first_guess, timezone):
             timeTMP2 = (timeTMP2.replace("O", "0"))
             numTime = re.sub('[^0-9]+', '', timeTMP2)
             if len(numTime) == 0 or len(numTime) > 4 and first_guess_adj:
-                hhmm_str = "{:02d}".format(first_guess_adj.hour)+\
-                                "{:02d}".format(first_guess_adj.minute)
+                hhmm_str = "{:02d}".format(first_guess_adj.hour)+"{:02d}".format(first_guess_adj.minute)
                 return None, hhmm_str, None
             else:
                 return None, None, None
@@ -535,8 +594,7 @@ def get_Issuing_Time_text(uniqueHours, first_guess, timezone):
     if strHour is None and first_guess is None:
         return None, None, None
     if first_guess_adj:
-        hhmm_str = "{:02d}".format(first_guess_adj.hour)+\
-                            "{:02d}".format(first_guess_adj.minute)
+        hhmm_str = "{:02d}".format(first_guess_adj.hour)+"{:02d}".format(first_guess_adj.minute)
 
     #combine into one string for time
     if strHour is None or checked_min is None:
@@ -546,8 +604,76 @@ def get_Issuing_Time_text(uniqueHours, first_guess, timezone):
         MND_Header = str(strHour)+str(checked_min)
 
     if first_guess_adj:
-        WMO_Header = hhmm_str
+        WMO_Header= hhmm_str
     else:
         WMO_Header = None
 
     return MND_Header, WMO_Header, Time_Assume
+
+
+
+def checkEverything(DDHHMM, year, month, text_day, iYear):
+    """doc-string"""
+    fday = -1
+    fmon = -1
+    fyr = -1
+    isAssumed = False
+
+    dayWMOHEAD, hrWMOHEAD, minWMOHEAD = getDDHHMM(DDHHMM)
+
+    if text_day == dayWMOHEAD:
+        fday = text_day
+    elif abs(int(dayWMOHEAD) - int(text_day)) == 1:
+        fday = dayWMOHEAD
+    else:
+        if abs(int(dayWMOHEAD) - int(text_day)) > 1:
+            if dayWMOHEAD == 1 and int(text_day) >= 28:
+                fday = dayWMOHEAD
+                #isAssumed = True # assumed because 28 is February no 30/31
+                month = month + 1
+                if month > 12:
+                    month = 1
+                    fyr = year + 1
+            elif dayWMOHEAD >= 28 and int(text_day) == 1:
+                fday = dayWMOHEAD
+                #isAssumed = True # assumed because 28 is February no 30/31
+                month = month - 1
+                if month == 0:
+                    month = 12
+                    fyr = year - 1
+            else:
+                return None, None, None, None, None, None
+
+    if fyr == -1:
+        if year == iYear:
+            fyr = iYear
+        elif year == iYear + 1:
+            if month == 1:
+                fyr = iYear + 1
+            elif month == 12:
+                fyr = iYear
+            else:
+                return None, None, None, None, None, None
+
+        elif year == iYear - 1:
+            if month == 12:
+                fyr = iYear - 1
+            elif month == 1:
+                fyr = iYear
+            else:
+                return None, None, None, None, None, None
+        else:
+            return None, None, None, None, None, None
+
+    else:
+        if abs(fyr - iYear) <= 1 and month in (1, 12):
+            pass
+        else:
+            isAssumed = True
+
+    if abs(fyr-iYear) > 1:
+        isAssumed = True
+
+    fmon = month
+
+    return fyr, fmon, fday, hrWMOHEAD, minWMOHEAD, isAssumed
