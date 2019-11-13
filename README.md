@@ -237,11 +237,9 @@ _Execute in 2 steps. Internet connection is required for this step._
        **8. debug_flag** :: Boolean value. If you are having issues try switching the debut flag to True. No output will be saved. If there is something wrong with the program which I expect in the beginning there might be a few hiccups. Either email me (email is in the overview section) or create an issue here and I will look into what might be going wrong. 
        
                                              
- 2. Execute this file once it has been properly configured. This step can take a few minutes to a few hours depending on the number and size of the forecasts.
+ 2. Execute this file once it has been properly configured. This step can take a few seconds to an hour depending on the scope of your search. The time also depends on the system/computer it is being run on. This program likely could be easily parallelized for runs on HPCC. Ask for details (I personally haven't done it but I know how I would try to do it). 
       
               python FSW_NAMELIST.py
-
-
 
 **OUTPUTS OF THE FORECAST SEARCH WIZARD:** Check the outputs when they are done. You will get one output located in the **FSW_WARN** folder with information about the run, any trouble it had, some statistics about the run, etc. The second output if the Forecast Search Wizard ran successfully will be located in the **FSW_OUTPUT** folder. This file will provide you with information about the search and the results of the search. In the future tools will become available to help analyze this data. Until then you are responsible for the analysis of the Forecast Search Wizard results.
 
@@ -251,5 +249,5 @@ _Execute in 2 steps. Internet connection is required for this step._
 
 
 
-
-
+## OTHER USES
+The Forecast Search Wizard was written in a way that it's pieces would be useful for a wide variety of things dealing with NWS/NOAA Text Products. That includes making a database for NOAA/NWS text forecasts (@NOAA @NWS). Relaying NWS Forecasts (Impacts/Hazards/Warnings) to customers. I would be open to consulting on a case-by-case basis. 
