@@ -36,7 +36,7 @@ MO_STR = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", 
 TZS = ["UTC", "EST", "EDT", "CDT", "CST", "MST", "MDT", "PDT", "PST", "AKDT", "AKST", "HST",
        "HAST", "HADT", "GMT", "GUAM LST", "ADT", "AST", "CHST", "SST", "SDT", "ChST"]
 
-def getDay(t_nums, dayWMOHEAD):
+def getDay(t_nums, day_wmohead):
     """Do not look at dayWMOHEAD unless there are multiple possible day-dates. NO ASSUMPTIONS."""
     possible = []
     for item in t_nums:
@@ -48,8 +48,8 @@ def getDay(t_nums, dayWMOHEAD):
     if len(possible) == 1:
         return int(possible[0])
     elif len(possible) > 1:
-        if str(dayWMOHEAD) in possible and dayWMOHEAD is not None:
-            return dayWMOHEAD
+        if str(day_wmohead) in possible and day_wmohead is not None:
+            return day_wmohead
         else:
             return None
     else:
@@ -134,16 +134,16 @@ def getMonth(month):
         return None
 
 
-def getDDHHMM(DDHHMM):
+def getDDHHMM(ddhhmm):
     """ Get the DDHHMM variable from header. NO ASSUMPTIONS."""
-    if len(DDHHMM) == 6:
-        if DDHHMM == "999999":
+    if len(ddhhmm) == 6:
+        if ddhhmm == "999999":
             return None, None, None
 
-        dayWMOHEAD = int(DDHHMM[:2])
-        hrWMOHEAD = DDHHMM[2:4]
-        minWMOHEAD = DDHHMM[4:6]
-        return dayWMOHEAD, hrWMOHEAD, minWMOHEAD
+        day_wmohead = int(ddhhmm[:2])
+        hr_wmohead = ddhhmm[2:4]
+        min_wmohead = ddhhmm[4:6]
+        return day_wmohead, hr_wmohead, min_wmohead
     else:
         return None, None, None
 
@@ -293,29 +293,28 @@ def guessAMPM(first_guess, timezone):
 
 
 def getAMPM(timepre):
-    """Get AMPM from the time data. ASSUMPTIONS will be made.Will not necessarily
+    """Get AMPM from the time data. ASSUMPTIONS will be made. Will not necessarily
     impact the output unless the WMO Header is missing
     """
-
-    if not timepre:
+    if timepre is None:
         return None, True
 
     time22 = (re.sub('[^APMZ]+', '', timepre)).lstrip("M")
-    numTime = (re.sub('[^0-9O]+', '', timepre)).lstrip("O")
-    numTime = numTime.replace("O", "0")
+    num_time = (re.sub('[^0-9O]+', '', timepre)).lstrip("O")
+    num_time = num_time.replace("O", "0")
     if time22 == "AM":
         return "AM", False
     elif time22 == "PM":
         return "PM", False
     elif time22 == "Z":
-        numTime = (re.sub('[^0-9O]+', '', timepre)).lstrip("O")
-        numTime = numTime.replace("O", "0")
-        if numTime.isdigit() and len(numTime) >= 3:
+        num_time = (re.sub('[^0-9O]+', '', timepre)).lstrip("O")
+        num_time = num_time.replace("O", "0")
+        if num_time.isdigit() and len(num_time) >= 3:
             # UGH IF IT WAS LIKE 15LT then it's still b/c trimming
-            if int(numTime) < 1200:
+            if int(num_time) < 1200:
                 return "AM", False
             # otherwise greater than or equal to 1200 it's PM
-            elif int(numTime) < 2400:
+            elif int(num_time) < 2400:
                 return "PM", False
             else:
                 return None, True
@@ -343,14 +342,14 @@ def getAMPM(timepre):
     elif "MIDNIGHT" in timepre:
         return "AM", True
     else:
-        numTime = (re.sub('[^0-9O]+', '', timepre)).lstrip("O")
-        numTime = numTime.replace("O", "0")
-        if numTime.isdigit() and len(numTime) >= 3:
+        num_time = (re.sub('[^0-9O]+', '', timepre)).lstrip("O")
+        num_time = num_time.replace("O", "0")
+        if num_time.isdigit() and len(num_time) >= 3:
             # ASSUMPTION 1230 would still be assumed AM
-            if int(numTime) < 1300:
+            if int(num_time) < 1300:
                 return "AM", True
             # otherwise greater than or equal to 1200 it's PM
-            elif int(numTime) < 2400:
+            elif int(num_time) < 2400:
                 return "PM", False
             else:
                 return None, True
@@ -402,38 +401,28 @@ def checkHour(hour, AMPM):
 
 
 def getHHMM(short_time, AMPM):
-    """Get the HH and MM from the time stamp... in the local time. format it"""
+    """Get the HH and MM from the time stamp... in the local time. format it.
+    return <hour>, <minute>"""
     lShortTy = len(short_time)
     # If it's time is 4 then assuming first 2 = hour, last 2 = minute
     if short_time.isdigit():
         if lShortTy == 4:
-            hour = int(short_time[0:2])
-            minute = int(short_time[2:4])
-            return hour, minute
+            return int(short_time[0:2]), int(short_time[2:4])
         # if length is only 2 then assume you are only being given the hour
         elif lShortTy == 2:
             if AMPM == "AM": ## IT IS UTC
-                hour = int(00)
-                minute = int(short_time)
-                return hour, minute
+                return int(00), int(short_time)
 
             elif AMPM == "PM":
-                hour = int(short_time)
-                minute = int(00)
-                return hour, minute
+                return int(short_time), int(00)
             else:
                 return None, None
         # if time is length 3 then assume it's an AM/PM time < 1000 hrs
         elif lShortTy == 3:
-            hour = int(short_time[0])
-            minute = int(short_time[-2:])
-            return hour, minute
-
+            return int(short_time[0]), int(short_time[-2:])
         # rare but if only 1 value given then assume it's only hour only <10 AM/PM
         elif lShortTy == 1:
-            hour = int(short_time)
-            minute = int(00)
-            return hour, minute
+            return int(short_time), int(00)
         # If length is > than 5 then we aren't expecting that warn and skip
         else:
             return None, None
@@ -463,16 +452,16 @@ def get_Issuing_Time_text(uniqueHours, first_guess, timezone):
 
         short_time = ""
 
-        numTime = (re.sub('[^0-9O]+', '', timepre)).lstrip("O")
-        numTime = numTime.replace("O", "0")
+        num_time = (re.sub('[^0-9O]+', '', timepre)).lstrip("O")
+        num_time = num_time.replace("O", "0")
 
-    if len(numTime) <= 4 and len(numTime.strip('0')) >= 1:
+    if len(num_time) <= 4 and len(num_time.strip('0')) >= 1:
         pass
 
-    elif len(numTime) == 0:
+    elif len(num_time) == 0:
         timeTMP2 = uniqueHours.split()
         if len(timeTMP2) > 0:
-            numTime = re.sub('[^0-9]+', '', timeTMP2[0])
+            num_time = re.sub('[^0-9]+', '', timeTMP2[0])
         elif first_guess_adj:
             hhmm_str = "{:02d}".format(first_guess_adj.hour)+\
                                 "{:02d}".format(first_guess_adj.minute)
@@ -487,9 +476,9 @@ def get_Issuing_Time_text(uniqueHours, first_guess, timezone):
                 return None, hhmm_str, None
             else:
                 if "N00N" in uniqueHours.replace("O", "0"):
-                    numTime = str(1200)
+                    num_time = str(1200)
                 elif "MIDNIGHT" in uniqueHours:
-                    numTime = str(0000)
+                    num_time = str(0000)
                 else:
                     pass
         elif first_guess_adj:
@@ -499,27 +488,27 @@ def get_Issuing_Time_text(uniqueHours, first_guess, timezone):
         else:
             return None, None, None
 
-    else:# len(numTime) > 4:
+    else:# len(num_time) > 4:
         if str(12000) in uniqueHours or "N00N" in uniqueHours or "MIDNIGHT" in uniqueHours:
             if "MIDNIGHT" in uniqueHours:
-                numTime = str(0000)
+                num_time = str(0000)
             elif "AFTERN00N" not in uniqueHours.replace("O", "0"):
-                numTime = str(1200)
+                num_time = str(1200)
             else:
                 pass
         else:
-            timeTMP = uniqueHours.split("/")[-1]
-            timeTMP2 = "".join(timeTMP.split()[-1])
-            timeTMP2 = (timeTMP2.replace("O", "0"))
-            numTime = re.sub('[^0-9]+', '', timeTMP2)
-            if len(numTime) == 0 or len(numTime) > 4 and first_guess_adj:
+            tmpt = uniqueHours.split("/")[-1]
+            tmpt2 = "".join(tmpt.split()[-1])
+            tmpt2 = (tmpt2.replace("O", "0"))
+            num_time = re.sub('[^0-9]+', '', tmpt2)
+            if len(num_time) == 0 or len(num_time) > 4 and first_guess_adj:
                 hhmm_str = "{:02d}".format(first_guess_adj.hour)+\
                                 "{:02d}".format(first_guess_adj.minute)
                 return None, hhmm_str, None
             else:
                 return None, None, None
 
-    short_time = numTime
+    short_time = num_time
     hour, minute = getHHMM(short_time, AMPM)
 
 # == == == == == == == == == == == == == == == == == == == == == == == ==
@@ -539,11 +528,11 @@ def get_Issuing_Time_text(uniqueHours, first_guess, timezone):
                             "{:02d}".format(first_guess_adj.minute)
 
     #combine into one string for time
-    if strHour is None or checked_min is None:
+    if strHour is not None and checked_min is not None:
+        MND_Header = str(strHour)+str(checked_min)
+    else:
         MND_Header = None
         Time_Assume = None
-    else:
-        MND_Header = str(strHour)+str(checked_min)
 
     if first_guess_adj:
         WMO_Header = hhmm_str

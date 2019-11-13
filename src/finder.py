@@ -376,7 +376,7 @@ def AFD_finder(FSW_SEARCH, run_start_time):
                                     ## COUNT NUMBER OF TIMES EACH KEYWORD THAT IS FORECASTED
                             else:
                                 ## DUPLICATE KEYWORD IN FORECAST - skip- don't add to the list
-                                if readData[idx_holder] == readData[holder_last]: 
+                                if readData[idx_holder] == readData[holder_last]:
                                     #TODO WHAT IF BOTH ARE 0?
                                     ## SAME FORECAST BUT KEYWORD WAS ALREADY USED
                                     if idx_holder == holder_last and copy_false[idy]:
