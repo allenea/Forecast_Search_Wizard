@@ -13,7 +13,7 @@ The only programs that need to be executed for the Forecast Search Wizard to run
 
 Additional documentation can be found in the Documentation folder. This includes Frequently Used NWS Contractions, Preset [Search] Options, AWIPS and WFO ID's.
 
-This work was not funded and done independently in my free time. If you would like to share or contribute *tools* to analyze or improve the Forecast Search Wizard please contact me at [email](allenea@udel.edu).
+This work was not funded and done independently in my free time. If you would like to share or contribute *tools* to analyze or improve the Forecast Search Wizard please contact me at [email](mailto:allenea@udel.edu).
 
 ## Downloading the Forecast Search Wizard
 
