@@ -6,18 +6,22 @@
 
 **LICENSE:** GNU GPLv3
 
+**DOI:** 
+
 (Draft)
 
 ## Overview
- The Forecast Search Wizard makes it easier than ever before to analyze archived NOAA text products to obtain valuable information. The Forecast Search Wizard is a program that allows researchers to search keywords in NOAA/NWS text products (e.g., Area Forecast Discussions, Local Storm Reports, Watches/Warnings, etc.) to identify the occurrence of case studies, particular weather events, or other specific information. This tool will not only save the researcher time, but it will also improve the depth and quality of research by opening a door to a new source of data in the weather enterprise.
+The Forecast Search Wizard makes it easier than ever before to analyze archived NOAA text products to obtain valuable information. Thanks to the hard working individuals at the National Weather Service and National Centers for Environmental Prediction there is a large record of very detailed weather forecasts from across the country. This program, the Forecast Search Wizard, allows users to search for keywords in NOAA/NWS text products (e.g., Area Forecast Discussions, Local Storm Reports, Watches/Warnings, etc.) to identify the occurrence of case studies, particular weather events, or other specific information. This one-of-a-kind tool will not only save the researcher time, but it will also improve the depth and quality of research by opening a door to a new source of data in the weather enterprise.
  
-The only programs that need to be executed for the Forecast Search Wizard to run are located in the RUN_ME directory. These files are the FSW_NAMELIST.py and the DOWNLOAD_DATA.py. Each of these files are constructed so that minimal programming knowledge is required to use this program. 
+The Forecast Search Wizard is a robust and efficient program, but more importantly it is user friendly. The only programs that need to be executed for the Forecast Search Wizard to run are located in the RUN_ME directory. These files are the DOWNLOAD_DATA.py and [FSW_NAMELIST.py](https://github.com/allenea/Forecast_Search_Wizard/blob/Forecast_Search_Wizard_beta/RUN_ME/FSW_NAMELIST.py) which is a namelist file. Each of these files are constructed so that minimal programming knowledge is required to use this program. These files are modeled after the [WRF](https://esrl.noaa.gov/gsd/wrfportal/namelist_input_options.html) namelist files. This enables users to construct their own searches without worrying about breaking the program. In fact, the user never touches the Forecast Search Wizard. An instance of your search is checked and validated before being sent to the Forecast Search Wizard. This enables to user to run multiple searches at once. _Note: The DOWNLOAD_DATA.py does not have these validation checks._
 
-The Forecast Search Wizard is not case sensitive. However, please consider that these forecasts are written by humans. Humans make mistakes. Consider accounting for abbriviations or contractions, typos, or slang for a robust search. The Forecast Search Wizard was designed to identify case studies and specific weather information. It should not be taken as fact. It should be used to identify possible case studies. Always verify with observations or surface analysis. For example, if you are searching "Hurricane" you might get results referencing Hurricane Preparedness Week.
+The Forecast Search Wizard is not case sensitive. However, please consider that these forecasts are written by humans. Humans do make mistakes from time to time. Consider accounting for abbriviations or contractions, typos, or slang for a robust search. In the folder Documentation there is a list of [Common NWS Contractions](https://www.weather.gov/phi/contractions). The [AMS Glossary](http://glossary.ametsoc.org/wiki/Main_Page) is another place you might consider. Additionally, there is information about Pre-Set [Search Options](https://github.com/allenea/Forecast_Search_Wizard/blob/Forecast_Search_Wizard_beta/Documentation/Frequently_Used_NWS_Contractions.txt) and AWIPS/WFO ID's in this [folder](https://github.com/allenea/Forecast_Search_Wizard/tree/Forecast_Search_Wizard_beta/Documentation).
 
-Additional documentation can be found in the Documentation folder. This includes Frequently Used NWS Contractions, Preset [Search] Options, AWIPS and WFO ID's.
+The Forecast Search Wizard was designed to identify case studies and specific weather information. It should not be taken as fact. It should be used to identify possible case studies. Always verify with observations or surface analysis. For example, if you are searching "Hurricane" you might get results referencing Hurricane Preparedness Week.
 
-This work was not funded and done independently and in my free time. If you would like to share or contribute *tools* to analyze or improve the Forecast Search Wizard please contact me at [email](mailto:allenea@udel.edu).
+Information about namelist options, assumptions, tracking print statements and error codes can be found below.
+
+This work was not funded and done independently and in my free time. If you would like to share or contribute code or *tools* to analyze or improve the Forecast Search Wizard please contact me at [email](mailto:allenea@udel.edu). If you create a program to read and parse the outputs and would like to share, then please contact me.
 
 ## Installation
 
@@ -34,7 +38,7 @@ This work was not funded and done independently and in my free time. If you woul
  
  **SUPPORTED VERSIONS**: I hope to support Python 2.6+ and Python 3.0+. Please let me know if you're having any problems.
  
- **REQUIRED LIBRARIES**: python-dateutil, pytz>=2019.1, wget>=3.2 (I have a wget program packaged so this might be redundant).
+ **REQUIRED LIBRARIES**: python-dateutil, pytz>=2019.1, wget>=3.2
  
  *Written in Python3.6 and Python3.7*
  
@@ -46,58 +50,60 @@ This work was not funded and done independently and in my free time. If you woul
  
 _Execute in 2 steps. Internet connection is required for this step._
  
- 1. Edit DOWNLOAD_DATA.py. The user can configure this file to download the desired search dataset which is required by the Forecast Search Wizard. There are 6 parameters that you can set in the **DOWNLOAD_DATA** program. For each parameter below you will see the _Variable Name_, _Data Type_, _Default Value_, and some _Valid Options_ to guide you. Simply execute this file once properly configured. Currently the [Iowa Environmental Mesonet text archive](https://mesonet.agron.iastate.edu/wx/afos/list.phtml) is being used. All IEM data should be used for educational purposes only. IEM states "Please do not depend on this page for operational decision making, errors can and do occur with data processing, data reception and any other error possible with Internet communications." The Forecast Search Wizard only depends on the information in the written forecasts. The Forecast Search Wizard is not dependent upon sucessful archival in the IEM database, but in some instances the year the forecast was stored in the IEM database is used in the logic but this has more to do with the file naming structure. Other than that, all data retrieved by the Forecast Search Wizard is from the text products themselves. Currently, IEM is the only supported source of text data.
+1. Edit DOWNLOAD_DATA.py. The user can configure this file to download the desired search dataset. This dataset is required by the Forecast Search Wizard. There are 6 parameters that you can set in the **DOWNLOAD_DATA** program. You will see the _Variable Name_, _Data Type_, _Default Value_, and some _Valid Options_ for each parameter (below) to guide you. Simply execute this file once properly configured. 
  
-       #### PARAMETERS ####
-
-       **1. Download_Data** :: Boolean value
+Currently the [Iowa Environmental Mesonet text archive](https://mesonet.agron.iastate.edu/wx/afos/list.phtml) is being used. All IEM data should be used for educational purposes only. IEM states "Please do not depend on this page for operational decision making, errors can and do occur with data processing, data reception and any other error possible with Internet communications." The Forecast Search Wizard only depends on the information in the written forecasts. The Forecast Search Wizard is not dependent upon sucessful archival in the IEM database however these instances may be flagged as assumptions in the Forecast Search Wizard. Other than that, all data retrieved by the Forecast Search Wizard is from the text products themselves. Currently, IEM is the only supported source of text data. I would be happy to work with NCEI to make their archives more accessible to the public.
+ 
+   #### PARAMETERS ####
+   
+   **1. Download_Data** :: Boolean value
        
           > download_data = True
           
-       Valid Options:
+        Valid Options:
        
                  True (Download Data)
                  False (Do Not Download)
 
-       **2. Get_Latest_Year** :: Boolean value
+   **2. Get_Latest_Year** :: Boolean value
            
           > Get_Latest_Year = False
           
-       Valid Options:
+        Valid Options:
        
                  True (Download Latest Year)
                  False (Do Not Download)
                                       
-       **3. Remove_Empty** :: Boolean value 
+   **3. Remove_Empty** :: Boolean value 
        
           > Remove_Empty = True
           
-       Valid Options:
+        Valid Options:
        
                  True (Remove Empty Forecast Products)
                  False (Keep All Products)
 
-       **4. start_year** :: integer value
+   **4. start_year** :: integer value
        
           > start_year = int(1996)
 
-       Valid Options: Any year between 1996 and Present
+        Valid Options: Any year between 1996 and Present
       
                  1996 - 2019
            
-       **5. end_year** :: integer value
+   **5. end_year** :: integer value
                  
           > end_year = int(time.ctime()[-4:])
 
-       Valid Options: Any year between 1996 and Present but later than the start_year
+        Valid Options: Any year between 1996 and Present but later than the start_year
       
                  1996 - 2019
 
-       **6. MASTER_LIST** ::  a list of strings or by selecting a **preset configuration**.
+   **6. MASTER_LIST** ::  a list of strings or by selecting a **preset configuration**.
        
           > MASTER_LIST = ["AFDLWX", "AFDPHI"]
 
-       Valid Options: Valid forecast products as strings or select from the preset search options (537 options) or create your own.
+        Valid Options: Valid forecast products as strings or select from the preset search options (537 options) or create your own.
          
                  MASTER_LIST = Option.MASTER_LIST
                  MASTER_LIST = Option.ALL
@@ -109,23 +115,23 @@ _Execute in 2 steps. Internet connection is required for this step._
                                 "AFDCLE", "AFDPBZ", "AFDCTP", "AFDCHS", "AFDCAE", "AFDGSP",\
                                 "AFDBTV", "AFDLWX", "AFDRNK", "AFDAKQ", "AFDRLX"]
                                                
- 2. Execute this file once it has been properly configured. This step can take a few minutes to a few hours depending on the number and size of the forecasts.
+ 2. Execute this file once DOWNLOAD_DATA has been properly configured. This step can take a few minutes to a few hours depending on the number and size of the forecasts as well as network connectivity.
       
           > python DOWNLOAD_DATA.py
 
 
-**DOWNLOAD OUTPUT:** A file that looks like *Data_Download_VerboseTue_Nov_12_195850_2019.out* will be stored in the RUN_ME folder. This is for your records to know what was downloaded and where. It explains everything that happened when you tried to download the dataset.
+**DOWNLOAD OUTPUT:** A file that looks like *Data_Download_VerboseTue_Nov_12_195850_2019.out* will be stored in the RUN_ME folder. This is for your records to know what was downloaded and where that data can be found. All FSW data should be stored in _Forecast_Search_Wizard/TEXT_DATA/_. Otherwise you will need to set the new path. This is not recommended. Please keep the file structure otherwise things might break. This file also explains everything that happened when you tried to download the dataset.
 
-**DATA STORAGE:** The Forecast Search Wizard does require you to have available space to store the forecasts. I am able to download ~23 years of data for ~580 forecast products with a storage requirement of less than 32GB. This is an extreme scenario. If download Area Forecast Discussions for a single offices you might be able to expect that to take up 300 - 500 MB. Some forecasts are longer or more frequent and therefore take up more space.
+**DATA STORAGE:** The Forecast Search Wizard does require you to have available space to store the forecasts. I am able to download ~23 years of data for ~580 forecast products (>10,000,000 forecasts) with a storage requirement of less than 32GB. This is an extreme scenario. If you are downloading only Area Forecast Discussions for a single offices, then you might be able to expect that to take up 300 - 500 MB. Some forecasts are longer or more frequent and therefore take up more space.
 
 **Preset Configurations:** You can create your own list, choose or modify existing options found in *~/search_options/search_options.py* by declaring *Option.<OPTION_NAME>*. By default the search_options module is imported for RUN_ME programs (DOWNLOAD_DATA and FSW_NAMELIST).
 
-   **Example:**
+   **General Example:**
    ```
    > from search_options.search_options import Option
    > MASTER_LIST = Option.ALL
    ```
-   **Combining Preset Search Options:** The following example will allow you to search or download ALL options except all SPC forecasts. The search or download will proceed alphabetically.
+   **Example When Combining Preset Search Options:** The following example will allow you to search or download ALL options except all SPC forecasts. The search or download will proceed alphabetically.
    ```
    > from search_options.search_options import Option
    > lst = list(set(Option.ALL) - set(Option.ALL_SPC))
@@ -138,10 +144,8 @@ _Execute in 2 steps. Internet connection is required for this step._
      
 
 ### FSW_NAMELIST.py
- 
-_Execute in 2 steps. Internet connection is required for this step._
- 
- 1. Edit FSW_NAMELIST.py to your search criteria. ....
+  
+ 1. Edit FSW_NAMELIST.py to your search criteria. .... This is the main program which you will be using once you have your data and everything installed.
  
        #### PARAMETERS ####
 
@@ -151,16 +155,16 @@ _Execute in 2 steps. Internet connection is required for this step._
                        "SEABREEZE", "SEABREAZES", "SEABREAZE", "SEA BREEZES",\
                        "SEA BREAZES"] 
                        
-       Valid Options:  ANYTHING! FOLLOW THE STRUCTURE ABOVE. LIST OF STRINGS!
+        Valid Options:  ANYTHING! FOLLOW THE STRUCTURE ABOVE. LIST OF STRINGS!
 
                  input_word_list = ["dorian", "alabama"] #Too Soon?
                  input_word_list = ["cold air damming", "cad"] #Too Soon?
 
-       **2. forecast_product_list** :: a list of strings or or by selecting a **preset configuration** (see above).
+       **2. forecast_product_list** :: a list of strings or by selecting a **preset configuration** (see above).
        
           > forecast_product_list = ["AFDPHI"]
 
-       Valid Options: Valid forecast products as strings or select from the preset search options (537 options) or create your own.
+        Valid Options: Valid forecast products as strings or select from the preset search options (537 options) or create your own.
          
                  forecast_product_list = Option.MASTER_LIST
                  forecast_product_list = Option.ALL
@@ -175,7 +179,7 @@ _Execute in 2 steps. Internet connection is required for this step._
        
                  > start_year = int(1996)
                  
-       Valid Options: Any year between 1996 and Present. This is a hard limit. Internal controls prevent other options.
+        Valid Options: Any year between 1996 and Present. This is a hard limit. Internal controls prevent other options.
       
                  1996 - 2019
            
@@ -191,7 +195,7 @@ _Execute in 2 steps. Internet connection is required for this step._
        
           > isAnd = True
           
-       Valid Options:
+        Valid Options:
        
                  True (Search for All of the words)
                  False (Search for ANY of the words)
@@ -210,7 +214,7 @@ _Execute in 2 steps. Internet connection is required for this step._
            
           > isGrep = True
           
-       Valid Options:
+        Valid Options:
        
                  True (GREP-Style Search)
                               Example:
@@ -229,17 +233,22 @@ _Execute in 2 steps. Internet connection is required for this step._
        
           > make_assumptions = True
           
-       Valid Options: I advise that you enable assumptions. Any assumptions that are made are indicated in the output with a # or *<star>*. 
+        Valid Options: I advise that you enable assumptions. Any assumptions that are made are indicated in the output with a # or *<star>*. 
        
                                       True (make likely assumptions)
                                       False (no assumptions)
 
-       **8. debug_flag** :: Boolean value. If you are having issues try switching the debut flag to True. No output will be saved. If there is something wrong with the program which I expect in the beginning there might be a few hiccups. Either email me (email is in the overview section) or create an issue here and I will look into what might be going wrong. 
+       **8. debug_flag** :: Boolean value. 
+           
+           > debug_flag = False
+           
+        If you are having issues try switching the debut flag to True. No output will be saved. If there is something wrong with the program which I expect in the beginning there might be a few hiccups. Either email me (email is in the overview section) or create an issue here and I will look into what might be going wrong. 
        
                                              
- 2. Execute this file once it has been properly configured. This step can take a few seconds to an hour depending on the scope of your search. The time also depends on the system/computer it is being run on. This program likely could be easily parallelized for runs on HPCC. Ask for details (I personally haven't done it but I know how I would try to do it). 
+ 2. Execute this file once it has been properly configured. This step can take a few seconds to an hour depending on the scope of your search. The time also depends on the system/computer it is being run on. This program likely could be easily parallelized for runs on HPCC. Ask for details (I personally haven't done it but I know how I would try to do it). There is an internal alarm that kills the program if the search exceeds 6 hours. If this happens either you are doing something wrong or something internally has gone horribly wrong.
       
               python FSW_NAMELIST.py
+              
 
 **OUTPUTS OF THE FORECAST SEARCH WIZARD:** Check the outputs when they are done. You will get one output located in the **FSW_WARN** folder with information about the run, any trouble it had, some statistics about the run, etc. The second output if the Forecast Search Wizard ran successfully will be located in the **FSW_OUTPUT** folder. This file will provide you with information about the search and the results of the search. In the future tools will become available to help analyze this data. Until then you are responsible for the analysis of the Forecast Search Wizard results.
 
@@ -310,4 +319,4 @@ File:  read_time   Row:  250  - TP: CATASTROPHIC ERROR", times, unique_hrs[idx],
 
 
 ## OTHER USES
-The Forecast Search Wizard was written in a way that it's pieces would be useful for a wide variety of things dealing with NWS/NOAA Text Products. That includes making a database for NOAA/NWS text forecasts (@NOAA @NWS). Relaying NWS Forecasts (Impacts/Hazards/Warnings) to customers. I would be open to consulting on a case-by-case basis. 
+Components of the Forecast Search Wizard could be used universally for parsing NWS/NOAA text products. The Forecast Search Wizard was carefully written in a way that this would be possible. This would enable a wide variety of applications dealing with NWS/NOAA text products. That includes making a database for NOAA/NWS text forecasts (@NOAA @NWS). Relaying NWS Forecasts (Impacts/Hazards/Warnings) to customers. I would be open to consulting on a case-by-case basis.
