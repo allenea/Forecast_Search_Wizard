@@ -205,7 +205,7 @@ Currently the [Iowa Environmental Mesonet text archive](https://mesonet.agron.ia
        
           > byForecast = True
           
-       Valid Options:
+        Valid Options:
        
                  True (Search by forecast)
                  False (Search by day)
