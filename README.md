@@ -1,4 +1,4 @@
-# Forecast_Search_Wizard
+# Forecast Search Wizard
 
 **Author:** [Eric Allen](mailto:allenea@udel.edu)
 
