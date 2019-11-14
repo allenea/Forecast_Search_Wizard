@@ -95,22 +95,18 @@ def write_output_file(outputfile, inputKey, station_list, start, end, eTime, isG
         if makeAssume:
             text_file.write("\tThis search may make basic 'safe' assumptions for cases with "+\
                             "incomplete date or time information.\n")
-            text_file.write("\t\t- Any assumption made on whether the forecast was issued in the"+\
-                            " AM or PM will be indicated with a ' * '.\n")
-            text_file.write("\t\t- Any assumption made on the date or time (year, month, "+\
-                            "day, hour, minute) will be indicated with a ' # '.\n")
-            text_file.write("\t\t- See documentation for more information...\n\n")
+            text_file.write("\t\t- Any MAJOR assumptions will be indicated with an *. ")
+            text_file.write("\t\t- Any MINOR assumptions will be indicated with an #.\n")
+            text_file.write("\t\t- The full criteria for assumptions can be found in the Documentation.\n\n") 
 
         else:
             text_file.write("\tThis search makes no assumptions on incomplete date"+\
                             " or time information.\n")
             text_file.write("\t\t- As a result, this search may not accurately account for all "+\
                             "cases for this search criteria.\n")
-            text_file.write("\t\t- The 'warnings_and_errors' output file can be used to manually "+\
-                            "add these cases.\n")
             text_file.write("\t\t- See documentation for more information... \n\n")
 
-#NOT IMPLEMENTED IN V3... List of SECTIONS being searched...
+#NOT IMPLEMENTED IN V1.0... List of SECTIONS being searched...
 # =============================================================================
 # if searchSEClist == None:
 #     text_file.write("\tSearched all sections of the forecast.\n\n")
@@ -159,7 +155,7 @@ def write_output_file(outputfile, inputKey, station_list, start, end, eTime, isG
             text_file.write("Total Cases Found:  %d\n\n" % num_days)
 
         text_file.write("Total Products Searched: %d\n"%prodsIssued)
-        text_file.write("Duplicate Forecasts Issued: %d\n"%countDupFcst)
+        text_file.write("Duplicate Forecasts Found: %d\n"%countDupFcst)
         text_file.write("Main-Search Elapsed Time: %f"%(eTime)+" seconds\n\n")
 
         if byforecast:
@@ -169,7 +165,7 @@ def write_output_file(outputfile, inputKey, station_list, start, end, eTime, isG
             text_file.write("Stats are limited to first instance of each keyword for that day:")
         text_file.write("\n\tTotal Mentions:  %d\n" % total_mentions)
         text_file.write("\tUnique Mentions: %d\n"  % no_dups)
-        text_file.write("\tTimezone Errors: %d\n\n"  % countBad)  #REMOVE IN THE FUTURE?
+        #text_file.write("\tTimezone Errors: %d\n\n"  % countBad)  #REMOVE IN THE FUTURE?
 
         ## This should be used to identify start of the dates when analyzing the outputs
         text_file.write("!!TIMES ARE IN UTC!!\n")

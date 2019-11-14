@@ -37,9 +37,8 @@ def trim_warnings(warningfile):
     afterEnd = False
     countTP = 0
     countTZ = 0
-    utc_convert = 0
-    countTF = 0
-    countCR = 0
+    countCT = 0
+    countCNR = 0
     rowLast = ""
 
     #Iterate through file
@@ -66,19 +65,14 @@ def trim_warnings(warningfile):
                 elif row == rowLast:
                     continue
                 else:
-
-                    if "ERROR CONVERTING" in row: # utc_convert.py
-                        utc_convert += 1
+                    if "CT: Convert_Time Failure" in row:
+                        countCT += 1
                     elif "TP:" in row:
                         countTP += 1
-                    #elif "WARNING TZ_FINDER: " in row:
-                    #    countTZ +=1
-                    elif "WARNING TZ: " in row:
+                    elif "TZ: TIMEZONE WARNING" in row:
                         countTZ += 1
-                    elif "TF" in row: #missing_time.py
-                        countTF += 1
-                    elif "FINDER:" in row: #finder.py
-                        countCR += 1
+                    elif "FINDER:" in row:
+                        countCNR += 1
                         continue
 
                     outfile.write("%s" % row)
@@ -86,11 +80,10 @@ def trim_warnings(warningfile):
 
 
     #Write some numbers
-    outfile.write("\nFINDER: Could Not Access An Expected Forecast: %d\n" % countCR)
+    outfile.write("\nFINDER: Could Not Access An Expected Forecast: %d\n" % countCNR)
     outfile.write("TZ: Timezone Errors: %d\n" % countTZ)
     outfile.write("TP: Time Problem Errors: %d\n" % countTP)
-    outfile.write("UTC Conversion Error: %d\n" % utc_convert)
-    outfile.write("TF: Time Finder Issues: %d\n" % countTF)
+    outfile.write("CT: Time Conversion Error: %d\n" % countCT)
 
     outfile.write("\n\n\n** LOGGING POSSIBLE FORECASTS NOT ACCESSIBLE **\n\n")
 

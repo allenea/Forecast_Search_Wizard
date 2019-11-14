@@ -1,89 +1,140 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Nov 12 11:07:08 2019
-
-@author: ericallen
-"""
+"""Copyright (C) 2018-2019 Eric Allen - All Rights Reserved"""
+#
+# You may use, distribute and modify this code under the
+# terms of the GNU General Public License v3.0 license.
+#
+# You should have received a copy of the GNU General Public
+# License v3.0 packaged with the Forecast Search Wizard.
+# If not vist https://www.gnu.org/licenses/gpl-3.0.en.html
+#
+# Please properly cite code, derivative code, and outputs
+# of the Forecast Search Wizard in all scholarly work and
+# publications.
+#
+# Imports
+from __future__ import print_function
+import calendar
 from datetime import datetime
-def checkEverything(LST, GMT, year, month, text_day, iYear):
-    """doc-string"""
+import pytz
+from src.time_functions import getDDHHMM
+
+def checkEverything(LST, GMT, year, month, text_day, iYear, timezone):
+    """Take all the given information and create the best timestamp"""
     fday = -1
     fmon = -1
     fyr = -1
     is_assumed = False
+    had_to_use_local = False
+    cmonthdays = calendar.monthlen(year, month)
 
-    dt_lst = datetime.strptime(LST, "%d%H%M")
-    if GMT != "999999":
-        try:
-            dt_gmt = datetime.strptime(GMT, "%d%H%M")
-        except:
-            dt_gmt = datetime.strptime(LST, "%d%H%M")
-            is_assumed = True
-
-        if dt_gmt >= dt_lst:
-            if dt_gmt.day == text_day:
-                fday = text_day
-            elif abs((dt_gmt - dt_lst).days) == 1:
-                fday = text_day + 1
-            else:
-                #if abs((dt_gmt - dt_lst).days) > 1:
-                if dt_gmt.day >= 28 and text_day == 1:
-                    fday = dt_gmt.day
-                    #is_assumed = True # assumed because 28 is February no 30/31
-                    month = month - 1
-                    if month == 0:
-                        month = 12
-                        fyr = year - 1
+    if LST is None:
+        if GMT != "999999":
+            gday, ghr, gmin = getDDHHMM(GMT)
+            if gday >= text_day:
+                if gday == text_day:
+                    fday = gday
+                elif abs(gday - text_day) == 1:
+                    fday = text_day + 1
                 else:
-                    return None, None, None, None, None, None
-        else:
-            if dt_gmt.day == text_day:
-                fday = text_day
-            elif abs((dt_lst - dt_gmt).days) == 1:
-                fday = dt_gmt.day
+                    if gday >= cmonthdays and text_day == 1:
+                        fday = gday
+                        month = month - 1
+                        if month == 0:
+                            month = 12
+                            fyr = year - 1
+                    else:
+                        return None, None
+
             else:
-                #if abs((dt_gmt - dt_lst).days) > 1:
-                if dt_gmt.day == 1 and text_day >= 28:
-                    fday = dt_gmt.day
-                    #is_assumed = True # assumed because 28 is February no 30/31
+                if abs(gday - text_day) == 1:
+                    fday = gday
+                if gday == 1 and text_day >= cmonthdays:
+                    fday = gday
                     month = month + 1
                     if month > 12:
                         month = 1
                         fyr = year + 1
                 else:
-                    return None, None, None, None, None, None
+                    return None, None
+        fhour = int(ghr)
+        fminute = int(gmin)
 
-        fhour = dt_gmt.hour
-        fminute = dt_gmt.minute
+    elif GMT != "999999":
+        gday, ghr, gmin = getDDHHMM(GMT)
+        if text_day is None:
+            fday = gday
+            fhour = int(ghr)
+            fminute = int(gmin)
+        elif gday == text_day:
+            fday = gday
+            fhour = int(ghr)
+            fminute = int(gmin)
 
+        elif gday > text_day:
+            if abs(gday - text_day) == 1:
+                fday = gday
+            else:
+                if gday >= cmonthdays and text_day == 1:
+                    #More reason to go with the header.... than text_day
+                    fday = gday
+                    month = month - 1
+                    if month == 0:
+                        month = 12
+                        fyr = year - 1
+                else:
+                    return None, None
+        else:
+            if abs(text_day - gday) == 1:
+                fday = gday
+            else:
+                if gday == 1 and text_day >= cmonthdays:
+                    fday = gday
+                    month = month + 1
+                    if month > 12:
+                        month = 1
+                        fyr = year + 1
+                else:
+                    return None, None
+        fhour = int(ghr)
+        fminute = int(gmin)
     else:
         fday = text_day
-        fhour = dt_lst.hour
-        fminute = dt_lst.minute
+        fhour = int(LST[:2])
+        fminute = int(LST[2:])
+        had_to_use_local = True
+        timezone_str = timezone
 
+    if fday > cmonthdays:
+        fday = 1
+        month = month + 1
+        if month > 12:
+            fyr = year + 1
 
     if fyr == -1:
         if year == iYear:
             fyr = year
+        elif year is None:
+            fyr = iYear
+            is_assumed = True
         elif year == iYear + 1:
             if month == 1:
                 fyr = year
             elif month == 12:
                 fyr = iYear
             else:
-                return None, None, None, None, None, None
-
+                fyr = year
+                is_assumed = True
         elif year == iYear - 1:
             if month == 12:
                 fyr = year
             elif month == 1:
                 fyr = iYear
             else:
-                return None, None, None, None, None, None
+                fyr = year
+                is_assumed = True
         else:
-            return None, None, None, None, None, None
-
+            fyr = year
+            is_assumed = True
     else:
         if abs(fyr - iYear) <= 1 and month in (1, 12):
             pass
@@ -95,7 +146,13 @@ def checkEverything(LST, GMT, year, month, text_day, iYear):
         fyr = year
         is_assumed = True
 
-
     fmon = month
+    if had_to_use_local:
+        dt_tuple = datetime(fyr, fmon, fday, fhour, fminute, tzinfo=pytz.timezone(timezone_str))
+    else:
+        try:
+            dt_tuple = datetime(fyr, fmon, fday, fhour, fminute, tzinfo=pytz.timezone("UTC"))
+        except:
+            return None, None
 
-    return fyr, fmon, fday, fhour, fminute, is_assumed
+    return dt_tuple, is_assumed

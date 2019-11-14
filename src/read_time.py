@@ -14,12 +14,11 @@
 # Imports
 from __future__ import print_function
 import sys
-from src.time_functions import getDDHHMM, getFirstGuess
 from src.time_functions import get_Issuing_Time_text as get_time
 from src.time_functions import get_Issuing_Date_text as get_date
 from src.convert_time import convert_time
-from datetime import datetime
 from src.check_everything import checkEverything
+import pytz
 
 FMT_STRING = "%m-%d-%Y %H:%M"
 
@@ -31,6 +30,7 @@ def wfo_rft_time(trim_times, unique_hrs, ddhhmm_list, wfo, unique_keywords, \
     Parameters:
         trim_times (str): Raw date info
         unique_hrs (str): Raw time info
+        unique_hrs (str): ddhhmm from top of the forecast
         wfo (str): Forecast product PIL
         unique_keywords (str): Keyword that was found
         make_assume (bool): Make assumptions
@@ -73,18 +73,13 @@ def wfo_rft_time(trim_times, unique_hrs, ddhhmm_list, wfo, unique_keywords, \
             elif is_assumed_date is True:
                 if int_day is None and ddhhmm_list[idx] == "999999":
                     final_assume_time = True
-                    print("TP: ", wfo, " - WMO Header Missing and MND Header Day Not Found. Exiting... "+\
+                    print("TP: ", wfo, \
+                          " - WMO Header Missing and MND Header Day Not Found. Exiting... "+\
                           "Check File:", iYear, " for  ", month, "-", "???", "-", year,\
                           " @", ddhhmm_list[idx], "Z", times.strip(), "   ", "___/",\
                           year, "/", iYear)
                     sys.stdout.flush()
                     continue
-                else:
-                    #Missing Timezone Info
-                    if timezone[idx] == "":
-                        timezone[idx] = replace_tz
-                        final_assume_time = True
-
 
             #Missing Timezone Info
             if timezone[idx] == "":
@@ -93,134 +88,108 @@ def wfo_rft_time(trim_times, unique_hrs, ddhhmm_list, wfo, unique_keywords, \
     # =============================================================================
     #       GET TIME INFO
     # =============================================================================
+            MND_Header, is_assumed_time = get_time(unique_hrs[idx])
+
+            #IF NEITHER _dd or int_day exists the program should quit above
+            #If month is missing the program already quit
+            #If year was missing and FSW guessed check_everything will look into it
             if ddhhmm_list[idx] != "999999":
-                _dd, _hh, _mm = getDDHHMM(ddhhmm_list[idx])
-                first_guess = getFirstGuess(year, month, _dd, _hh, _mm)
+                if int_day is None: #is_assumed_date == True
+                    use_day = int(ddhhmm_list[idx][:2])
+                    dt_tuple, is_assumed = checkEverything(MND_Header,\
+                                ddhhmm_list[idx], year, month, use_day, iYear, timezone[idx])
+                else:# is_assumed_time == False:
+                    use_day = int_day
+                    dt_tuple, is_assumed = checkEverything(MND_Header,\
+                                    ddhhmm_list[idx], year, month, int_day, iYear, timezone[idx])
+            # No DD HH MM - UTC
             else:
-                first_guess = None
+                if is_assumed_time is not None:
+                    if int_day is not None:#is_assumed_date == True or False
+                        if is_assumed_date:
+                            final_assume_time = True
+                        elif is_assumed_time:
+                            final_assume_time = True
 
-            MND_Header, WMO_Header, is_assumed_time = get_time(unique_hrs[idx],\
-                                                                       first_guess, timezone[idx])
+                        use_day = int_day
+                        dt_tuple, is_assumed = checkEverything(MND_Header,\
+                                          "999999", year, month, int_day, iYear, timezone[idx])
+                    else:#is_assumed_date == None. No Day Info
+                        print("TP: ", wfo, " - Time Information Could Not Be Found. "+\
+                                  "(CONTINUING)... Check File:", iYear, " for  ", month, "-",\
+                                  int_day,\
+                                  "-", year, " @", ddhhmm_list[idx], "Z", times.strip())
+                        sys.stdout.flush()
+                        continue
 
-            if (MND_Header, WMO_Header, is_assumed_time) == (None, None, None):
-                if ddhhmm_list[idx] == "999999":
+                else:
                     print("TP: ", wfo, " - Time Information Could Not Be Found. "+\
-                                  "CONTINUING... Check File:", iYear, " for  ", month, "-", int_day,\
+                                  "[CONTINUING]... Check File:", iYear, " for  ", month, "-",\
+                                  int_day,\
                                   "-", year, " @", ddhhmm_list[idx], "Z", times.strip())
                     sys.stdout.flush()
                     continue
-                else:
-                    fyr, fmon, fday, fhr, fmin, isAssumed  = checkEverything(ddhhmm_list[idx],\
-                          ddhhmm_list[idx], year, month, int_day, iYear)
-                    if isAssumed == False:
-                        final_time_string = convert_time(wfo, fyr, fmon, fday,\
-                             int(fhr), int(fmin))
-                    elif isAssumed: #None or True use pre-check
-                        final_assume_time = True
-                        final_time_string = convert_time(fyr, year, fmon, fday,\
-                                        int(fhr), int(fmin))
-                    else:
-                        final_assume_time = True
-                        final_time_string = convert_time(wfo, year, month, _dd,\
-                            int(_hh), int(_mm))
 
-            # USE MND HEADER - ASSUMPTION. FLAGGED
-            elif WMO_Header is None:
-                if is_assumed_time: #True
+            if is_assumed is not None:
+                if is_assumed:
                     final_assume_time = True
-                elif is_assumed_time == False:
-                    pass
 
-                LST = "{:02d}".format(int_day) + "{:02d}".format(int(MND_Header[:2]))+\
-                        "{:02d}".format(int(MND_Header[2:]))
-
-                fyr, fmon, fday, fhr, fmin, isAssumed  = checkEverything(LST,\
-                                          ddhhmm_list[idx], year, month, int_day, iYear)
-
-                if isAssumed == False:
-                    final_time_string = convert_time(wfo, fyr, fmon, fday,\
-                         int(fhr), int(fmin))
-                elif isAssumed: #None or True use pre-check
-                    final_assume_time = True
-                    final_time_string = convert_time(fyr, year, fmon, fday,\
-                                    int(fhr), int(fmin), timezone=timezone[idx])
+                if dt_tuple.tzname() != "UTC":
+                    final_time_string = dt_tuple.astimezone(pytz.timezone("UTC"))
                 else:
-                    final_assume_time = True
-                    final_time_string = convert_time(wfo, year, month, int_day,\
-                        int(MND_Header[:2]), int(MND_Header[2:]), timezone=timezone[idx])
-
-            else: #WMO HEADER IS NOT NONE
-                if int_day is None and ddhhmm_list[idx] != "999999":
-                    use_day = _dd
-                    LST = "{:02d}".format(_dd) +\
-                            "{:02d}".format(int(WMO_Header[:2])) +\
-                            "{:02d}".format(int(WMO_Header[2:]))
-                    fyr, fmon, fday, fhr, fmin, isAssumed  = checkEverything(LST,\
-                                 ddhhmm_list[idx], year, month, use_day, iYear)
-
-                elif ddhhmm_list[idx] == "999999":
-                    use_day = int_day
-                    LST = "{:02d}".format(int_day) +\
-                            "{:02d}".format(int(MND_Header[:2])) +\
-                            "{:02d}".format(int(MND_Header[2:]))
-
-                else:
-                    use_day = int_day
-                    LST = "{:02d}".format(int_day) +\
-                            "{:02d}".format(int(WMO_Header[:2])) +\
-                            "{:02d}".format(int(WMO_Header[2:]))
-                    fyr, fmon, fday, fhr, fmin, isAssumed  = checkEverything(LST,\
-                                 ddhhmm_list[idx], year, month, use_day, iYear)
-
-                if isAssumed == False:
-                    final_time_string = convert_time(wfo, fyr, fmon, fday,\
-                         int(fhr), int(fmin))
-                elif isAssumed:
-                    if is_assumed_date == False:
-                        final_time_string = convert_time(wfo, year, month, use_day,\
-                                        int(MND_Header[:2]), int(MND_Header[2:]))
-                    else: #TRUE
-                        final_time_string = convert_time(wfo, year, month, use_day,\
-                                        int(_hh), int(_mm))
+                    final_time_string = dt_tuple
+            else:
+                if ddhhmm_list[idx] != "999999":
+                    if is_assumed_date:
                         final_assume_time = True
-                else:
-                    if is_assumed_time == True:
-                        final_assume_time = True
-
                     final_time_string = convert_time(wfo, year, month, use_day,\
-                                    int(WMO_Header[:2]), int(WMO_Header[2:]), timezone=timezone[idx])
+                                    int(ddhhmm_list[idx][2:4]), int(ddhhmm_list[idx][4:6]))
+                else: #TRUE
+                    if is_assumed_time:
+                        final_assume_time = True
+                    final_time_string = convert_time(wfo, year, month, use_day,\
+                                    int(MND_Header[:2]), int(MND_Header[2:]),\
+                                    timezone=timezone[idx])
 
-            try:
-                dt_lst = datetime.strptime(LST,"%d%H%M")
-                test_time_string = convert_time(wfo, year, month, use_day, dt_lst.hour, dt_lst.minute, timezone=timezone[idx])
-                difference_time = abs((test_time_string - final_time_string).total_seconds()/(60*60))
 
-                if final_assume_time:
-                    major_assume = True
-                else:
-                    if difference_time <= 1:
-                        pass
-                    elif 2 < difference_time <= 24:
-                        #pass
-                        minor_assume = True
-                        #print("TP: minor discrepancy - : ", final_time_string.strftime(FMT_STRING),\
-                        #       isAssumed, "\t /// \tOther: ", test_time_string.strftime(FMT_STRING), "\t+++",\
-                        #       "{:4.2f}".format(difference_time), "++++","\t", times.strip(), "\t",\
-                        #       unique_hrs[idx].strip(), " DEFAULT - Day: ", _dd, " - Hour: ", _hh,\
-                        #       " - Minute: ", _mm, "  UTC")
-                        #sys.stdout.flush()
-                    else:
-                        major_assume = True
-                        print("TP: MAJOR DISCREPANCY - : ",\
-                              final_time_string.strftime(FMT_STRING), isAssumed, \
-                              "\t /// \tOther: ", test_time_string.strftime(FMT_STRING), "\t+++",\
-                              "{:4.2f}".format(difference_time), "++++",\
-                              "\t", times.strip(),\
-                              "\t", unique_hrs[idx].strip(), " DEFAULT - Day: ", use_day,\
-                              " - Hour: ", _hh, " - Minute: ", _mm, "  UTC")
-                        sys.stdout.flush()#continue
-            except:
+            if final_time_string.day != use_day:
+                try:
+                    test_time_string = convert_time(wfo, year, month, use_day,\
+                                                    int(MND_Header[:2]), int(MND_Header[2:]),\
+                                                    timezone=timezone[idx], s='silence')
+                    tots = (test_time_string - final_time_string).total_seconds()
+                    difference_time = abs(tots/(60*60))
+                except:
+                    difference_time = 0 #Cannot resolve
+            else:
+                difference_time = 0 #Close enough - might lose a few minor assumption
+                # this is because we are using use_day and not the converted day.
+
+            if final_assume_time:
                 major_assume = True
+            else:
+                if difference_time <= 2:
+                    pass
+                elif difference_time < 36:
+                    minor_assume = True
+                    #print("TP: minor discrepancy - : ", final_time_string.strftime(FMT_STRING),\
+                    #       is_assumed, "\t /// \tOther: ", test_time_string.strftime(FMT_STRING),\
+                    #"\t+++",\
+                    #       "{:4.2f}".format(difference_time), "++++","\t", times.strip(), "\t",\
+                    #       unique_hrs[idx].strip(), " DEFAULT - Day: ", _dd, " - Hour: ", _hh,\
+                    #       " - Minute: ", _mm, "  UTC")
+                    #sys.stdout.flush()
+                else:
+                    major_assume = True
+                    print("TP: MAJOR DISCREPANCY - Using: ",\
+                          final_time_string.strftime(FMT_STRING), \
+                          "  ///  Other: ", test_time_string.strftime(FMT_STRING), "\t+++",\
+                          "{:4.2f}".format(difference_time), "++++",\
+                          "\t", times.strip(),\
+                          "\t", unique_hrs[idx].strip(), " WMO - Day: ", ddhhmm_list[idx][0:2],\
+                          " - Hour: ", ddhhmm_list[idx][2:4], " - Minute: ",\
+                          ddhhmm_list[idx][4:6], "  UTC")
+                    sys.stdout.flush()
 
             if final_time_string is not None:
                 if make_assume:
@@ -236,20 +205,16 @@ def wfo_rft_time(trim_times, unique_hrs, ddhhmm_list, wfo, unique_keywords, \
                         key_found[count] = unique_keywords[idx]
 
                 else:
-                    if major_assume == False or minor_assume == False:
+                    if not major_assume and not minor_assume:
                         times_found[count] = final_time_string
                         key_found[count] = unique_keywords[idx]
-                    else:
-                        print("TP: BOMBASTIC ERROR", times, unique_hrs[idx], ddhhmm_list[idx],\
-                              wfo, unique_keywords[idx], make_assume, iYear, timezone[idx])
-                        sys.stdout.flush()
 
                 #increase the count by 1 after the iteration
                 count += 1
-
         except:
-            print("TP: CATASTROPHIC ERROR", times, unique_hrs[idx], ddhhmm_list[idx],\
-                  wfo, unique_keywords[idx], make_assume, iYear, timezone[idx])
+            print("TP: Unknown - Exception Thrown. Continuing without the time in question.",\
+                  times, unique_hrs[idx], ddhhmm_list[idx], wfo,\
+                  unique_keywords[idx], iYear, timezone[idx])
             sys.stdout.flush()
             continue
 

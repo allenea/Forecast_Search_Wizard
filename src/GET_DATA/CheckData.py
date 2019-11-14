@@ -30,7 +30,7 @@ def CheckRemove_Data(indir):
     If not then use the os.walk and loop through and don't use glob...
     """
 
-    print("Data Directory", indir)
+    print("\n\nChecking Data\nData Directory", indir)
     lst_paths = glob.glob(indir+"/*")
     print("Starting Number: ", len(lst_paths))
     lst_paths.sort()

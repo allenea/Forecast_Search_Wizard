@@ -65,8 +65,8 @@ def execute(FSW_SEARCH):
             AFD_finder(FSW_SEARCH, run_start_time)
 
         except TimeoutException:
-            print("The search was limited to 6 hours. No search should take more than"+\
-                  " 6 hours at this time.")
+            print("Program Failed To Run due to (6-hour) TimeoutException..."+\
+                  " Even poorly configured searches should take less than 6 hours.")
             print("If second run yields the same problem. Try narrowing your search"+\
                   " and/or contact: allenea@udel.edu")
             print("--- %s seconds ---\n\n" % (time.time() - start_time))
@@ -77,7 +77,7 @@ def execute(FSW_SEARCH):
 
         #RARE - REDOWNLOAD DATA OR CORRUPT DATA
         except UnicodeEncodeError:
-            print("Failed UnicodeEncodeError... Possibly caused by a corrupt file.")
+            print("Program Failed on UnicodeEncodeError... Possibly caused by a corrupt file.")
             print("--- %s seconds ---\n\n" % (time.time() - start_time))
             #close the files
             filen.close()
@@ -86,7 +86,8 @@ def execute(FSW_SEARCH):
 
         # ALL OTHER EXCEPTIONS
         except:
-            print("Program Failed To Run To Completion. Please alert allenea@udel.edu to"+\
+            print("Program Failed To Run To Completion..."+\
+                  " Please alert allenea@udel.edu to"+\
                   " identify the problem and fix it.")
             print("--- %s seconds ---\n\n" % (time.time() - start_time))
             #close the files

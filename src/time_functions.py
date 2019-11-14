@@ -17,8 +17,6 @@ import re
 import time
 import datetime
 import pytz
-#import os
-#import sys
 
 ADMIN_EARLIEST_YEAR = 1996
 ADMIN_CURRENT_YEAR = int(time.ctime()[-4:])
@@ -278,8 +276,9 @@ def getFirstGuess(year, month, DD, HH, MM):
 
 
 def guessAMPM(first_guess, timezone):
-    """Guess AM or PM based off of the first guess time. NO ASSUMPTION"""
+    """UNUSED....Guess AM or PM based off of the first guess time. NO ASSUMPTION"""
     try:
+        #unused this isn't done
         local_time = first_guess.astimezone(pytz.timezone(timezone))
         if local_time.hour < 12:
             return "AM"
@@ -431,20 +430,10 @@ def getHHMM(short_time, AMPM):
 
 
 
-def get_Issuing_Time_text(uniqueHours, first_guess, timezone):
+def get_Issuing_Time_text(uniqueHours):
     """NO ASSUMPTIONS OUTSIDE OF getAMPM"""
-    if first_guess:
-        first_guess_adj = first_guess.astimezone(pytz.timezone(timezone))
-    else:
-        first_guess_adj = None
-
     if len(uniqueHours) == 0:
-        if first_guess_adj:
-            hhmm_str = "{:02d}".format(first_guess_adj.hour)+\
-                            "{:02d}".format(first_guess_adj.minute)
-            return None, hhmm_str, None
-        else:
-            return None, None, None
+        return None, None
     else:
         timepre = "".join((uniqueHours.strip()).split()[-3:]) ## WAS 2
 
@@ -462,18 +451,12 @@ def get_Issuing_Time_text(uniqueHours, first_guess, timezone):
         timeTMP2 = uniqueHours.split()
         if len(timeTMP2) > 0:
             num_time = re.sub('[^0-9]+', '', timeTMP2[0])
-        elif first_guess_adj:
-            hhmm_str = "{:02d}".format(first_guess_adj.hour)+\
-                                "{:02d}".format(first_guess_adj.minute)
-            return None, hhmm_str, None
         else:
-            return None, None, None
+            return None, None
 
         if "N00N" in uniqueHours.replace("O", "0") or "MIDNIGHT" in uniqueHours:
-            if "AFTERNOON" in uniqueHours and first_guess_adj:
-                hhmm_str = "{:02d}".format(first_guess_adj.hour)+\
-                                "{:02d}".format(first_guess_adj.minute)
-                return None, hhmm_str, None
+            if "AFTERNOON" in uniqueHours:
+                return None, None
             else:
                 if "N00N" in uniqueHours.replace("O", "0"):
                     num_time = str(1200)
@@ -481,32 +464,24 @@ def get_Issuing_Time_text(uniqueHours, first_guess, timezone):
                     num_time = str(0000)
                 else:
                     pass
-        elif first_guess_adj:
-            hhmm_str = "{:02d}".format(first_guess_adj.hour)+\
-                                "{:02d}".format(first_guess_adj.minute)
-            return None, hhmm_str, None
         else:
-            return None, None, None
+            return None, None
 
-    else:# len(num_time) > 4:
+    else:
         if str(12000) in uniqueHours or "N00N" in uniqueHours or "MIDNIGHT" in uniqueHours:
             if "MIDNIGHT" in uniqueHours:
                 num_time = str(0000)
             elif "AFTERN00N" not in uniqueHours.replace("O", "0"):
                 num_time = str(1200)
             else:
-                pass
+                return None, None
         else:
             tmpt = uniqueHours.split("/")[-1]
             tmpt2 = "".join(tmpt.split()[-1])
             tmpt2 = (tmpt2.replace("O", "0"))
             num_time = re.sub('[^0-9]+', '', tmpt2)
-            if len(num_time) == 0 or len(num_time) > 4 and first_guess_adj:
-                hhmm_str = "{:02d}".format(first_guess_adj.hour)+\
-                                "{:02d}".format(first_guess_adj.minute)
-                return None, hhmm_str, None
-            else:
-                return None, None, None
+            if len(num_time) == 0 or len(num_time) > 4:
+                return None, None
 
     short_time = num_time
     hour, minute = getHHMM(short_time, AMPM)
@@ -515,28 +490,10 @@ def get_Issuing_Time_text(uniqueHours, first_guess, timezone):
 # Check Time Information: Hours and Minutes
 # == == == == == == == == == == == == == == == == == == == == == == == ==
     checked_min = checkMinute(minute)
-
-    if checked_min is None and first_guess is None:
-        return None, None, None
-
     strHour = checkHour(hour, AMPM)
-
-    if strHour is None and first_guess is None:
-        return None, None, None
-    if first_guess_adj:
-        hhmm_str = "{:02d}".format(first_guess_adj.hour)+\
-                            "{:02d}".format(first_guess_adj.minute)
-
-    #combine into one string for time
-    if strHour is not None and checked_min is not None:
+    if checked_min is None or strHour is None:
+        return None, None
+    else:
         MND_Header = str(strHour)+str(checked_min)
-    else:
-        MND_Header = None
-        Time_Assume = None
 
-    if first_guess_adj:
-        WMO_Header = hhmm_str
-    else:
-        WMO_Header = None
-
-    return MND_Header, WMO_Header, Time_Assume
+    return MND_Header, Time_Assume

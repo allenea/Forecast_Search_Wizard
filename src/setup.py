@@ -31,7 +31,7 @@ def setup(input_word_list, forecast_product_list, start_year, end_year, AndOr, b
     if search_option(forecast_product_list):
         search.STATION_LIST = list(map(str.upper, forecast_product_list))
     else:
-        print("FAILURE IN SETUP...INVALID SEARCH OPTION. Exiting....")
+        print("FAILURE IN SETUP...INVALID PRODUCT LIST SEARCH OPTION. Exiting....")
         print("Setup.py is designed to verify that only valid search criteria"+\
               " is passed to the Finder program.")
         sys.stdout.flush()
@@ -62,7 +62,7 @@ def setup(input_word_list, forecast_product_list, start_year, end_year, AndOr, b
 
     if None in FSW_SEARCH.values():
         print("FAILURE IN SETUP...AT LEAST ONE USER DEFINED VARIABLE CAUSED A NoneType EXCEPTION."+\
-              " Exiting....")
+              " Exiting...")
         print("Setup.py is designed to verify that only valid search criteria is passed "+\
               "to the Finder program.")
         sys.stdout.flush()
@@ -170,12 +170,13 @@ class SEARCH_VARIABLES:
 
         # IF DOES NOT EXIST... WHAT ARE YOU DOING!?
         if not os.path.exists(self.APPLICATION_ROOT_DIRECTORY):
-            print("PROJECT MUST BE RUN FROM PACKAGED FORECAST_SEARCH_WIZARD folder. Exiting...")
+            print("PROJECT MUST BE RUN FROM PACKAGED FORECAST_SEARCH_WIZARD FOLDER. Exiting...")
             sys.stdout.flush()
             sys.exit(0)
 
         if not os.path.exists(self.TEXT_DATA_PATH):
             print("THE ./TEXT_DATA/ FOLDER COULD NOT BE FOUND. Creating... Exiting...")
+            print("Make sure you have downloaded the data with DOWNLOAD_DATA.py")
             sys.stdout.flush()
             os.makedirs(self.TEXT_DATA_PATH)
             sys.exit(0)

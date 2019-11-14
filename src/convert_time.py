@@ -23,10 +23,9 @@ import pytz
 # for tz in pytz.all_timezones:
 #     print(tz)
 #
-#
 # =============================================================================
 
-def convert_time(wfo, year, month, day, hour, minute, timezone="UTC"):
+def convert_time(wfo, year, month, day, hour, minute, timezone="UTC", s=False):
     """Converts date/time information to UTC time given the specified or implied time zone.
 
     If you are in UTC time function call without timezone="UTC"
@@ -42,18 +41,19 @@ def convert_time(wfo, year, month, day, hour, minute, timezone="UTC"):
     Returns:
         utc_dt (datetime tuple): Datetime tuple with timezone info
     """
-
-    #fmt_string = "%m-%d-%Y %H:%M"
-    try:
-        dtime = datetime.datetime(int(year), int(month), int(day), int(hour), int(minute))
-        local = pytz.timezone(timezone)
-    except:
-        if wfo == "LSRNY1":
+    if not s:
+        try:
             dtime = datetime.datetime(int(year), int(month), int(day), int(hour), int(minute))
-            local = pytz.timezone("US/Eastern")
-        else:
-            ## RAISE VALUE_ERROR -> RETURN NONE
-            print("CT: Convert_Time Failure: ", year, month, day, hour, minute, timezone)
+            local = pytz.timezone(timezone)
+        except:
+            print("CT: "+wfo+" Convert_Time Failure on ", month, "-", day, "-", year, " @ ",\
+                      str(hour)+str(minute), timezone)
+            return None
+    else:
+        try:
+            dtime = datetime.datetime(int(year), int(month), int(day), int(hour), int(minute))
+            local = pytz.timezone(timezone)
+        except:
             return None
 
     # Assign that timezone to the time and localize the time

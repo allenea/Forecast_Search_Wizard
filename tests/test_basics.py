@@ -234,13 +234,3 @@ def test_convert_time():
     assert convert_time(pil, int("2013"), int("06"), int("01"), int("00"), int("00"), bad) is None
     assert convert_time(pil, int("2013"), int("06"), int("01"), int("00"), int("00"), "EDT") is None
     assert convert_time(pil, int("2014"), int("02"), int("30"), int("12"), int("00"), tz3) is None
-
-#def test_sort_time():
-    #"""docstring"""
-    #assert sort_time(dt_tuple, KeyFound, byForecast) ==\
-            #(final_reformat_2_str[:count2], final_Key_Found[:count2])
-
-#def test_read_time():
-    #"""docstring"""
-    #assert wfo_rft_time(tTimesFound, uniqHours, DDHHMM_LIST, wfo, uniqKeyWords, Assume, iYear, tz)\
-            # == (FinalTimesFound, KeyFound)

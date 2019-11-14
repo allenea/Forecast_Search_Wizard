@@ -518,131 +518,97 @@ def test_get_issuing_time_text():
     """docstring"""
     F = False
     T = True
-    UTC = pytz.timezone("UTC")
-    ESTEDT = "US/Eastern"
+    #UTC = pytz.timezone("UTC")
+    #ESTEDT = "US/Eastern"
 
-    assert get_Issuing_Time_text("MIDNIGHT", datetime(2013, 6, 6, 16, 00, tzinfo=UTC), ESTEDT)\
-                        == ("0000", "1200", T) # THIS IS CORRECTED IN THE FUNCTION
+    assert get_Issuing_Time_text("MIDNIGHT") == ("0000", T) # THIS IS CORRECTED IN THE FUNCTION
 
-    assert get_Issuing_Time_text("1159", datetime(2013, 6, 6, 3, 59, tzinfo=UTC), ESTEDT)\
-                        == ("1159", "2359", T)
-    assert get_Issuing_Time_text("1214 AM", datetime(2013, 12, 6, 5, 14, tzinfo=UTC), ESTEDT)\
-                        == ("0014", "0014", F)
-    assert get_Issuing_Time_text("1130 PM", datetime(2013, 12, 6, 4, 30, tzinfo=UTC), ESTEDT)\
-                        == ("2330", "2330", F)
-    assert get_Issuing_Time_text("1159 A", datetime(2013, 6, 6, 3, 59, tzinfo=UTC), ESTEDT)\
-                        == ("1159", "2359", T)
+    assert get_Issuing_Time_text("1159") == ("1159", T)
+    assert get_Issuing_Time_text("1214 AM") == ("0014", F)
+    assert get_Issuing_Time_text("1130 PM") == ("2330", F)
+    assert get_Issuing_Time_text("1159 A") == ("1159", T)
 
-    assert get_Issuing_Time_text("NOON", datetime(2013, 6, 6, 16, 00, tzinfo=UTC), ESTEDT)\
-                        == ("1200", "1200", T)
-    assert get_Issuing_Time_text("NOON", datetime(2013, 6, 6, 4, 00, tzinfo=UTC), ESTEDT)\
-                        == ("1200", "0000", T)
-    assert get_Issuing_Time_text("AFTERNOON", datetime(2013, 6, 6, 4, 00, tzinfo=UTC), ESTEDT)\
-                        == (None, "0000", None)
+    assert get_Issuing_Time_text("NOON") == ("1200", T)
+    assert get_Issuing_Time_text("NOON") == ("1200", T)
+    assert get_Issuing_Time_text("AFTERNOON") == (None, None)
 
-    assert get_Issuing_Time_text("1004 PM", datetime(2013, 6, 6, 2, 4, tzinfo=UTC), ESTEDT)\
-                        == ("2204", "2204", F)
-    assert get_Issuing_Time_text("104 AM", datetime(2013, 6, 6, 5, 4, tzinfo=UTC), ESTEDT)\
-                        == ("0104", "0104", F)
-    assert get_Issuing_Time_text("1214 AMPM", datetime(2013, 12, 6, 5, 14, tzinfo=UTC), ESTEDT)\
-                        == ("0014", "0014", T)
-    assert get_Issuing_Time_text("1230 PM AM", datetime(2013, 6, 6, 16, 30, tzinfo=UTC), ESTEDT)\
-                        == ("1230", "1230", T)
-    assert get_Issuing_Time_text("1230 AM PM", datetime(2013, 6, 6, 4, 30, tzinfo=UTC), ESTEDT)\
-                        == ("0030", "0030", T)
-    assert get_Issuing_Time_text("0003 AM", datetime(2013, 12, 6, 5, 3, tzinfo=UTC), ESTEDT)\
-                        == ("0003", "0003", F)
+    assert get_Issuing_Time_text("1004 PM") == ("2204", F)
+    assert get_Issuing_Time_text("104 AM") == ("0104", F)
+    assert get_Issuing_Time_text("1214 AMPM") == ("0014", T)
+    assert get_Issuing_Time_text("1230 PM AM") == ("1230", T)
+    assert get_Issuing_Time_text("1230 AM PM") == ("0030", T)
+    assert get_Issuing_Time_text("0003 AM") == ("0003", F)
 
-    assert get_Issuing_Time_text("1230Z", datetime(2013, 12, 6, 12, 30, tzinfo=UTC), "UTC")\
-                        == ("1230", "1230", F)
-    assert get_Issuing_Time_text("1230 Z", datetime(2013, 12, 6, 12, 30, tzinfo=UTC), "UTC")\
-                        == ("1230", "1230", F)
-    assert get_Issuing_Time_text("0030 Z", datetime(2013, 12, 6, 0, 30, tzinfo=UTC), "UTC")\
-                        == ("0030", "0030", F)
-    assert get_Issuing_Time_text("500 Z", datetime(2013, 12, 6, 5, 0, tzinfo=UTC), "UTC")\
-                        == ("0500", "0500", F)
-    assert get_Issuing_Time_text("1500 Z", datetime(2013, 12, 6, 15, 0, tzinfo=UTC), "UTC")\
-                        == ("1500", "1500", F)
-    assert get_Issuing_Time_text("15OO Z", datetime(2013, 12, 6, 15, 0, tzinfo=UTC), "UTC")\
-                        == ("1500", "1500", F)
-    assert get_Issuing_Time_text("NMLT Z", datetime(2013, 12, 6, 5, 30, tzinfo=UTC), "UTC")\
-                        == (None, "0530", None)
-    assert get_Issuing_Time_text("2789 Z", datetime(2013, 12, 6, 5, 30, tzinfo=UTC), "UTC")\
-                        == (None, "0530", None)
+    assert get_Issuing_Time_text("1230Z") == ("1230", F)
+    assert get_Issuing_Time_text("1230 Z") == ("1230", F)
+    assert get_Issuing_Time_text("0030 Z") == ("0030", F)
+    assert get_Issuing_Time_text("500 Z") == ("0500", F)
+    assert get_Issuing_Time_text("1500 Z") == ("1500", F)
+    assert get_Issuing_Time_text("15OO Z") == ("1500", F)
+    assert get_Issuing_Time_text("NMLT Z") == (None, None)
+    assert get_Issuing_Time_text("2789 Z") == (None, None)
 
-    assert get_Issuing_Time_text("1230 AM", None, ESTEDT) == ("0030", None, F)
-    assert get_Issuing_Time_text("1230 PM", None, ESTEDT) == ("1230", None, F)
+    assert get_Issuing_Time_text("1230 AM") == ("0030", F)
+    assert get_Issuing_Time_text("1230 PM") == ("1230", F)
 
-    assert get_Issuing_Time_text("1230 AMPM", None, ESTEDT) == ("0030", None, T)
-    assert get_Issuing_Time_text("1230 PMAM", None, ESTEDT) == ("1230", None, T)
-    assert get_Issuing_Time_text("1230 PM AM", None, ESTEDT) == ("1230", None, T)
-    assert get_Issuing_Time_text("1230 AM PM", None, ESTEDT) == ("0030", None, T)
+    assert get_Issuing_Time_text("1230 AMPM") == ("0030", T)
+    assert get_Issuing_Time_text("1230 PMAM") == ("1230", T)
+    assert get_Issuing_Time_text("1230 PM AM") == ("1230", T)
+    assert get_Issuing_Time_text("1230 AM PM") == ("0030", T)
 
-    assert get_Issuing_Time_text("1230Z", None, "UTC") == ("1230", None, F)
-    assert get_Issuing_Time_text("1230 Z", None, "UTC") == ("1230", None, F)
-    assert get_Issuing_Time_text("0030 Z", None, "UTC") == ("0030", None, F)
-    assert get_Issuing_Time_text("500 Z", None, "UTC") == ("0500", None, F)
-    assert get_Issuing_Time_text("1500 Z", None, "UTC") == ("1500", None, F)
-    assert get_Issuing_Time_text("15OO Z", None, "UTC") == ("1500", None, F)
-    assert get_Issuing_Time_text("NMLT Z", None, "UTC") == (None, None, None)
-    assert get_Issuing_Time_text("2789 Z", None, "UTC") == (None, None, None)
+    assert get_Issuing_Time_text("1230Z") == ("1230", F)
+    assert get_Issuing_Time_text("1230 Z") == ("1230", F)
+    assert get_Issuing_Time_text("0030 Z") == ("0030", F)
+    assert get_Issuing_Time_text("500 Z") == ("0500", F)
+    assert get_Issuing_Time_text("1500 Z") == ("1500", F)
+    assert get_Issuing_Time_text("15OO Z") == ("1500", F)
+    assert get_Issuing_Time_text("NMLT Z") == (None, None)
+    assert get_Issuing_Time_text("2789 Z") == (None, None)
 
-    assert get_Issuing_Time_text("NOON", None, ESTEDT) == ("1200", None, T)
-    assert get_Issuing_Time_text("N00N", None, ESTEDT) == ("1200", None, T)
-    assert get_Issuing_Time_text("MIDNIGHT", None, ESTEDT) == ("0000", None, T)
-    assert get_Issuing_Time_text("AFTERNOON", None, ESTEDT) == ("1200", None, T)
-    assert get_Issuing_Time_text("   ", None, ESTEDT) == (None, None, None)
+    assert get_Issuing_Time_text("NOON") == ("1200", T)
+    assert get_Issuing_Time_text("N00N") == ("1200", T)
+    assert get_Issuing_Time_text("MIDNIGHT") == ("0000", T)
+    assert get_Issuing_Time_text("AFTERNOON") == (None, None)
+    assert get_Issuing_Time_text("   ") == (None, None)
 
     #MISSING TIME STRING BUT HAS DATETIME
-    assert get_Issuing_Time_text("", datetime(2013, 12, 6, 5, 30, tzinfo=UTC), "UTC")\
-                        == (None, "0530", None)
+    assert get_Issuing_Time_text("") == (None, None)
 
-    assert get_Issuing_Time_text(" 12000 PM", datetime(2013, 12, 6, 16, 00, tzinfo=UTC), "UTC")\
-                        == ("1200", "1600", F)
+    assert get_Issuing_Time_text(" 12000 PM") == ("1200", F)
 
-    assert get_Issuing_Time_text("1230 PAM", None, ESTEDT) == ("0030", None, T)
-    assert get_Issuing_Time_text("1230 APM", None, ESTEDT) == ("1230", None, T)
-    assert get_Issuing_Time_text("130", None, ESTEDT) == ("0130", None, T)
-    assert get_Issuing_Time_text("1230", None, ESTEDT) == ("0030", None, T)
-    assert get_Issuing_Time_text("1700", None, ESTEDT) == ("1700", None, F)
+    assert get_Issuing_Time_text("1230 PAM") == ("0030", T)
+    assert get_Issuing_Time_text("1230 APM") == ("1230", T)
+    assert get_Issuing_Time_text("130") == ("0130", T)
+    assert get_Issuing_Time_text("1230") == ("0030", T)
+    assert get_Issuing_Time_text("1700") == ("1700", F)
 
     #KEEP AN EYE ON THIS ONE...
-    assert get_Issuing_Time_text("15TH Z", datetime(2013, 12, 6, 15, 30, tzinfo=UTC), "UTC")\
-                        == (None, "1530", None)
+    assert get_Issuing_Time_text("15TH Z") == (None, None)
 
     # BECAUSE AM ANDPM DO NOT MATCH SINCE AMPM is NONE-TYPE
-    assert get_Issuing_Time_text("15TH Z", None, "UTC") == (None, None, None)
+    assert get_Issuing_Time_text("15TH Z") == (None, None)
 
-    assert get_Issuing_Time_text("MIDNIGHT", datetime(2013, 6, 6, 16, 00, tzinfo=UTC), ESTEDT)\
-                        == ("0000", "1200", T) # THIS IS CORRECTED IN THE FUNCTION
-    assert get_Issuing_Time_text("MIDNIGHT", datetime(2013, 6, 6, 4, 00, tzinfo=UTC), ESTEDT)\
-                        == ("0000", "0000", T) # THIS IS CORRECTED IN THE FUNCTION
+    assert get_Issuing_Time_text("MIDNIGHT") == ("0000", T) # THIS IS CORRECTED IN THE FUNCTION
+    assert get_Issuing_Time_text("MIDNIGHT") == ("0000", T) # THIS IS CORRECTED IN THE FUNCTION
 
 
-    assert get_Issuing_Time_text("1130 PMAM", datetime(2013, 6, 6, 3, 30, tzinfo=UTC), ESTEDT)\
-                        == ("2330", "2330", T) # 11:30 PM being confused with 11:30PMAM
+    assert get_Issuing_Time_text("1130 PMAM") == ("2330", T) # 11:30 PM being confused with 11:30PMAM
 
-    assert get_Issuing_Time_text("1159 AMPM", datetime(2013, 12, 6, 4, 59, tzinfo=UTC), ESTEDT)\
-                        == ("1159", "2359", T) # 11:59 pm being confused with 11:59AMPM
+    assert get_Issuing_Time_text("1159 AMPM") == ("1159", T) # 11:59 pm being confused with 11:59AMPM
 
     # Trust datetime
-    assert get_Issuing_Time_text("1214 PM", datetime(2013, 12, 6, 5, 14, tzinfo=UTC), ESTEDT)\
-                        == ("1214", "0014", F) #12:14 am but written as 12:14pm
+    assert get_Issuing_Time_text("1214 PM") == ("1214", F) #12:14 am but written as 12:14pm
 
-    assert get_Issuing_Time_text("1130 AM", datetime(2013, 12, 6, 4, 30, tzinfo=UTC), ESTEDT)\
-                        == ("1130", "2330", F) #11:30 pm but written as 11:30am
+    assert get_Issuing_Time_text("1130 AM") == ("1130", F) #11:30 pm but written as 11:30am
 
     # THIS IS AN EXAMPLE OF WRONG TIME BEING PROVIDED -- 11:30 PM being confused with 1:30AM
-    assert get_Issuing_Time_text("1130 PMAM", datetime(2013, 6, 6, 5, 30, tzinfo=UTC), ESTEDT)\
-                        == ("2330", "0130", T) # SHOULD REALLY BE 1:30 AM
+    assert get_Issuing_Time_text("1130 PMAM") == ("2330", T) # SHOULD REALLY BE 1:30 AM
 
-    assert get_Issuing_Time_text("130 PMAM", datetime(2013, 6, 6, 3, 30, tzinfo=UTC), ESTEDT)\
-                        == ("1330", "2330", T) # 11:30 PM being confused with 1:30AM
+    assert get_Issuing_Time_text("130 PMAM") == ("1330", T) # 11:30 PM being confused with 1:30AM
     #THIS IS NOTABLY WRONG BASED ON DDHHMM it shouldbe like 11:55 AM not 1200 PM
-    assert get_Issuing_Time_text("1200PM", datetime(2009, 4, 13, 16, 55, tzinfo=UTC), "US/Central")\
-                        == ("1200", "1155", F) #11:55 am but written as 12:00PM
+    assert get_Issuing_Time_text("1200PM") == ("1200", F) #11:55 am but written as 12:00PM
 
-    assert get_Issuing_Time_text("815 PM", None, "US/Eastern") == ("2015", None, False)
+    assert get_Issuing_Time_text("815 PM") == ("2015", False)
 
 
 def test_get_issuing_date_text1():

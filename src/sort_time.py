@@ -36,14 +36,12 @@ def sort_time(dt_tuple, key_found, by_forecast):
         final_Key_Found (list of lists):  A list w/o duplicate keywords for each case
                                         (final list of keywords per case)
     """
-
     count2 = 0
-
+    strp_fmt = "%m-%d-%Y %H:%M"
     # By forecast - Keep all instances
     if by_forecast:
         t_fmt = "%m-%d-%Y %H:%M"
         lastday = '00-00-0000 00:00'
-
     #By day - Only keeping the first instance
     else:
         t_fmt = "%m-%d-%Y"
@@ -71,7 +69,7 @@ def sort_time(dt_tuple, key_found, by_forecast):
         else:
 
             #string format the dt object - !! Could consider ging with the t_fmt ONLY
-            final_reformat_2_str[count2] = dt_sort1.strftime("%m-%d-%Y %H:%M")
+            final_reformat_2_str[count2] = dt_sort1.strftime(strp_fmt)
 
             final_key_found[count2] = [keys[idx]]
             lastday = now

@@ -44,7 +44,7 @@ def print_info(usr_vars):
 
 
 #ADD COUNT PER KEYWORD
-def algor_stats(station_list, mainword, total_mentions, num_days, no_dups, start, end):  #, bad)
+def algor_stats(station_list, mainword, total_mentions, num_days, no_dups, start, end):
     """ This function displays the FSW alorigthm's "Quick Statistics"."""
     print("\n--------ALGORITHM STATISTICS---------")
     print("Years Searched: "+str(start)+" - "+str(end))
@@ -69,7 +69,6 @@ def final_message():
     print("- Remember that sometimes words are used when not referring to a forecasted"+\
           " weather event (i.e. Hurricane Preparedness Week).")
     print("- Validate the search by checking the forecast, surface analysis, or observations.")
-
     print("- As great as NWS/NCEP forecasters are, sometimes forecasts busts and events"+\
           " don't happen, especially in the long-term section.")
     print("- Hopefully a future version will include the ability to search-by-section to"+\

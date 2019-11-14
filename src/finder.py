@@ -23,9 +23,9 @@ from src.read_time import wfo_rft_time
 from src.sort_time import sort_time
 from src.print_search_info import algor_stats
 from src.write_output import write_output_file
-from search_options.search_options import Option
 from src.Pre2003_SPC import covertSPC, timezone_finder_SPC
 from src.find_header import find_header, find_header_nws
+from search_options.search_options import Option
 
 NWS = 'NATIONAL WEATHER SERVICE'
 STR_SWPC = ":PRODUCT: DAILY SPACE WEATHER SUMMARY AND FORCAST DAYDSF.TXT"
@@ -59,7 +59,7 @@ def AFD_finder(FSW_SEARCH, run_start_time):
         outputfileOUT (file): Search results
     """
     start_time = t.time()
-    print("Start Time: " + str(start_time))
+    print("Start Time: " + t.ctime())
     sys.stdout.flush()
     ## SET SOME DIRECTORY PATHS
     extension = ".txt"           # INPUT AND OUTPUT FILE THE SAME FORMAT
@@ -248,23 +248,23 @@ def AFD_finder(FSW_SEARCH, run_start_time):
                                 elif "SWXALTK" in readData[idx]:
                                     pass
                                 else:
-                                    #print("FINDER: NO FORECAST HEADER WAS FOUND, ", wfo,\
-                                    #      iYear, "Current: ",\
-                                    #      idx, "Last Good: ", idx_holder)
-                                    #sys.stdout.flush()
+                                    print("FINDER: NO FORECAST HEADER WAS FOUND, ", wfo,\
+                                          iYear, "Current: ",\
+                                          idx, "Last Good: ", idx_holder)
+                                    sys.stdout.flush()
                                     pass
                             else:
                                 if abs(idx-idx_holder) < 8:
                                     #print("FINDER: DUPLICATE AWIPS ID IN HEADER",\
-                                        #wfo, iYear, "Current: ",\
-                                        #idx, "Last Good: ", idx_holder)
+                                    #    wfo, iYear, "Current: ",\
+                                    #    idx, "Last Good: ", idx_holder)
                                     sys.stdout.flush()
                                     countTry -= 1
                                     continue
-                                #print("FINDER: NO FORECAST HEADER WAS FOUND, ", wfo,\
-                                #      iYear, "Current: ", idx,\
-                                #      "Last Good: ", idx_holder)
-                                #sys.stdout.flush()
+                                print("FINDER: NO FORECAST HEADER WAS FOUND, ", wfo,\
+                                      iYear, "Current: ", idx,\
+                                      "Last Good: ", idx_holder)
+                                sys.stdout.flush()
 
                     # FOUND THE TOP.... TRY TO FIND THE TIME DDHHMM
                     foundDDHHMM = False
@@ -399,7 +399,7 @@ def AFD_finder(FSW_SEARCH, run_start_time):
                                         ### IF "" "" "" CHECK IT OUT
 
                                     except:
-                                        print("FINDER: WARNING TZ: ", idx_holder,\
+                                        print("TZ: TIMEZONE WARNING", idx_holder,\
                                               readData[idx_holder-1:idx_holder+1])
                                         count_bad += 1
                                         sys.stdout.flush()
@@ -454,9 +454,6 @@ def AFD_finder(FSW_SEARCH, run_start_time):
             ## If time was found and stored
             if len(findTime) != 0:
                 # REFORMAT TIME STRING TO BE SORTABLE AND NUMERICAL
-                #TODO SPC2003 is getting lost here
-                #TimesFound, key_found = wfo_rft_time(findTime, hourTime, wfo, keyWord,\
-                                    #FSW_SEARCH['Make_Assumptions'], iYear, timeZone)
                 TimesFound, key_found = wfo_rft_time(findTime, hourTime, DDHHMM_lst,\
                                                     wfo, keyWord, FSW_SEARCH['Make_Assumptions'],\
                                                     iYear, timeZone)

@@ -124,7 +124,7 @@ def input_words(lst, isGrep):
             inputKeyLst = check_if_substring(inputKeyLst)
         return inputKeyLst
     else:
-        print("FAILURE: List of keywords contains something other than all strings...")
+        print("SETUP FAILURE: List of keywords contains something other than strings...")
         sys.stdout.flush()
         return None
 
@@ -138,7 +138,7 @@ def search_option(option):
             return None
         return True
     else:
-        print("FAILURE FROM SEARCH OPTIONS.")
+        print("SETUP FAILURE: List of products contains something other than strings...")
         sys.stdout.flush()
         return None
 
@@ -157,14 +157,14 @@ def set_year_range(start, end):
 
     # You might be living in the future, but we're all living in the present.
     if end >= ADMIN_SET_MAX + 1:
-        print("\nThis year has not happened yet. Choose a more recent end date - year\n")
+        print("SETUP FAILURE: Invalid end year. Must not be higher than current year...")
         print("Redo with correct year range\n")
         sys.stdout.flush()
         return None, None
 
     # ha you're funny
     if (start < ADMIN_SET_MIN or start >= ADMIN_SET_MAX + 1) and end <= ADMIN_SET_MAX:
-
+        print("SETUP FAILURE: Invalid start year... Valid options: 1996 - Current Year...")
         ## IEM DATA MESSAGE
         print("Start year out of range [1996 - Current Year]. Check your TEXT_DATA"+\
               " folder and refer below (from Iowa Mesonet)")
@@ -211,13 +211,13 @@ def check_if_substring(lst):
     for ydx in range(1, len_key):
         print(inputKeyNew[ydx], keepKey)
         if any(kk in inputKeyNew[ydx] for kk in keepKey):
-            print("REDUNDANT: REMOVING: ", inputKeyNew[ydx], "FROM THE LIST OF KEYWORDS...")
+            print("REDUNDANT: REMOVING - ", inputKeyNew[ydx], "FROM THE LIST OF KEYWORDS...")
             sys.stdout.flush()
             continue
         elif inputKeyNew[ydx] not in keepKey:
             keepKey.append(inputKeyNew[ydx])
         else:
-            print("REDUNDANT: REMOVING: ", inputKeyNew[ydx], "FROM THE LIST OF KEYWORDS...")
+            print("REDUNDANT: REMOVING - ", inputKeyNew[ydx], "FROM THE LIST OF KEYWORDS...")
             sys.stdout.flush()
             continue
 

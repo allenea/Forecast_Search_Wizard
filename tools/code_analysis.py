@@ -14,8 +14,8 @@ for p in PY_FILES:
     short_pf = p.split("/")[-1][:-3]
     file1 = open(p, 'r').readlines()
     for i, file_row in enumerate(file1):
-        if "try:" in file_row: #and "#" != (file_row.strip())[0]:# and "(" in file_row:
+        if "print" in file_row:#.upper(): #and "#" != (file_row.strip())[0]:# and "(" in file_row:
             #if (file_row.strip())[0] == "#":
             #    continue
-            print("File: ", short_pf, "  Row: ", i, " Line ", file_row.strip())
+            print("File: ", short_pf, "  Row: ", i+1, " Line ", file_row.strip())
             COUNT += 1
