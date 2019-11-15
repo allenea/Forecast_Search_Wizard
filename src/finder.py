@@ -420,7 +420,7 @@ def AFD_finder(FSW_SEARCH, run_start_time):
                                 ## DDHHMM WAS NEVER FOUND SO USE THE TIME PROVIDED IN THE TEXT
                                 else:
                                     if idx_holder == 0:
-                                        print("FINDER: idx_holder == 0. DDHHMM could not be found")
+                                        print("FINDER: idx_holder == 0. DDHHMM could not be found.")
                                         count_bad += 1
                                         continue
 
