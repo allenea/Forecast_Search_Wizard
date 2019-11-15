@@ -98,7 +98,7 @@ def write_output_file(outputfile, inputKey, station_list, start, end, eTime, isG
             text_file.write("\t\t- Any MAJOR assumptions will be indicated with an *.\n ")
             text_file.write("\t\t- Any MINOR assumptions will be indicated with an #.\n")
             text_file.write("\t\t- The full criteria for assumptions can be found in the"+\
-                            " Documentation.\n\n")
+                            " documentation.\n\n")
 
         else:
             text_file.write("\tThis search makes no assumptions on incomplete date"+\
