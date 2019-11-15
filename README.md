@@ -254,11 +254,28 @@ Currently the [Iowa Environmental Mesonet text archive](https://mesonet.agron.ia
 
 
 ## Assumptions 
-     
- 
+- If month is missing from Issuing Date then the forecast CANNOT be resolved.
+
+- If year cannot be found in the Issuing Date, then assume the year the forecast was stored in the IEM database was correct. Other cases default to the year found in the forecast. If December or January then there are exceptions to that rule. If year does not match database +/- 1 for December or January, then mark as an assumption.
+
+- Use ddhhmm found in the WMO Header for day and time. Check it against the day found in the Issuing Date. Adjust the month or year accordingly if it goes from one month or day to another. If day cannot be resolved then try to use day from ddhhmm. Check to make sure that works or raise assumption.
+
+- If ddhhmm cannot be found, then use Issuing Time. Assumptions may have been made on hour, year, AM or PM. If this is the case, then a warning will be issued at this time.
+
+- If AM and PM found in the Issuing Time, then mark as an assumption, but use whichever is found first. Indicate the assumption if ddhhmm is not available. If ddhhmm is available this will not matter. 
+
+- If timezone cannot be found, use the most frequently used timezone for that year in that forecast product
+
+- Check Everything takes all known information and checks to make sure everything checks out. If it does not and it can be fixed without triggering an assumption, then use the new date and time information. Whenever available ddhhmm is the default day, hour, and minute. But month can change if for example day in Issuing Date was 31 and the day in the ddhhmm was 1. If the day ends up being larger than possible for the month. Try moving the day to the next month. Mark as an assumption.
+
+- If Check Everything indicated that an assumption likely occured in the function, then mark as an assumption if and only if the Issuing Date triggered an assumption to either day or year. Use ddhhmm for day, hour and minute. If ddhhmm cannot be found then if there was an assumption indicated when resolving Issuing Time then mark as an assumption.
+
+**Major assumptions are marked with a ( * ) symbol.** All of these above are "major assumptions". Additionally if the difference in time between ddhhmm and the Issuing Time is greater than 36 hours.
 
 
+**Minor assumptions are indicated with a ( # ).** A minor assumption occurs if the day from the Issuing Date and ddhhmm do not equal each other. Since the Check Everything makes adjustments this can often be the case. However **ddhhmm is the Truth**. But if the difference in time between ddhhmm and the issuing time is less than 36 hours and greater than 2 hours, then mark as a minor assumption.
 
+I've had this time check thing working better but it does slow the program down a bit. At the end of the day it is redundant. If enough people want this feature of redundant checks, then I could consider making this better in the future. For now if there is a large difference just note it. There are many times when people forget what day it is and are off slightly. But this would impact less than 1% of all forecasts. Possibly even as small as 0.3%.
 
 ## Error Codes Index
 The following is a list of warnings you might find in the warnings file associated with your search. The purpose of the warnings program is to enable transparency.
