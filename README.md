@@ -324,4 +324,21 @@ File:  read_time   Row:  250  - TP: CATASTROPHIC ERROR", times, unique_hrs[idx],
 
 
 ## OTHER USES
-Components of the Forecast Search Wizard could be used universally for parsing NWS/NOAA text products. The Forecast Search Wizard was carefully written in a way that this would be possible. This would enable a wide variety of applications dealing with NWS/NOAA text products. That includes making a database for NOAA/NWS text forecasts (@NOAA @NWS). Relaying NWS Forecasts (Impacts/Hazards/Warnings) to customers. I would be open to consulting on a case-by-case basis.
+Components of the Forecast Search Wizard could be used universally for parsing NWS/NOAA text products. The Forecast Search Wizard was carefully written in a way that this would be possible. This would enable a wide variety of applications dealing with NWS/NOAA text products. That includes making a database for NOAA/NWS text forecasts (@NOAA @NWS) or relaying NWS Forecasts (Impacts/Hazards/Warnings) to customers via apps. I would be open to consulting on a case-by-case basis.
+
+
+## TODO LIST
+
+- Document Error/Warning Messages
+- Document Assumptions
+- Add PDF of NWA and DSI Poster.
+
+--- Release ----
+- Redo tests for wfo_rft_time.py and checkEverything
+- Test find_header_nws, find_header, sort_time.py
+- Edit/finalize documentation
+- Add tools to analyze the output
+
+---- V1.1 ----
+- Enable user provided datasets (If you are able to do this elegantly please let me know.)
+- Search-By-Section
