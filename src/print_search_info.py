@@ -93,9 +93,7 @@ def welcome():
     """ This is the welcome message that is displayed at the beginning of the program."""
     print("\n##  You are using the Forecast Search Wizard: a NOAA Text Product Keyword Finder. ")
     print("\n##  This is an independently developed program by Eric Allen - All Rights Reserved.")
-    ## UPDATE DOI
-    print("##  Please cite: 'Allen, E., 2019: Forecast Search Wizard: A Tool to Search"+\
-          " NOAA Text-Forecasts. Poster, Weather\n\tAnalysis and Forecasting, "+\
-          "44th Annual National Weather Association Meeting, Huntsville,\n\tAlabama,"+\
-          " 10 September 2019.'\n\n")
+    print("##  Please cite: 'Eric Allen. Forecast Search Wizard: A Tool to Search NOAA Text-Forecasts."+\
+            " Poster, Data Science Institute Symposium, Newark, Delaware, "+\
+            "15 November 2019. doi:10.5281/zenodo.3542412.'\n\n")
     sys.stdout.flush()
