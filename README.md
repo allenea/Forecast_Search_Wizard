@@ -305,9 +305,9 @@ File:  convert_time   Row:  55/56  - CT: Convert_Time Failure on <month>-<day>-<
  
 File:  read_time   Row:  68  - TP: <wfo> - ERR NO MONTH FOUND... FATAL.  ?? - <int_day> - <year> @ <ddhhmm_list[idx]> Z  Check:<times.strip()>
 
-File:  read_time   Row:  76  - TP: <wfo> - WMO Header Missing and MND Header Day Not Found. Exiting... Check File: <iYear> for <month> - ??? - <year> @ <ddhhmm_list[idx]> Z <times.strip()> ___ <year>/<iYear>
+File:  read_time   Row:  76  - TP: <wfo> - WMO Header Missing and MND Header Day Not Found. Exiting... Check File: <iYear> for <month> - ??? - <year> @ <ddhhmm_list[idx]> Z <times.strip()>
  
-File:  read_time   Row:  118  - TP: wfo - Time Information Could Not Be Found. (CONTINUING)... Check File: <iYear> for <month> - <int_day> - <year> @ <ddhhmm_list[idx]> Z <times.strip()>
+ File:  read_time   Row:  118  - TP: wfo - Time Information Could Not Be Found. (CONTINUING)... Check File: <iYear> for <month> - <int_day> - <year> @ <ddhhmm_list[idx]> Z <times.strip()>
 
 File:  read_time   Row:  126  - TP: wfo - Time Information Could Not Be Found. [CONTINUING]... Check File: <iYear> for <month> - <int_day> - <year> @ <ddhhmm_list[idx]> Z <times.strip()>
 
