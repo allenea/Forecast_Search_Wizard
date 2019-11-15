@@ -59,7 +59,7 @@ def main():
 # =============================================================================
     input_word_list = ["Sea breeze", "Sea breaze", "SEA BREEZE", "SEABREEZES",\
                        "SEABREEZE", "SEABREAZES", "SEABREAZE", "SEA BREEZES",\
-                       "SEA BREAZES"] 
+                       "SEA BREAZES"]
 
 
 # =============================================================================
