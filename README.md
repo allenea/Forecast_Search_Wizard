@@ -341,7 +341,6 @@ Components of the Forecast Search Wizard could be used universally for parsing N
 
 ## FUTURE
 
-- Document Assumptions
 --- V1.0 Release ----
 - Redo tests for changed arguments in wfo_rft_time.py and checkEverything
 - Test find_header_nws, find_header, sort_time.py
