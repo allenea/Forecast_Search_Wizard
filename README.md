@@ -33,15 +33,14 @@ This work was not funded and done independently and in my free time. If you woul
     
     - python setup.py install --user
 
-    - python setup.py build install --prefix $HOME/.local
+    - python setup.py build install --prefix $HOME/.local (University of Delaware HPC Users)
  
  
- **SUPPORTED VERSIONS**: I hope to support Python 2.6+ and Python 3.0+. Please let me know if you're having any problems.
+ **SUPPORTED VERSIONS**: I hope to support Python 2.6+ and Python 3.0+. I have personally tested a few versions between 2.6 and 3.7.4. Please let me know if you're having any problems.
  
  **REQUIRED LIBRARIES**: python-dateutil, pytz>=2019.1, wget>=3.2
  
  *Written in Python3.6 and Python3.7*
- 
  
  
  ## USING THE FORECAST SEARCH WIZARD
@@ -263,6 +262,7 @@ Currently the [Iowa Environmental Mesonet text archive](https://mesonet.agron.ia
 
 ## Error Codes Index
 The following is a list of warnings you might find in the warnings file associated with your search. The purpose of the warnings program is to enable transparency.
+
 File:  setup   Row:  34  - FAILURE IN SETUP...INVALID PRODUCT LIST SEARCH OPTION. Exiting....
 
 File:  setup   Row:  53  - FAILURE IN SETUP...INVALID INPUT KEYWORDS. Exiting....
@@ -293,33 +293,27 @@ File:  driver   Row:  89  -  Program Failed To Run To Completion...
 
 File:  finder   Row:  182  - MISSING FILE: </path/data_file>
 
-File:  finder   Row:  250  - FINDER: NO FORECAST HEADER WAS FOUND
+File:  finder   Row:  251/264  - FINDER: NO FORECAST HEADER WAS FOUND, <wfo> <iYear> Current: <idx> Last Good:  <idx_holder>
 
-File:  finder   Row:  257  - FINDER: DUPLICATE AWIPS ID IN HEADER
+File:  finder   Row:  402  - TZ: TIMEZONE WARNING -  <idx_holder> <readData[idx_holder-1:idx_holder+1]>
 
-File:  finder   Row:  263  - FINDER: NO FORECAST HEADER WAS FOUND
+File:  finder   Row:  423  - FINDER: idx_holder == 0. DDHHMM could not be found.
 
-File:  finder   Row:  401  - TZ: TIMEZONE WARNING - ", idx_holder
-
-File:  finder   Row:  422  - FINDER: idx_holder == 0. DDHHMM could not be found
-
-File:  finder   Row:  447  - FINDER: NO FORECAST HEADER WAS FOUND (EOF), ", wfo, iYear, "Current:
+File:  finder   Row:  448  -  FINDER: NO FORECAST HEADER WAS FOUND (EOF),  <wfo> <iYear> Current: <idx> Last Good: <idx_holder>
 
 File:  convert_time   Row:  55/56  - CT: Convert_Time Failure on <month>-<day>-<year> @ <hour><minute> <timezone>
  
-File:  read_time   Row:  67  - TP: ", wfo, " - ERR NO MONTH FOUND... FATAL.  ", "??-", int_day
+File:  read_time   Row:  68  - TP: <wfo> - ERR NO MONTH FOUND... FATAL.  ?? - <int_day> - <year> @ <ddhhmm_list[idx]> Z  Check:<times.strip()>
 
-File:  read_time   Row:  75  - TP: ", wfo, " - WMO Header Missing and MND Header Day Not Found. Exiting...
+File:  read_time   Row:  76  - TP: <wfo> - WMO Header Missing and MND Header Day Not Found. Exiting... Check File: <iYear> for <month> - ??? - <year> @ <ddhhmm_list[idx]> Z <times.strip()> ___ <year>/<iYear>
+ 
+File:  read_time   Row:  118  - TP: wfo - Time Information Could Not Be Found. (CONTINUING)... Check File: <iYear> for <month> - <int_day> - <year> @ <ddhhmm_list[idx]> Z <times.strip()>
 
-File:  read_time   Row:  106  - TP: ", wfo, " - Time Information Could Not Be Found.
+File:  read_time   Row:  126  - TP: wfo - Time Information Could Not Be Found. [CONTINUING]... Check File: <iYear> for <month> - <int_day> - <year> @ <ddhhmm_list[idx]> Z <times.strip()>
 
-File:  read_time   Row:  205  - TP: minor discrepancy - : ", final_time_string.strftime(FMT_STRING)
+File:  read_time   Row:  184  -TP: MAJOR DISCREPANCY - Using:  06-20-1998 21:42   ///  Other:  06-19-1998 07:24 	+++ 38.30 ++++ 	 FRI JUN 19 1998 	 124 AM  WMO - Day:  20  - Hour:  21  - Minute:  42   UTC
 
-File:  read_time   Row:  213  - TP: MAJOR DISCREPANCY - : 
-
-File:  read_time   Row:  242  - TP: BOMBASTIC ERROR", times, unique_hrs[idx], ddhhmm_list[idx]
-
-File:  read_time   Row:  250  - TP: CATASTROPHIC ERROR", times, unique_hrs[idx], ddhhmm_list[idx]
+File:  read_time   Row:  215  -TP: Unknown - Exception Thrown. Continuing without the time in question. (Could be calendar, datetime, pytz issue or something else not expected)
 
 
 
@@ -327,14 +321,12 @@ File:  read_time   Row:  250  - TP: CATASTROPHIC ERROR", times, unique_hrs[idx],
 Components of the Forecast Search Wizard could be used universally for parsing NWS/NOAA text products. The Forecast Search Wizard was carefully written in a way that this would be possible. This would enable a wide variety of applications dealing with NWS/NOAA text products. That includes making a database for NOAA/NWS text forecasts (@NOAA @NWS) or relaying NWS Forecasts (Impacts/Hazards/Warnings) to customers via apps. I would be open to consulting on a case-by-case basis.
 
 
-## TODO LIST
 
-- Document Error/Warning Messages
+## FUTURE
+
 - Document Assumptions
-- Add PDF of NWA and DSI Poster.
-
---- Release ----
-- Redo tests for wfo_rft_time.py and checkEverything
+--- V1.0 Release ----
+- Redo tests for changed arguments in wfo_rft_time.py and checkEverything
 - Test find_header_nws, find_header, sort_time.py
 - Edit/finalize documentation
 - Add tools to analyze the output
