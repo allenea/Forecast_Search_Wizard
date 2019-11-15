@@ -55,9 +55,9 @@ def write_output_file(outputfile, inputKey, station_list, start, end, eTime, isG
     with open(outputfile, "w") as text_file:
         text_file.write("This code was developed by Eric Allen. \n")
         text_file.write("~Acknowledge: Eric Allen and the Forecast Search Wizard.~\n"+\
-            "Citation: 'Eric Allen. Forecast Search Wizard: A Tool to Search NOAA Text-Forecasts."+\
-            " Poster, Data Science Institute Symposium, Newark, Delaware, "+\
-            "15 November 2019. doi:10.5281/zenodo.3542412.'\n\n")
+            "Citation: 'Eric Allen. Forecast Search Wizard: A Tool to Search NOAA Text-Forecasts.\n\t\t\t\t"+\
+            "Poster, Data Science Institute Symposium, Newark, Delaware, "+\
+            "15 November 2019.\n\t\t\t\tdoi:10.5281/zenodo.3542412.'\n\n")
 
 # DO NOT TOUCH OUTPUT FORMATTING BELOW
 # =============================================================================
@@ -95,7 +95,7 @@ def write_output_file(outputfile, inputKey, station_list, start, end, eTime, isG
         if makeAssume:
             text_file.write("\tThis search may make basic 'safe' assumptions for cases with "+\
                             "incomplete date or time information.\n")
-            text_file.write("\t\t- Any MAJOR assumptions will be indicated with an *. ")
+            text_file.write("\t\t- Any MAJOR assumptions will be indicated with an *.\n ")
             text_file.write("\t\t- Any MINOR assumptions will be indicated with an #.\n")
             text_file.write("\t\t- The full criteria for assumptions can be found in the"+\
                             " Documentation.\n\n")
