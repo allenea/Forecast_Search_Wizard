@@ -25,7 +25,8 @@ def checkEverything(LST, GMT, year, month, text_day, iYear, timezone):
     fyr = -1
     is_assumed = False
     had_to_use_local = False
-    cmonthdays = calendar.monthlen(year, month)
+    #cmonthdays = calendar.monthlen(year, month) #V3.7 and future
+    cmonthdays = calendar.monthrange(year, month)[1] #BEST PRE 3.7
 
     if LST is None:
         if GMT != "999999":
