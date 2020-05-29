@@ -350,3 +350,4 @@ Components of the Forecast Search Wizard could be used universally for parsing N
 ---- V1.1 ----
 - Enable user provided datasets (If you are able to do this elegantly please let me know.)
 - Search-By-Section
+- Parallel Version
