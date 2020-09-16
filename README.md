@@ -10,6 +10,11 @@
 
 (Draft)
 
+
+Testimonial: "Even with my nominal python and linux background I was able to run your program without issue.” - NWS Employee
+
+Note From Eric: Today, this tool is being used at various level of the National Weather Services and in different parts of the Weather Enterprise. Less than one year from its release (V1), I have seen this tool used in a variety of different ways. This week at the National Weather Association conference I saw the first project that used/cited the Forecast Search Wizard. It's being used in ways I did not imagine. The possibilities are endless. This tool will continue to grow with the support of the community. (9/16/2020)
+
 ## Overview
 The Forecast Search Wizard makes it easier than ever before to analyze archived NOAA text products to obtain valuable information. Thanks to the hard working individuals at the National Weather Service and National Centers for Environmental Prediction there is a large record of very detailed weather forecasts from across the country. This program, the Forecast Search Wizard, allows users to search for keywords in NOAA/NWS text products (e.g., Area Forecast Discussions, Local Storm Reports, Watches/Warnings, etc.) to identify the occurrence of case studies, particular weather events, or other specific information. This one-of-a-kind tool will not only save the researcher time, but it will also improve the depth and quality of research by opening a door to a new source of data in the weather enterprise.
  
