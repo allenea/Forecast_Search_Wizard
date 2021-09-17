@@ -78,9 +78,18 @@ def AFD_finder(FSW_SEARCH, run_start_time):
 #  OUTFILE NAMING ...    --- REMOVE AND MODIFY FOR WEBSITE
 # =============================================================================
     str_len = str(len(FSW_SEARCH['STATION_LIST']))
-    outfile = run_start_time +"_"+ replace(inputKey[0], " ", "_")+"_"+str_len+\
-            "_"+str(FSW_SEARCH['START_YEAR'])+"_"+str(FSW_SEARCH['END_YEAR']) +\
-            "_Forecast_Search_Wizard" + extension
+
+    if int(str_len) == 1:
+        outfile = run_start_time +"_"+ replace(inputKey[0], " ", "_")+"_"+\
+                FSW_SEARCH['STATION_LIST'][0]+\
+                "_"+str(FSW_SEARCH['START_YEAR'])+"_"+str(FSW_SEARCH['END_YEAR']) +\
+                "_Forecast_Search_Wizard" + extension
+    else:
+        outfile = run_start_time +"_"+ replace(inputKey[0], " ", "_")+"_"+str_len+\
+                "_"+str(FSW_SEARCH['START_YEAR'])+"_"+str(FSW_SEARCH['END_YEAR']) +\
+                "_Forecast_Search_Wizard" + extension
+
+
     outfile = replace(outfile, "__", "_")
     print("Outfile: "+outfile)
     print()

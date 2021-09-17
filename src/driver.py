@@ -18,7 +18,7 @@ import os
 import time
 import datetime
 import signal
-import getpass
+#import getpass
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from src.trimwarnings import trim_warnings
 from src.print_search_info import final_message
@@ -41,9 +41,16 @@ def execute(FSW_SEARCH):
     start_time = time.time()
     replace = str.replace
     run_start_time = datetime.datetime.today().strftime('%y%m%d_%H%M')
+    if len(FSW_SEARCH['STATION_LIST']) == 1:
+        wfname = run_start_time+"_"+replace(FSW_SEARCH['KEYWORD_LIST'][0][:9], " ", "_")+"_"+\
+            FSW_SEARCH['STATION_LIST'][0]+"_"+str(FSW_SEARCH['START_YEAR'])+\
+            str(FSW_SEARCH['END_YEAR'])+"_errors.txt"
+    else:
+        wfname = run_start_time+"_"+replace(FSW_SEARCH['KEYWORD_LIST'][0][:9], " ", "_")+"_"+\
+            str(len(FSW_SEARCH['STATION_LIST']))+"_"+str(FSW_SEARCH['START_YEAR'])+\
+            str(FSW_SEARCH['END_YEAR'])+ "_errors.txt"
 
-    wfname = run_start_time+"_"+replace(FSW_SEARCH['KEYWORD_LIST'][0][:9], " ", "_")+"_"+\
-        str(len(FSW_SEARCH['STATION_LIST']))+"_"+getpass.getuser()+"_errors.txt"
+
     wfname = replace(wfname, "__", "_")
     warningfile = os.path.join(FSW_SEARCH['WARNING_PATH'], wfname)
 
