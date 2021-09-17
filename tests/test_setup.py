@@ -91,7 +91,7 @@ def test_debug_check():
 def test_set_year_range():
     """docstring"""
     assert set_year_range(1996, 2019) == (1996, 2019)
-    assert set_year_range(1996, 2020) == (None, None)
+    assert set_year_range(1996, 2020) == (1996, 2020)
     assert set_year_range(1995, 2019) == (None, None)
     assert set_year_range(1995, 2020) == (None, None)
     assert set_year_range(1990, 2010) == (None, None)

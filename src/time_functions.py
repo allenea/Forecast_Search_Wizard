@@ -173,18 +173,19 @@ def getYear(date, iYear):
         if len(t_array) == 1 and len(t_array[0]) > 4 and t_array[0].isdigit():
             t_arr = t_array[0]
             #NOT QUITE AN ASSUMPTION
-            if int(t_arr[:4]) >= 1900 and int(t_arr[:4]) <= ADMIN_CURRENT_YEAR:
-                year = int(t_arr[:4])
-                date_nums = ["".join(t_arr.split(str(year)))]
+            #Sept. 17, 2021 -- Moved this higher to give preference to iYear.
+            #previous method gave preference to year in text (first 4 digits)
+            if str(iYear) in t_arr:
+                year = iYear
+                date_nums = [t_arr.split(str(year))[0]]
                 return year, date_nums
-            #NOT QUITE AN ASSUMPTION
             elif int(t_arr[-4:]) >= 1900 and int(t_arr[-4:]) <= ADMIN_CURRENT_YEAR:
                 year = int(t_arr[-4:])
                 date_nums = ["".join(t_arr.split(str(year)))]
                 return year, date_nums
-            elif str(iYear) in t_arr:
-                year = iYear
-                date_nums = [t_arr.split(str(year))[0]]
+            elif int(t_arr[:4]) >= 1900 and int(t_arr[:4]) <= ADMIN_CURRENT_YEAR:
+                year = int(t_arr[:4])
+                date_nums = ["".join(t_arr.split(str(year)))]
                 return year, date_nums
             elif str(iYear+1) in t_arr:
                 year = iYear+1

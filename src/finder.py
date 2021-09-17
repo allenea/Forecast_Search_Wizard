@@ -81,6 +81,7 @@ def AFD_finder(FSW_SEARCH, run_start_time):
     outfile = run_start_time +"_"+ replace(inputKey[0], " ", "_")+"_"+str_len+\
             "_"+str(FSW_SEARCH['START_YEAR'])+"_"+str(FSW_SEARCH['END_YEAR']) +\
             "_Forecast_Search_Wizard" + extension
+    outfile = replace(outfile, "__", "_")
     print("Outfile: "+outfile)
     print()
     sys.stdout.flush()

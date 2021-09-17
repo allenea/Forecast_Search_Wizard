@@ -1,6 +1,6 @@
 """Copyright (C) 2018-2019 Eric Allen - All Rights Reserved"""
 # CREATE YOUR OWN TOOL - Used for analyzing FSW code
-
+#IMPORTS
 import glob
 import os
 

@@ -32,6 +32,7 @@ def word_in_list_sym(key_check, lst):
     """
     # IF WORD OR SUBWORD IN THE LIST ALREADY
     if re.sub('[#*]', '', key_check) in str(lst):
+    #if re.sub('[#*]', '', key_check) in lst: -- doesn't help with the not identicals
 
         # SEE IF THERE IS AN IDENTICAL MATCH.. If there is move on.
         if key_check in lst:
@@ -46,7 +47,10 @@ def word_in_list_sym(key_check, lst):
 
             # IS IT A NEW KEYWORD??
             # No: IF SUBWORD WITH SYMBOLS
-            if word == fkf[indices[0]]:
+            if len(indices) == 0:
+                lst.append(key_check)
+            
+            elif word == fkf[indices[0]]:
                 lst[indices[0]] = lst[indices[0]] + symbol
 
             #Yes: Add it

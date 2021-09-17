@@ -181,12 +181,21 @@ def test_word_trim_list():
     step6 = ['SEA BREEZE*#', 'SEA BREEZES*']
     step7 = ['SEA BREEZE*#', 'SEA BREEZES*', "IRON MAN"]
 
+    step1b = [' ECMWF ']
+    step2b = [' ECMWF ', ' ECMWF ENSEMBLE ']
+    step3b = [' ECMWF ', ' ECMWF ENSEMBLE ', ' ENSEMBLE ']
+
+    
     assert word_in_list_sym("SEA BREEZES", step1) == step2
     assert word_in_list_sym("SEA BREEZE*", step2) == step3
     assert word_in_list_sym("SEA BREEZE#", step3) == step4
     assert word_in_list_sym("SEA BREEZES", step4) == step5
     assert word_in_list_sym("SEA BREEZES*", step5) == step6
     assert word_in_list_sym("IRON MAN", step6) == step7
+    
+    assert word_in_list_sym(' ECMWF ENSEMBLE ', step1b) == step2b
+    assert word_in_list_sym(' ENSEMBLE ', step2b) == step3b
+
 
 def test_convert_time():
     """docstring"""

@@ -39,12 +39,12 @@ def execute(FSW_SEARCH):
         FSW_SEARCH (Dictionary): Contains search specifications
     """
     start_time = time.time()
-
+    replace = str.replace
     run_start_time = datetime.datetime.today().strftime('%y%m%d_%H%M')
 
-    wfname = run_start_time+"_"+FSW_SEARCH['KEYWORD_LIST'][0][:9]+"_"+\
+    wfname = run_start_time+"_"+replace(FSW_SEARCH['KEYWORD_LIST'][0][:9], " ", "_")+"_"+\
         str(len(FSW_SEARCH['STATION_LIST']))+"_"+getpass.getuser()+"_errors.txt"
-
+    wfname = replace(wfname, "__", "_")
     warningfile = os.path.join(FSW_SEARCH['WARNING_PATH'], wfname)
 
 
