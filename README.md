@@ -6,16 +6,21 @@
 
 **LICENSE:** GNU GPLv3
 
-**DOI:** 
+**DOI:** https://doi.org/10.5281/zenodo.3542411
 
 (Draft)
+
+
+Testimonial: "Even with my nominal python and linux background I was able to run your program without issue.” - NWS Employee
+
+Note From Eric: Today, this tool is being used at various levels of the National Weather Services and in different parts of the Weather Enterprise. Less than one year from its release (V1), I have seen this tool used in a variety of different ways. This week at the National Weather Association conference I saw the first project that used/cited the Forecast Search Wizard. It's being used in ways I did not imagine. The possibilities are endless. This tool will continue to grow with the support of the community. (9/16/2020)
 
 ## Overview
 The Forecast Search Wizard makes it easier than ever before to analyze archived NOAA text products to obtain valuable information. Thanks to the hard working individuals at the National Weather Service and National Centers for Environmental Prediction there is a large record of very detailed weather forecasts from across the country. This program, the Forecast Search Wizard, allows users to search for keywords in NOAA/NWS text products (e.g., Area Forecast Discussions, Local Storm Reports, Watches/Warnings, etc.) to identify the occurrence of case studies, particular weather events, or other specific information. This one-of-a-kind tool will not only save the researcher time, but it will also improve the depth and quality of research by opening a door to a new source of data in the weather enterprise.
  
 The Forecast Search Wizard is a robust and efficient program, but more importantly it is user friendly. The only programs that need to be executed for the Forecast Search Wizard to run are located in the RUN_ME directory. These files are the DOWNLOAD_DATA.py and [FSW_NAMELIST.py](https://github.com/allenea/Forecast_Search_Wizard/blob/Forecast_Search_Wizard_beta/RUN_ME/FSW_NAMELIST.py) which is a namelist file. Each of these files are constructed so that minimal programming knowledge is required to use this program. These files are modeled after the [WRF](https://esrl.noaa.gov/gsd/wrfportal/namelist_input_options.html) namelist files. This enables users to construct their own searches without worrying about breaking the program. In fact, the user never touches the Forecast Search Wizard. An instance of your search is checked and validated before being sent to the Forecast Search Wizard. This enables to user to run multiple searches at once. _Note: The DOWNLOAD_DATA.py does not have these validation checks._
 
-The Forecast Search Wizard is not case sensitive. However, please consider that these forecasts are written by humans. Humans do make mistakes from time to time. Consider accounting for abbriviations or contractions, typos, or slang for a robust search. In the folder Documentation there is a list of [Common NWS Contractions](https://www.weather.gov/phi/contractions). The [AMS Glossary](http://glossary.ametsoc.org/wiki/Main_Page) is another place you might consider. Additionally, there is information about [Preset Search Options](https://github.com/allenea/Forecast_Search_Wizard/blob/Forecast_Search_Wizard_beta/Documentation/Frequently_Used_NWS_Contractions.txt) and AWIPS/WFO ID's in this [folder](https://github.com/allenea/Forecast_Search_Wizard/tree/Forecast_Search_Wizard_beta/Documentation).
+The Forecast Search Wizard is not case sensitive. However, please consider that these forecasts are written by humans. Humans do make mistakes from time to time. Consider accounting for abbreviations or contractions, typos, or slang for a robust search. In the folder Documentation there is a list of [Common NWS Contractions](https://www.weather.gov/phi/contractions). The [AMS Glossary](http://glossary.ametsoc.org/wiki/Main_Page) is another place you might consider. Additionally, there is information about [Preset Search Options](https://github.com/allenea/Forecast_Search_Wizard/blob/Forecast_Search_Wizard_beta/Documentation/Frequently_Used_NWS_Contractions.txt) and AWIPS/WFO ID's in this [folder](https://github.com/allenea/Forecast_Search_Wizard/tree/Forecast_Search_Wizard_beta/Documentation).
 
 The Forecast Search Wizard was designed to identify case studies and specific weather information. It should not be taken as fact. It should be used to identify possible case studies. Always verify with observations or surface analysis. For example, if you are searching "Hurricane" you might get results referencing Hurricane Preparedness Week.
 
@@ -350,3 +355,4 @@ Components of the Forecast Search Wizard could be used universally for parsing N
 ---- V1.1 ----
 - Enable user provided datasets (If you are able to do this elegantly please let me know.)
 - Search-By-Section
+- Parallel Version
