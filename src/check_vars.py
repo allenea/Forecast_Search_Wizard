@@ -72,6 +72,17 @@ def debug_check(option):
     else:
         return None
 
+def bulk_check(option):
+    """docstring"""
+    if isinstance(option, bool):
+        if option:
+            return True
+        else:
+        #elif not option:
+            return False
+    else:
+        return None
+
 
 def input_words(lst, isGrep):
     """ SETS THE LIST OF KEYWORDS PROVIDED IN THE FSW_NAMELIST. Prints them to display."""

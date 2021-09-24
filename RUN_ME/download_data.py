@@ -13,9 +13,9 @@
 #
 # Imports
 from __future__ import print_function
-import time
-import sys
 import os
+import sys
+import time
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from search_options.search_options import Option
 from src.GET_DATA.retrieve import retrieve

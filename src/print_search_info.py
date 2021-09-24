@@ -29,6 +29,8 @@ def print_info(usr_vars):
     print("\nAPPLICATION DIRECTORY: ", usr_vars['APPLICATION_ROOT_DIRECTORY'])
     print("\nTEXT DATA PATH: ", usr_vars['TEXT_DATA_PATH'])
     print("\nWARNING DIRECTORY: ", usr_vars['WARNING_PATH'])
+    if not usr_vars['bulk_search']:
+        print("\nWARNING FILE NAME: ", usr_vars['WARNING_FILE'])
     print("\nOUTPUT DIRECTORY: ", usr_vars['OUTPUT_PATH'])
     print("\nPRODUCTS BEING SEARCHED: ", usr_vars['STATION_LIST'])
     print("\nLIST OF KEYWORDS: ", usr_vars['KEYWORD_LIST'])
@@ -37,6 +39,7 @@ def print_info(usr_vars):
     print("\nSearch By And (True) or Or (False): ", usr_vars['And_Or'])
     print("Search By Forecast (True) or Day (False): ", usr_vars['ByForecast_ByDay'])
     print("Is Grep Style Search: ", usr_vars['isGrep'])
+    print("Is [Special] Bulk Search (default: False): ", usr_vars['bulk_search'])
     print("Make Basic Assumptions: ", usr_vars['Make_Assumptions'])
     print("\n\nThe Forecast Search Wizard was developed by Eric Allen",\
           "\n(Follow on Twitter: @THE_Eric_Allen and Support: @WxSearchWizard)\n\n")
@@ -44,11 +47,11 @@ def print_info(usr_vars):
 
 
 #ADD COUNT PER KEYWORD
-def algor_stats(station_list, mainword, total_mentions, num_days, no_dups, start, end):
+def algor_stats(fsw_search, mainword, total_mentions, num_days, no_dups):
     """ This function displays the FSW alorigthm's "Quick Statistics"."""
     print("\n--------ALGORITHM STATISTICS---------")
-    print("Years Searched: "+str(start)+" - "+str(end))
-    station_split_list = split_list(station_list, 7)
+    print("Years Searched: "+str(fsw_search["START_YEAR"])+" - "+str(fsw_search["END_YEAR"]))
+    station_split_list = split_list(fsw_search["STATION_LIST"], 7)
     print("Products Searched:")
     for eric in range(len(station_split_list)):
         station_split_list[eric] = str(station_split_list[eric]).replace("[", " ")
@@ -93,7 +96,7 @@ def welcome():
     """ This is the welcome message that is displayed at the beginning of the program."""
     print("\n##  You are using the Forecast Search Wizard: a NOAA Text Product Keyword Finder. ")
     print("\n##  This is an independently developed program by Eric Allen - All Rights Reserved.")
-    print("##  Please cite: 'Eric Allen. Forecast Search Wizard: A Tool to Search NOAA Text-Forecasts."+\
-            "\n\t\t\tPoster, Data Science Institute Symposium, Newark, Delaware, "+\
+    print("##  Please cite: 'Eric Allen. Forecast Search Wizard: A Tool to Search NOAA Text-"+\
+          "Forecasts." + "\n\t\t\tPoster, Data Science Institute Symposium, Newark, Delaware, "+\
             "15 November 2019.\n\t\t\tdoi:10.5281/zenodo.3542412.'\n\n")
     sys.stdout.flush()

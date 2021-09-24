@@ -37,6 +37,7 @@ def convert_time(wfo, year, month, day, hour, minute, timezone="UTC", s=False):
         hour (int)
         minute (int)
         timezone (str): Timezone string name - As required by Pytz for supported TZs
+        s means silence
 
     Returns:
         utc_dt (datetime tuple): Datetime tuple with timezone info

@@ -13,10 +13,9 @@
 #
 # Imports
 from __future__ import print_function
-import sys
 import os
+import sys
 import time
-import datetime
 import signal
 #import getpass
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -32,33 +31,23 @@ def timeout_handler(signum, frame):
     """Custom signal handler"""
     raise TimeoutException
 
-def execute(FSW_SEARCH):
+def execute(FSW_SEARCH, filen=sys.stdout):
     """ Executes the Forecast Search Wizard... Only if it passes the checks in Setup.py
 
     Parameters:
         FSW_SEARCH (Dictionary): Contains search specifications
+
+        filen=sys.stdout --> your console reference point which you are about to change
+                                to the WARNING_FILE if you are working in debug mode.
     """
     start_time = time.time()
-    replace = str.replace
-    run_start_time = datetime.datetime.today().strftime('%y%m%d_%H%M')
-    if len(FSW_SEARCH['STATION_LIST']) == 1:
-        wfname = run_start_time+"_"+replace(FSW_SEARCH['KEYWORD_LIST'][0][:9], " ", "_")+"_"+\
-            FSW_SEARCH['STATION_LIST'][0]+"_"+str(FSW_SEARCH['START_YEAR'])+\
-            str(FSW_SEARCH['END_YEAR'])+"_errors.txt"
-    else:
-        wfname = run_start_time+"_"+replace(FSW_SEARCH['KEYWORD_LIST'][0][:9], " ", "_")+"_"+\
-            str(len(FSW_SEARCH['STATION_LIST']))+"_"+str(FSW_SEARCH['START_YEAR'])+\
-            str(FSW_SEARCH['END_YEAR'])+ "_errors.txt"
-
-
-    wfname = replace(wfname, "__", "_")
-    warningfile = os.path.join(FSW_SEARCH['WARNING_PATH'], wfname)
-
 
     if not FSW_SEARCH['debug_mode']:
-
-        filen = sys.stdout
-        sys.stdout = open(warningfile, 'w')
+            
+        if FSW_SEARCH['bulk_search']:
+            sys.stdout = open(FSW_SEARCH['WARNING_FILE'], 'a+')
+        else:
+            sys.stdout = open(FSW_SEARCH['WARNING_FILE'], 'w')
 
         # Change the behavior of SIGALRM
         signal.signal(signal.SIGALRM, timeout_handler)
@@ -69,7 +58,7 @@ def execute(FSW_SEARCH):
 
         # This try/except loop ensures that you'll catch TimeoutException when it happens.
         try:
-            AFD_finder(FSW_SEARCH, run_start_time)
+            outfile = AFD_finder(FSW_SEARCH)
 
         except TimeoutException:
             print("Program Failed To Run due to (6-hour) TimeoutException..."+\
@@ -78,18 +67,18 @@ def execute(FSW_SEARCH):
                   " and/or contact: allenea@udel.edu")
             print("--- %s seconds ---\n\n" % (time.time() - start_time))
             # close the file
-            filen.close()
             sys.stdout.close()
             sys.stdout = filen
+            sys.exit("TIMEOUT ERROR...")
 
         #RARE - REDOWNLOAD DATA OR CORRUPT DATA
         except UnicodeEncodeError:
             print("Program Failed on UnicodeEncodeError... Possibly caused by a corrupt file.")
             print("--- %s seconds ---\n\n" % (time.time() - start_time))
             #close the files
-            filen.close()
             sys.stdout.close()
             sys.stdout = filen
+            sys.exit("UNICODE ENCODE ERROR...")
 
         # ALL OTHER EXCEPTIONS
         except:
@@ -98,9 +87,9 @@ def execute(FSW_SEARCH):
                   " identify the problem and fix it.")
             print("--- %s seconds ---\n\n" % (time.time() - start_time))
             #close the files
-            filen.close()
             sys.stdout.close()
             sys.stdout = filen
+            sys.exit("ERROR...")
 
         else:
             # Reset the alarm
@@ -109,13 +98,14 @@ def execute(FSW_SEARCH):
             final_message()
             print("--- %s seconds ---\n\n" % (time.time() - start_time))
             # close the file
-            filen.close()
             sys.stdout.close()
             sys.stdout = filen
 
         ## Remove duplicate consecutive warnings from the verbose output file
-        trim_warnings(warningfile)
-
+        if not FSW_SEARCH['bulk_search']:
+            trim_warnings(FSW_SEARCH['WARNING_FILE'])
     else:
         ## DEBUG MODE: YOU WILL SEE THE ERRORS IN CMD LINE
-        AFD_finder(FSW_SEARCH, run_start_time)
+        outfile = AFD_finder(FSW_SEARCH)
+
+    return outfile

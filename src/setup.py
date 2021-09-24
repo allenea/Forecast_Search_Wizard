@@ -15,13 +15,16 @@
 from __future__ import print_function
 import sys
 import os
+import time
+import datetime
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from src.print_search_info import print_info
 from src.check_vars import search_option, input_words, AndTrue_OrFalse, byforecast,\
-                            set_year_range, makeAssumptions, grep_check, debug_check
+                            set_year_range, makeAssumptions, grep_check, debug_check,\
+                            bulk_check
 
 def setup(input_word_list, forecast_product_list, start_year, end_year, AndOr, byForecast,\
-          make_assumptions, isGrep, debug_flag=False):
+          make_assumptions, isGrep, bulk_search=False, debug_flag=False):
     """Check for valid search criteria. Validate Search."""
 
     search = SEARCH_VARIABLES()
@@ -43,7 +46,10 @@ def setup(input_word_list, forecast_product_list, start_year, end_year, AndOr, b
 
     search.Make_Assumptions = makeAssumptions(make_assumptions)
     search.isGrep = grep_check(isGrep)
+    search.bulk_search = bulk_check(bulk_search)
     search.debug_mode = debug_check(debug_flag)
+
+    search.RUN_START_TIME = datetime.datetime.today().strftime('%y%m%d_%H%M')
 
     tmp_in_key = input_words(input_word_list, search.isGrep)
 
@@ -79,15 +85,18 @@ class SEARCH_VARIABLES:
                  TEXT_DATA_PATH=os.path.abspath('../TEXT_DATA'),
                  WARNING_PATH=os.path.abspath('../FSW_WARN'),
                  OUTPUT_PATH=os.path.abspath('../FSW_OUTPUT'),
-                 STATION_LIST=None,#[],
-                 KEYWORD_LIST=None,#[],
+                 STATION_LIST=None,
+                 KEYWORD_LIST=None,
                  START_YEAR=1996,
-                 END_YEAR=2019,
+                 END_YEAR=int(time.ctime()[-4:]),
                  And_Or=False,
                  ByForecast_ByDay=True,
                  Make_Assumptions=True,
                  isGrep=True,
-                 debug_mode=False):
+                 debug_mode=False,
+                 bulk_search=False,
+                 RUN_START_TIME=None,
+                 WARNING_FILE=None):
 
 #        os_system = sys.platform
 
@@ -139,7 +148,11 @@ class SEARCH_VARIABLES:
         self.ByForecast_ByDay = ByForecast_ByDay
         self.Make_Assumptions = Make_Assumptions
         self.isGrep = isGrep
+        self.bulk_search = bulk_search
         self.debug_mode = debug_mode
+
+        self.RUN_START_TIME = RUN_START_TIME
+        self.WARNING_FILE = WARNING_FILE
 
 
         #Dictionary of Variables... Used by the other programs
@@ -155,7 +168,10 @@ class SEARCH_VARIABLES:
                           'ByForecast_ByDay':self.ByForecast_ByDay,\
                           'Make_Assumptions':self.Make_Assumptions,\
                           'isGrep':self.isGrep,\
-                          'debug_mode':self.debug_mode}
+                          'debug_mode':self.debug_mode,\
+                          'bulk_search':self.bulk_search,\
+                          'RUN_START_TIME':self.RUN_START_TIME,\
+                          'WARNING_FILE':self.WARNING_FILE}
 
 
         SEARCH_VARIABLES.get_default_variables(self)
@@ -187,6 +203,20 @@ class SEARCH_VARIABLES:
         if not os.path.exists(self.OUTPUT_PATH):
             os.makedirs(self.OUTPUT_PATH)
 
+        if len(self.STATION_LIST) == 1:
+            wfname = self.RUN_START_TIME+"_"+str.replace(self.KEYWORD_LIST[0][:9], " ", "_")+"_"+\
+                self.STATION_LIST[0]+"_"+str(self.START_YEAR)+\
+                str(self.END_YEAR)+"_errors.txt"
+        else:
+            wfname = self.RUN_START_TIME+"_"+str.replace(self.KEYWORD_LIST[0][:9], " ", "_")+"_"+\
+                str(len(self.STATION_LIST))+"_"+str(self.START_YEAR)+\
+                str(self.END_YEAR)+ "_errors.txt"
+
+
+        wfname = str.replace(wfname, "__", "_")
+        self.WARNING_FILE = os.path.join(self.WARNING_PATH, wfname)
+
+
         self.user_vars = {'APPLICATION_ROOT_DIRECTORY':self.APPLICATION_ROOT_DIRECTORY,\
                           'TEXT_DATA_PATH':self.TEXT_DATA_PATH,\
                           'WARNING_PATH':self.WARNING_PATH,\
@@ -199,6 +229,9 @@ class SEARCH_VARIABLES:
                           'ByForecast_ByDay':self.ByForecast_ByDay,\
                           'Make_Assumptions':self.Make_Assumptions,\
                           'isGrep':self.isGrep,\
-                          'debug_mode':self.debug_mode}
+                          'debug_mode':self.debug_mode,\
+                          'bulk_search':self.bulk_search,\
+                          'RUN_START_TIME':self.RUN_START_TIME,\
+                          'WARNING_FILE':self.WARNING_FILE}
 
         return self.user_vars

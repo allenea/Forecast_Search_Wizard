@@ -26,7 +26,7 @@ def trim_warnings(warningfile):
                                 errors for the same forecast.
     """
     #switch suffix
-    trim_warn_file = warningfile.replace("_errors.txt", "_errors_trm.txt")
+    trim_warn_file = warningfile.replace(".txt", "_trm.txt")
 
     #open file and the new file
     f = open(warningfile, 'r').readlines()
