@@ -10,6 +10,7 @@
 
 (Draft)
 
+2/1/2022 - Fixed code to reflect changes in IEM Text Archive structure (url string) that resulted in downloading empty files....
 
 Testimonial: "Even with my nominal python and linux background I was able to run your program without issue.” - NWS Employee
 
