@@ -66,8 +66,8 @@ def get_data(lst, start, end):
 
             # Url to get the data
             get_file = "https://mesonet.agron.iastate.edu/cgi-bin/afos/retrieve.py?fmt=text&"+\
-                "pil="+str(awips_id)+"&center=&limit=9999&sdate="+str(year)+"0101&edate="+\
-                str(nextyear)+"0101"
+                "pil="+str(awips_id)+"&center=&limit=9999&sdate="+str(year)+"-01-01&edate="+\
+                str(nextyear)+"-01-01"
 
             # Output file name
             fname = awips_id +"_"+str(year)+".txt"
