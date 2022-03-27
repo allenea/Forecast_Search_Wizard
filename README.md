@@ -31,8 +31,17 @@ This work was not funded and done independently and in my free time. If you woul
 
 ## Installation
 
-    - git clone https://github.com/allenea/Forecast_Search_Wizard.git
- 
+1) If using anaconda or miniconda and want to create a separate environment, download environment.yml and then execute the following command. Otherwise proceed to step 2.
+
+```console
+conda env create -f environment.yml
+```
+2) Enter the following command:
+
+```console
+git clone https://github.com/allenea/Forecast_Search_Wizard.git
+
+``` 
  Try (depending on your system... Tell it where to build):
  
     - python setup.py install

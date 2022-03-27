@@ -1,0 +1,11 @@
+# Basic environment for forecast search wizards
+name: forecast_search_wizard
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - python-dateutil
+  - pytz>=2019.1
+  - wget>=3.2
+ 
