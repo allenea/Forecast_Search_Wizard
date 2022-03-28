@@ -31,8 +31,14 @@ This work was not funded and done independently and in my free time. If you woul
 
 ## Installation
 
-    - git clone https://github.com/allenea/Forecast_Search_Wizard.git
- 
+If using anaconda or miniconda and want to create a separate environment, download environment.yml and then execute the following command from step 2. Step 1 is recommended for most users. 
+
+1) Enter the following command:
+
+```console
+git clone https://github.com/allenea/Forecast_Search_Wizard.git
+
+``` 
  Try (depending on your system... Tell it where to build):
  
     - python setup.py install
@@ -41,6 +47,11 @@ This work was not funded and done independently and in my free time. If you woul
 
     - python setup.py build install --prefix $HOME/.local (University of Delaware HPC Users)
  
+2) If using anaconda or miniconda:
+
+```console
+conda env create -f environment.yml
+```
  
  **SUPPORTED VERSIONS**: I hope to support Python 2.6+ and Python 3.0+. I have personally tested a few versions between 2.6 and 3.7.4. Please let me know if you're having any problems.
  
