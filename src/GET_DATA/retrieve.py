@@ -47,14 +47,26 @@ def retrieve(master_list, start_year=ADMIN_EARLIEST_YEAR, end_year=ADMIN_CURRENT
 
     #Redict messages to out file over the course of the download
     fname = sys.stdout
-    str_time = time.ctime().replace(" ", "_")
+    str_time = "_".join((time.ctime().replace(" ", "_")).split("_")[1:])
 
-    print("\n\nCheck: (", os.path.join(os.getcwd(), "Data_Download_Verbose"+\
+    ## LOCAL COMPUTER
+    print("\n\nCheck: (", os.path.join(os.path.abspath("./.."), "downloadLogs", "Data_Download_Verbose_"+\
                 str_time.replace(":", "")+".out"),\
                 ") to view the progress of the data download.")
 
-    sys.stdout = open(os.path.join(os.getcwd(), "Data_Download_Verbose"+\
+    sys.stdout = open(os.path.join(os.path.abspath("./.."), "downloadLogs", "Data_Download_Verbose_"+\
+                str_time.replace(":", "")+".out"), 'w')
+    
+    
+    ## AWS
+    """
+    print("\n\nCheck: (", os.path.join("/", "Forecast_Search_Wizard", "downloadLogs", "Data_Download_Verbose_"+\
+                str_time.replace(":", "")+".out"),\
+                ") to view the progress of the data download.")
+
+	sys.stdout = open(os.path.join("/","Forecast_Search_Wizard", "downloadLogs", "Data_Download_Verbose_"+\
                                    str_time.replace(":", "")+".out"), 'w')
+	"""
 
     #Start Timer
     start_time = time.time()
