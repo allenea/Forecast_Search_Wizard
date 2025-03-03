@@ -132,7 +132,7 @@ class Option:
     #26 products as a part of the "Special" cases
     Downloaded_Not_Included = ['FFSLWX', 'FFSPHI', 'FFWLWX', 'FFWPHI', 'FLSLWX',\
                                'FLSPHI', 'FLWLWX', 'FLWPHI', 'WSWLWX', 'WSWPHI',\
-                               'SMWLWX', 'SMWPHI', 'SVRLWX', 'SVRPHI', 'SVSLWX',\
+                               'SVRLWX', 'SVRPHI', 'SVSLWX',\
                                'SVSPHI', 'TORLWX', 'TORPHI', 'PNSLWX', 'PNSPHI',\
                                'FFALWX', 'FFAPHI', 'HWOLWX', 'HWOPHI']
 
@@ -484,7 +484,6 @@ class Option:
     BLACKSBURG_ROANOKE_VA_AFD = ["AFDRNK"]
     WAKEFIELD_VA_AFD = ["AFDAKQ"]
     CHARLESTON_WV_AFD = ["AFDRLX"]
-
 
 
     CENTRAL_REGION_AFD = ["AFDBOU", "AFDGJT", "AFDPUB", "AFDLOT", "AFDILX", "AFDIND",\
@@ -868,6 +867,47 @@ class Option:
     KING_SALMON_AK_NOW = ['NOWAKN']
     KODIAK_AK_NOW = ['NOWADQ']
 
+    # =============================================================================
+    # SPECIAL MARINE WARNINGS
+    # =============================================================================
+    ALL_SMWS = [
+    	'SMWKEY', 'SMWEYW', 'SMWMFL', 'SMWMLB', 'SMWJAX',
+    	'SMWCHS', 'SMWILM', 'SMWMHX', 'SMWAKQ', 'SMWPHI',
+    	'SMWOKX', 'SMWBOX', 'SMWGYX', 'SMWCAR', 'SMWBRO',
+    	'SMWCRP', 'SMWHGX', 'SMWLCH', 'SMWLIX', 'SMWMOB',
+    	'SMWTAE', 'SMWTBW', 'SMWKEY', 'SMWEYW', 'SMWMFL',
+    	'SMWSEW', 'SMWPQR', 'SMWMFR', 'SMWEKA', 'SMWMTR',
+    	'SMWLOX', 'SMWLWX', 'SMWSGX', 'SMWPQ', 'SMWDPQ',
+        'SMWHFO', 'SMWPPG', 'SMWSJU',"SMWAPX", "SMWCLE",
+        "SMWDLH", "SMWDTX", "SMWGRB", "SMWGRR", "SMWIWX",
+        "SMWMKX", "SMWMQT"]
+
+
+    NEWPORT_MOREHEAD_CITY_NC_SMW = ["SMWMHX"]
+    WILMINGTON_NC_SMW = ["SMWILM"]
+    WAKEFIELD_VA_SMW = ["SMWAKQ"]
+    CHARLESTON_SC_SMW = ["SMWCHS"]
+    SAN_JUAN_PR_SMW = ["SMWSJU"]
+
+    GREAT_LAKES_SMWS = ["SMWAPX", "SMWCLE", "SMWDLH", "SMWDTX", "SMWGRB", "SMWGRR",\
+				"SMWIWX", "SMWMKX", "SMWMQT"]
+
+    ATLANTIC_COASTAL_SMWS = ['SMWKEY', 'SMWEYW', 'SMWMFL', 'SMWMLB', 'SMWJAX',\
+                         'SMWCHS', 'SMWILM', 'SMWMHX', 'SMWAKQ', 'SMWLWX', 'SMWPHI',\
+                         'SMWOKX', 'SMWBOX', 'SMWGYX', 'SMWCAR']
+
+    GULF_COASTAL_SMWS = ['SMWBRO', 'SMWCRP', 'SMWHGX', 'SMWLCH', 'SMWLIX', 'SMWMOB',\
+                     'SMWTAE', 'SMWTBW', 'SMWKEY', 'SMWEYW', 'SMWMFL']
+
+    PACIFIC_COASTAL_SMWS = ['SMWSEW', 'SMWPQR', 'SMWMFR', 'SMWEKA', 'SMWMTR',\
+                        'SMWLOX', 'SMWSGX', 'SMWPQ', 'SMWDPQ', 'SMWHFO',\
+                        'SMWPPG']
+
+    NC_SMW_PLUS_AKQ =  ["SMWMHX", "SMWILM", "SMWCHS", "SMWAKQ"]
+
+
+    GREAT_LAKES_MWS =  ["MWSCLE" "MWSDTX", "MWSAPX", "MWSBUF"]
+
 
     # =============================================================================
     # SPECIAL CONFIGURATIONS
@@ -880,6 +920,7 @@ class Option:
                           "LSRLWX", "HWOLWX", "FFALWX", "FFSLWX", "FFWLWX", "FLSLWX",\
                           "FLWLWX", "PNSLWX", "WSWLWX"]
 
+    RYAN_SPECIAL =  ["SMWMHX", "SMWILM", "SMWCHS", "SMWAKQ"]
 
 
     MASTER_LIST = ['AFDABQ', 'AFDABR', 'AFDAFC', 'AFDAFG', 'AFDAJK', 'AFDAKQ',\
@@ -963,8 +1004,8 @@ class Option:
                    'PMDHI', 'PMDHMD', 'PMDMRD', 'PMDSA', 'PMDSPD', 'PMDTHR',\
                    'PNSLWX', 'PNSPHI', 'QPFERD', 'QPFHSD', 'SCCNS1', 'SCCNS2',\
                    'SCCNS3', 'SCCNS4', 'SCCNS5', 'SEL0', 'SEL1', 'SEL2', 'SEL3',\
-                   'SEL4', 'SEL5', 'SEL6', 'SEL7', 'SEL8', 'SEL9', 'SMWLWX',\
-                   'SMWPHI', 'SVRLWX', 'SVRPHI', 'SVSLWX', 'SVSPHI', 'SWOD48',\
+                   'SEL4', 'SEL5', 'SEL6', 'SEL7', 'SEL8', 'SEL9', 'SVRLWX',
+		   'SVRPHI', 'SVSLWX', 'SVSPHI', 'SWOD48',\
                    'SWODY1', 'SWODY2', 'SWODY3', 'SWOMCD', 'TCDAT1', 'TCDAT2',\
                    'TCDAT3', 'TCDAT4', 'TCDAT5', 'TCDCP1', 'TCDCP2', 'TCDCP3',\
                    'TCDCP4', 'TCDCP5', 'TCDEP1', 'TCDEP2', 'TCDEP3', 'TCDEP4',\
@@ -978,4 +1019,12 @@ class Option:
                    "LSRAT1", "LSRBA1", "LSRBET", "LSRBH1", "LSRBR1", "LSRCS1",\
                    "LSRHO1", "LSRJM1", "LSRMCG", "LSRNK1", "LSRNY5", "LSRNY6",\
                    "LSROME", "LSROTZ", "LSRPPG", "LSRSNP", "LSRTD1", "LSRYAK",\
-                   "VOWLWX", "VOWPHI"]
+                   "VOWLWX", "VOWPHI", 'SMWKEY', 'SMWEYW', 'SMWMFL', 'SMWMLB',\
+		           'SMWJAX','SMWCHS', 'SMWILM', 'SMWMHX', 'SMWAKQ', 'SMWPHI',\
+	               'SMWOKX', 'SMWBOX', 'SMWGYX', 'SMWCAR', 'SMWBRO', 'SMWCRP',\
+		           'SMWHGX', 'SMWLCH', 'SMWLIX', 'SMWMOB', 'SMWTAE', 'SMWTBW',\
+		           'SMWKEY', 'SMWEYW', 'SMWMFL', 'SMWSEW', 'SMWPQR', 'SMWMFR',\
+		           'SMWEKA', 'SMWMTR', 'SMWLOX', 'SMWSGX', 'SMWPQ', 'SMWDPQ',\
+		           'SMWHFO','SMWPPG', 'SMWLWX', "SMWSJU", "SMWAPX",\
+		           "SMWCLE", "SMWDLH", "SMWDTX", "SMWGRB", "SMWGRR", "SMWIWX",\
+        	       "SMWMKX", "SMWMQT", "MWSCLE" "MWSDTX", "MWSAPX", "MWSBUF"]
