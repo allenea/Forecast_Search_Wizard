@@ -1946,7 +1946,27 @@ class Option:
         "DMOSLC", "DMOSPN", "DMOSTO", "DMOTAE", "DMOTBW", "DMOTFX", "DMOTN",
         "DMOTOP", "DMOTSA", "DMOTWC", "DMOUNR", "DMOUT", "DMOVA", "DMOVEF",
         "DMOVI", "DMOVT", "DMOWA", "DMOWI", "DMOWV", "DMOWY"]
-
+    
+    ALL_NPW = ["NPWABQ", "NPWABR", "NPWADQ", "NPWAER", "NPWAFG", "NPWAJK", "NPWAKQ",
+        "NPWALU", "NPWALY", "NPWAMA", "NPWAPX", "NPWARX", "NPWBGM", "NPWBIS",
+        "NPWBMX", "NPWBOI", "NPWBOU", "NPWBOX", "NPWBRO", "NPWBRW", "NPWBTV",
+        "NPWBUF", "NPWBYZ", "NPWCAE", "NPWCAR", "NPWCHS", "NPWCLE", "NPWCMH",
+        "NPWCRP", "NPWCTP", "NPWCVG", "NPWCYS", "NPWDDC", "NPWDLH", "NPWDMX",
+        "NPWDTX", "NPWDVN", "NPWEAX", "NPWEKA", "NPWEPZ", "NPWEWR", "NPWEWX",
+        "NPWFFC", "NPWFGF", "NPWFGZ", "NPWFSD", "NPWFWD", "NPWGGW", "NPWGID",
+        "NPWGJT", "NPWGLD", "NPWGRB", "NPWGRR", "NPWGSP", "NPWGYX", "NPWHFO",
+        "NPWHGX", "NPWHI", "NPWHNX", "NPWHUN", "NPWICT", "NPWILM", "NPWILN",
+        "NPWILX", "NPWIND", "NPWIWX", "NPWJAN", "NPWJAX", "NPWJKL", "NPWKEY",
+        "NPWLBF", "NPWLCH", "NPWLIX", "NPWLKN", "NPWLMK", "NPWLOT", "NPWLOX",
+        "NPWLSX", "NPWLUB", "NPWLWX", "NPWLZK", "NPWMAF", "NPWMCG", "NPWMEG",
+        "NPWMFL", "NPWMFR", "NPWMHX", "NPWMKX", "NPWMLB", "NPWMOB", "NPWMPX",
+        "NPWMQT", "NPWMRX", "NPWMSO", "NPWMTR", "NPWMY", "NPWNSB", "NPWOAX",
+        "NPWOHX", "NPWOKX", "NPWOME", "NPWOTX", "NPWOTZ", "NPWOUN", "NPWPAH",
+        "NPWPBZ", "NPWPDT", "NPWPHI", "NPWPIH", "NPWPPG", "NPWPQR", "NPWPSR",
+        "NPWPUB", "NPWRAH", "NPWREV", "NPWRIW", "NPWRLX", "NPWRNK", "NPWSEW",
+        "NPWSGF", "NPWSGX", "NPWSHV", "NPWSJT", "NPWSJU", "NPWSLC", "NPWSPN",
+        "NPWSTO", "NPWTAE", "NPWTBW", "NPWTFX", "NPWTOP", "NPWTSA", "NPWTWC",
+        "NPWUNR", "NPWVEF", "NPWWCZ"]
     # =============================================================================
     # SPECIAL CONFIGURATIONS
     # =============================================================================
@@ -2581,4 +2601,24 @@ class Option:
                    "VOWSD", "VOWSEW", "VOWSGF", "VOWSGX", "VOWSHV", "VOWSJT", "VOWSJU",
                    "VOWSLC", "VOWSNP", "VOWSPN", "VOWSTO", "VOWTAE", "VOWTBW", "VOWTFX",
                    "VOWTN", "VOWTOP", "VOWTSA", "VOWTWC", "VOWUNR", "VOWUT", "VOWVA",
-                   "VOWVEF", "VOWVI", "VOWVT", "VOWWA", "VOWWI", "VOWWV", "VOWWY"]
+                   "VOWVEF", "VOWVI", "VOWVT", "VOWWA", "VOWWI", "VOWWV", "VOWWY",
+                   "NPWABQ", "NPWABR", "NPWADQ", "NPWAER", "NPWAFG", "NPWAJK", "NPWAKQ",
+                   "NPWALU", "NPWALY", "NPWAMA", "NPWAPX", "NPWARX", "NPWBGM", "NPWBIS",
+                   "NPWBMX", "NPWBOI", "NPWBOU", "NPWBOX", "NPWBRO", "NPWBRW", "NPWBTV",
+                   "NPWBUF", "NPWBYZ", "NPWCAE", "NPWCAR", "NPWCHS", "NPWCLE", "NPWCMH",
+                   "NPWCRP", "NPWCTP", "NPWCVG", "NPWCYS", "NPWDDC", "NPWDLH", "NPWDMX",
+                   "NPWDTX", "NPWDVN", "NPWEAX", "NPWEKA", "NPWEPZ", "NPWEWR", "NPWEWX",
+                   "NPWFFC", "NPWFGF", "NPWFGZ", "NPWFSD", "NPWFWD", "NPWGGW", "NPWGID",
+                   "NPWGJT", "NPWGLD", "NPWGRB", "NPWGRR", "NPWGSP", "NPWGYX", "NPWHFO",
+                   "NPWHGX", "NPWHI", "NPWHNX", "NPWHUN", "NPWICT", "NPWILM", "NPWILN",
+                   "NPWILX", "NPWIND", "NPWIWX", "NPWJAN", "NPWJAX", "NPWJKL", "NPWKEY",
+                   "NPWLBF", "NPWLCH", "NPWLIX", "NPWLKN", "NPWLMK", "NPWLOT", "NPWLOX",
+                   "NPWLSX", "NPWLUB", "NPWLWX", "NPWLZK", "NPWMAF", "NPWMCG", "NPWMEG",
+                   "NPWMFL", "NPWMFR", "NPWMHX", "NPWMKX", "NPWMLB", "NPWMOB", "NPWMPX",
+                   "NPWMQT", "NPWMRX", "NPWMSO", "NPWMTR", "NPWMY", "NPWNSB", "NPWOAX",
+                   "NPWOHX", "NPWOKX", "NPWOME", "NPWOTX", "NPWOTZ", "NPWOUN", "NPWPAH",
+                   "NPWPBZ", "NPWPDT", "NPWPHI", "NPWPIH", "NPWPPG", "NPWPQR", "NPWPSR",
+                   "NPWPUB", "NPWRAH", "NPWREV", "NPWRIW", "NPWRLX", "NPWRNK", "NPWSEW",
+                   "NPWSGF", "NPWSGX", "NPWSHV", "NPWSJT", "NPWSJU", "NPWSLC", "NPWSPN",
+                   "NPWSTO", "NPWTAE", "NPWTBW", "NPWTFX", "NPWTOP", "NPWTSA", "NPWTWC",
+                   "NPWUNR", "NPWVEF", "NPWWCZ"]
