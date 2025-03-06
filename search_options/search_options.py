@@ -1669,7 +1669,7 @@ class Option:
                "NPWSTO", "NPWTAE", "NPWTBW", "NPWTFX", "NPWTOP", "NPWTSA", "NPWTWC",
                "NPWUNR", "NPWVEF", "NPWWCZ"]
 
-    ALL_WWAs = ALL_SVR + ALL_SVS + ALL_WSW + ALL_TOR + ALL_FFW +\
+    ALL_WWA = ALL_SVR + ALL_SVS + ALL_WSW + ALL_TOR + ALL_FFW +\
         ALL_FFS + ALL_FLW + ALL_FFA + ALL_FLS
     # =============================================================================
     # SPECIAL CONFIGURATIONS
